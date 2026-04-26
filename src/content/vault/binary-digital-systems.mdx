@@ -1,0 +1,79 @@
+---
+title: Binary Digital Systems
+type: note
+status: seedling
+created: 2025-08-19
+tags: [digital-systems, electronics, cs-fundamentals]
+description: Systems that represent and process information using two discrete voltage levels mapped to 0 and 1.
+---
+
+A binary digital system represents and stores all data using exactly **two discrete values** — conventionally `0` and `1`. Every piece of information in a modern computer — text, images, programs, network packets — is ultimately a sequence of these bits.
+
+## Why Binary?
+
+Physical circuits are far more reliable at distinguishing two states (voltage high / voltage low) than at representing analog magnitudes precisely. A transistor is either *on* or *off*. Noise and manufacturing variation can shift an analog signal significantly without flipping a well-designed binary signal.
+
+The two voltage levels are:
+
+| Symbol | Meaning | Typical voltage |
+|---|---|---|
+| `0` (LOW) | Logic false | 0 V |
+| `1` (HIGH) | Logic true | 3.3 V or 5 V |
+
+## Building Blocks
+
+### The Bit
+
+The **bit** (binary digit) is the elementary unit of information — a single `0` or `1`.
+
+### Groupings
+
+| Group | Size | Range |
+|---|---|---|
+| Nibble | 4 bits | 0–15 |
+| Byte | 8 bits | 0–255 |
+| Word | 16 / 32 / 64 bits | Architecture-dependent |
+
+### Encoding Numbers
+
+**Unsigned binary**: positional notation in base 2.
+
+$$1011_2 = 1 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0 = 11_{10}$$
+
+**Two's complement**: the standard for signed integers.
+
+To negate a number: invert all bits, add 1.
+
+$$5 = 0101_2 \xrightarrow{\text{invert}} 1010_2 \xrightarrow{+1} 1011_2 = -5$$
+
+The MSB is the sign bit. This encoding makes arithmetic circuits identical for signed and unsigned addition.
+
+## Logic Gates
+
+All computation reduces to combinations of three fundamental gates:
+
+| Gate | Symbol | Behavior |
+|---|---|---|
+| AND | `A · B` | Output 1 only if both inputs are 1 |
+| OR | `A + B` | Output 1 if at least one input is 1 |
+| NOT | `¬A` | Output 1 if input is 0 |
+
+From these three, all other gates (NAND, NOR, XOR, XNOR) and all arithmetic circuits (adders, multipliers) can be constructed. NAND and NOR are individually **functionally complete** — any logic function can be built from only NANDs or only NORs.
+
+## Encoding Text
+
+Raw binary numbers need a mapping to represent human-readable characters.
+
+- **ASCII** — 7-bit encoding, covers English letters, digits, and control codes (128 characters)
+- **UTF-8** — variable-width encoding (1–4 bytes) that covers all of Unicode while staying ASCII-compatible
+
+```
+'A' = 65 = 0100 0001
+'a' = 97 = 0110 0001
+'0' = 48 = 0011 0000
+```
+
+## Related
+
+- [[Algorithm]] — processes sequences of bits
+- [[Data Structure]] — organizes bits into meaningful structures

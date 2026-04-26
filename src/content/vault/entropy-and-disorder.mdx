@@ -1,0 +1,56 @@
+---
+title: Entropy and Disorder
+type: note
+status: evergreen
+created: 2024-01-10
+tags: [information-theory, physics, philosophy]
+description: Why "entropy = disorder" is wrong, and what entropy actually measures.
+---
+
+Entropy is often explained as "disorder," but that framing is misleading and loses the real insight.
+
+## The Common Misunderstanding
+
+> *"Entropy always increases, so the universe tends toward disorder."*
+
+This makes entropy sound like messiness. A messy room has high entropy; a clean room has low entropy. But a room isn't a thermodynamic system in the relevant sense, and "messy" isn't a physical quantity.
+
+## What Entropy Actually Measures
+
+Entropy quantifies **how many microscopic arrangements produce the same macroscopic state**.
+
+**Example — air molecules in a room:**
+
+- All molecules packed into one corner: roughly **1 possible arrangement** → low entropy
+- Molecules distributed evenly throughout: roughly $10^{10^{23}}$ possible arrangements → high entropy
+
+The second state is more **probable**, not more "messy." Entropy is a statement about probability distributions, not aesthetics.
+
+### Shannon's Formulation
+
+In information theory, entropy measures **uncertainty** in a random variable $X$:
+
+$$H(X) = -\sum_{i} p_i \log_2 p_i \quad \text{bits}$$
+
+A coin flip has $H = 1$ bit. A loaded coin (95% heads) has $H \approx 0.29$ bits. You already know roughly what you'll get, so there's less information in the outcome.
+
+## Why This Matters
+
+The correct framing changes how we think about several domains:
+
+| Domain | Wrong framing | Correct framing |
+|---|---|---|
+| Life | Organisms fight disorder | Life creates local order by exporting entropy to surroundings |
+| Computation | Bits just get processed | Every irreversible bit operation increases thermodynamic entropy (Landauer's principle) |
+| Design | Systems get messy over time | Systems drift toward higher-probability states — which may or may not look messy |
+
+## The Second Law, Correctly
+
+The second law of thermodynamics says the total entropy of an **isolated system** never decreases. The key word is isolated. Open systems (like a living cell, or a computer cooling fan) can decrease their local entropy at the cost of increasing entropy elsewhere.
+
+This is why life is possible. It's not a violation of thermodynamics — it's thermodynamics doing exactly what it says.
+
+## Related
+
+- [[Systems Thinking]] — entropy as a lens on complex systems
+- [[Information Theory]] — Shannon's formalization

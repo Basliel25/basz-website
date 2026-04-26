@@ -1,0 +1,134 @@
+---
+title: Docker Guide Index
+type: moc
+status: evergreen
+created: 2025-08-01
+tags: [docker, devops, containers]
+description: Curated learning paths, cheat sheets, and reference commands for Docker.
+---
+
+A collection of Docker-related learning paths, command references, and patterns. Organized from beginner basics to production practices.
+
+## Core Concepts
+
+Docker packages an application and its dependencies into a **container** — a lightweight, isolated environment that runs the same way on any host.
+
+| Concept | What it is |
+|---|---|
+| Image | Read-only template for creating containers |
+| Container | Running instance of an image |
+| Dockerfile | Script that builds an image step-by-step |
+| Registry | Storage for images (Docker Hub, GHCR, ECR) |
+| Compose | Tool for multi-container apps via YAML |
+
+## Essential Commands
+
+```shell
+# Build an image from a Dockerfile in current directory
+docker build -t myapp:latest .
+
+# Run a container (detached, port mapped)
+docker run -d -p 8080:80 --name myapp myapp:latest
+
+# List running containers
+docker ps
+
+# List all containers (including stopped)
+docker ps -a
+
+# View container logs (follow mode)
+docker logs -f myapp
+
+# Execute a command inside a running container
+docker exec -it myapp /bin/sh
+
+# Stop and remove a container
+docker stop myapp && docker rm myapp
+
+# Remove all stopped containers
+docker container prune
+```
+
+## Minimal Dockerfile Pattern
+
+```dockerfile
+# Multi-stage build — builder stage
+FROM golang:1.23-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -o /bin/server ./cmd/server
+
+# Final stage — minimal runtime image
+FROM alpine:3.20
+RUN adduser -D -u 1001 appuser
+USER appuser
+COPY --from=builder /bin/server /bin/server
+EXPOSE 8080
+CMD ["/bin/server"]
+```
+
+Multi-stage builds keep the final image lean — the Go toolchain stays in the builder stage; only the binary ships.
+
+## Docker Compose
+
+```yaml
+# docker-compose.yml
+version: "3.9"
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/mydb
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+```
+
+## Debugging Patterns
+
+```shell
+# Inspect container metadata (networking, mounts, env)
+docker inspect myapp
+
+# Check resource usage
+docker stats myapp
+
+# Copy files out of a container
+docker cp myapp:/app/logs/error.log ./error.log
+
+# Run a temporary container to debug the image
+docker run --rm -it myapp:latest /bin/sh
+
+# Check what changed from the base image
+docker diff myapp
+```
+
+## Best Practices
+
+- Pin base image versions (`alpine:3.20`, not `alpine:latest`)
+- Run as non-root user (`USER appuser`)
+- Use `.dockerignore` to exclude `node_modules`, `.git`, build artifacts
+- One process per container — use Compose for multi-service setups
+- Use multi-stage builds to keep images small
+- Never put secrets in `ENV` or build args — use runtime secrets or mounted files

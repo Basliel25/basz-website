@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "./BaseLayout.astro"
+import { formatDateLong } from "../lib/dates.ts"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const d = project.data
+const statusLabel = { shipped: "Shipped", wip: "In Progress", archived: "Archived" }[d.status]
+const crumbs = [
+  { label: "bas_", href: "/" },
+  { label: "Projects", href: "/projects" },
+  { label: d.title },
+]
+---
+
+<BaseLayout title={d.title} description={d.description} crumbs={crumbs}>
+  <header class="project-header">
+    <div class="project-header__main">
+      <div class="project-header__meta">
+        <span class="project-header__type">{d.stack[0] ?? "Project"}</span>
+        <span class={`project-header__status project-header__status--${d.status}`}>{statusLabel}</span>
+      </div>
+      <h1 class="project-header__title">{d.title}</h1>
+      <p class="project-header__subtitle">{d.description}</p>
+    </div>
+    <aside class="project-header__sidebar">
+      <div class="project-header__sidebar-label">Project Info</div>
+      <div class="project-header__stats">
+        {d.stats.map((s) => (
+          <div class="header-stat">
+            <span class="header-stat__label">{s.label}</span>
+            <span class="header-stat__value">{s.value}</span>
+          </div>
+        ))}
+        <div class="header-stat">
+          <span class="header-stat__label">Stack</span>
+          <span class="header-stat__value">{d.stack.slice(0, 3).join(" · ")}</span>
+        </div>
+        <div class="header-stat">
+          <span class="header-stat__label">Updated</span>
+          <span class="header-stat__value">{formatDateLong(d.date)}</span>
+        </div>
+      </div>
+    </aside>
+  </header>
+  <section class="prose" style="margin-top:48px">
+    <slot />
+  </section>
+  <nav class="entry-nav">
+    <a href="/projects">
+      <span class="entry-nav__label">↑ Index</span>
+      <span class="entry-nav__title">All projects</span>
+    </a>
+  </nav>
+</BaseLayout>

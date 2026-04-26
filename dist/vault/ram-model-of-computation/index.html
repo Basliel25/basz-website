@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RAM Model of Computation — bas_</title><meta name="description" content="Abstract machine model for analyzing algorithm complexity, with O(1) random memory access."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">RAM Model of Computation</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--growing"> ◑ GROWING </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">algorithms</span><span class="vault-tag vault-tag--inline">cs-fundamentals</span><span class="vault-tag vault-tag--inline">theory</span> </div> <h1 class="article__title">RAM Model of Computation</h1> <p class="article__sub">Abstract machine model for analyzing algorithm complexity, with O(1) random memory access.</p> <div class="article__meta"> <span>PLANTED · 1 AUGUST 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>The <strong>Random Access Machine (RAM)</strong> is an abstract <span class="wikilink wikilink--unresolved" data-unresolved="true">model of computation</span> that abstracts the structure of real computers to focus on how <a href="/vault/algorithm">Algorithm</a>s process information.</p>
+<h2 id="major-components">Major Components</h2>
+<h3 id="memory">Memory</h3>
+<p>Memory is modeled as an infinite sequence of <em>cells</em> (also called <em>words</em>), each storing a fixed-width integer.</p>
+<ul>
+<li>Each cell is <strong>directly addressable</strong> in <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord mathnormal" style="margin-right:0.0278em">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> time — hence “random access”</li>
+<li>No distinction between cache, RAM, or disk at this abstraction level</li>
+<li>Practically, word size is assumed to hold values up to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\log n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord mathnormal" style="margin-right:0.0278em">O</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.0139em">g</span></span><span class="mspace" style="margin-right:0.1667em"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> bits</li>
+</ul>
+<h3 id="processor">Processor</h3>
+<p>The model has a single processor that performs basic operations:</p>
+<ul>
+<li>Reading and writing to/from memory cells</li>
+<li>Arithmetic and logical operations</li>
+<li>Control flow (conditionals, jumps)</li>
+</ul>
+<blockquote>
+<p><strong>Key assumption</strong>: algorithms run <strong>sequentially</strong>, not in parallel. One operation at a time.</p>
+</blockquote>
+<h3 id="instruction-set">Instruction Set</h3>
+<p>All operations in the instruction set execute in <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord mathnormal" style="margin-right:0.0278em">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span> time</strong>:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Category</th><th>Operations</th></tr></thead><tbody><tr><td>Data movement</td><td>load, store, copy</td></tr><tr><td>Arithmetic</td><td>add, subtract, multiply, divide</td></tr><tr><td>Logical</td><td>AND, OR, NOT, XOR, shift</td></tr><tr><td>Control flow</td><td>jump, branch, call, return</td></tr></tbody></table>
+<h2 id="why-this-model-matters">Why This Model Matters</h2>
+<p>The RAM model lets us analyze algorithm complexity <strong>independently of hardware</strong>:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>T(n) = number of RAM instructions executed</span></span>
+<span class="line"><span>S(n) = number of memory cells used</span></span></code></pre>
+<p>This gives us the clean <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi></mrow><annotation encoding="application/x-tex">O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.0278em">O</span></span></span></span>-notation complexity we use in practice. The model is accurate enough for most algorithms but breaks down for:</p>
+<ul>
+<li><strong>Cache-oblivious analysis</strong> — where memory hierarchy matters</li>
+<li><strong>Parallel algorithms</strong> — where PRAM or BSP models are used</li>
+<li><strong>Quantum algorithms</strong> — where quantum gates replace classical ops</li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/algorithm">Algorithm</a> — what runs on the RAM model</li>
+<li><a href="/vault/computational-problem">Computational Problem</a> — what the algorithm solves</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

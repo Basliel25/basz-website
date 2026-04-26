@@ -1,0 +1,168 @@
+@use 'mixins' as *;
+
+// ── Editorial hero (section pages) ───────────────────────────────────────
+
+.hero {
+  @include container;
+  padding-top: 64px; padding-bottom: 48px;
+  border-bottom: 3px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+
+  // Ghost diagonal slash — stencil energy
+  &::before {
+    content: '//';
+    position: absolute;
+    right: -20px; top: 50%;
+    transform: translateY(-50%) rotate(-12deg);
+    font-family: var(--font-display);
+    font-size: clamp(180px, 28vw, 340px);
+    color: var(--ink);
+    opacity: .025;
+    pointer-events: none;
+    line-height: 1;
+    letter-spacing: -20px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+  &__numstack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    border-right: 3px solid var(--ink);
+    padding-right: 40px;
+    position: relative;
+
+    // Corner tick mark
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; right: -5px;
+      width: 8px; height: 8px;
+      border-right: 3px solid var(--accent);
+      border-bottom: 3px solid var(--accent);
+    }
+  }
+  &__section-idx {
+    @include display(clamp(120px, 18vw, 220px), 0px);
+    line-height: .82;
+    color: var(--ink);
+  }
+  &__issue   { @include mono(9px, 3px); color: var(--ink-dim); }
+  &__body    { display: flex; flex-direction: column; gap: 48px; padding-bottom: 12px; }
+  &__kicker  {
+    @include mono(10px, 3px);
+    color: var(--ink-dim);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  &__kicker-stamp { @include stamp(var(--accent), -3deg, 2px); font-family: var(--font-display); font-size: 12px; }
+  &__title {
+    @include serif-italic(clamp(42px, 7vw, 86px), 1.05);
+    color: var(--ink);
+    letter-spacing: 2px;
+    padding-bottom: 16px;
+
+    strong {
+      @include display(1em, 2px);
+      font-style: normal;
+      color: var(--ink);
+    }
+    .u {
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 4px;
+      text-underline-offset: 6px;
+    }
+  }
+  &__tag {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+    max-width: 640px;
+    font-style: italic;
+  }
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    @include mono(9px, 2px);
+    color: var(--ink-dim);
+    border-top: 1px dashed var(--border);
+    padding-top: 16px;
+    margin-top: 8px;
+    a:hover { color: var(--accent); }
+  }
+}
+
+// ── Mega-hero (landing page) ──────────────────────────────────────────────
+
+.mega-hero {
+  @include container;
+  padding-top: 80px; padding-bottom: 40px;
+  border-bottom: 3px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+
+  // Ghost background tag
+  &::before {
+    content: 'BAS_';
+    position: absolute;
+    right: -60px; bottom: -40px;
+    font-family: var(--font-display);
+    font-size: clamp(200px, 32vw, 480px);
+    color: var(--ink);
+    opacity: .018;
+    pointer-events: none;
+    line-height: 1;
+    letter-spacing: -8px;
+  }
+
+  &__row1 {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  &__logo {
+    @include display(clamp(100px, 20vw, 260px), -2px);
+    line-height: .85;
+    color: var(--ink);
+    .u { color: var(--accent); }
+  }
+  &__stamp {
+    @include stamp(var(--accent), -4deg, 2px);
+    padding: 8px 14px;
+    @include mono(11px, 2px);
+    align-self: center;
+    margin-bottom: 24px;
+    font-family: var(--font-display);
+    font-size: 14px;
+  }
+  &__row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    border-top: 1px dashed var(--border);
+    padding-top: 24px;
+  }
+  &__tag  { @include serif-italic(clamp(22px, 3vw, 32px), 1.3); color: var(--ink); }
+  &__meta {
+    @include mono(10px, 2px);
+    color: var(--ink-dim);
+    line-height: 1.9;
+    .row { display: flex; gap: 12px; }
+    .key { color: var(--ink-dim); min-width: 80px; }
+    .val { color: var(--ink); }
+  }
+}

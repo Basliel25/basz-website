@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import Hero from "../../components/Hero.astro"
+import FilterStrip from "../../components/FilterStrip.astro"
+import Featured from "../../components/Featured.astro"
+import StripDivider from "../../components/StripDivider.astro"
+import PostRow from "../../components/PostRow.astro"
+
+const all = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+const tagCounts = new Map<string, number>()
+for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
+const tags = [...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))
+
+const featured = all.find((p) => p.data.featured) ?? all[0]
+const rest = featured ? all.filter((p) => p !== featured) : all
+
+const byYear = new Map<number, typeof rest>()
+for (const p of rest) {
+  const y = p.data.date.getFullYear()
+  if (!byYear.has(y)) byYear.set(y, [])
+  byYear.get(y)!.push(p)
+}
+const years = [...byYear.keys()].sort((a, b) => b - a)
+
+const crumbs = [{ label: "bas_", href: "/" }, { label: "Dispatches" }]
+---
+
+<BaseLayout
+  title="Dispatches"
+  description="Long-form notes on systems, software, and things worth measuring."
+  crumbs={crumbs}
+>
+  <Hero
+    section="02"
+    issueLabel={`Section · ${all.length} dispatches`}
+    kickerStamp="WRITING"
+    kicker="/ long-form notes, in public"
+    titleHtml={`<strong>Systems</strong>, software, <span class="u">measured</span>`}
+    tag="Notes on the layer where abstractions stop being free. Published when ready."
+    meta={[`${all.length} DISPATCHES`, "LONG-FORM · NO ADS · RSS"]}
+  />
+  {tags.length > 0 && <FilterStrip {tags} />}
+  {featured && <Featured post={featured} />}
+  {years.map((year) => (
+    <>
+      <StripDivider text={`· ${year} ·`} alt />
+      <div class="posts">
+        {byYear.get(year)!.map((p) => <PostRow post={p} />)}
+      </div>
+    </>
+  ))}
+</BaseLayout>

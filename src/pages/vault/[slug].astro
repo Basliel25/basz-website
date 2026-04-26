@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from "astro:content"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { buildBacklinksMap } from "../../lib/vault-backlinks"
+
+export async function getStaticPaths() {
+  const notes = await getCollection("vault", ({ data }) => !data.draft)
+  const backlinksMap = buildBacklinksMap(notes)
+
+return notes.map((note) => {
+    const slug = note.id.replace(/\.[^.]+$/, "")
+    return {
+      params: { slug },
+      props: { note, backlinks: backlinksMap.get(slug) ?? [] },
+    }
+  })
+}
+
+const { note, backlinks } = Astro.props
+const { Content } = await render(note)
+const d = note.data
+
+const statusIcon: Record<string, string> = {
+  seedling:  "○",
+  growing:   "◑",
+  evergreen: "●",
+}
+
+const crumbs = [
+  { label: "bas_", href: "/" },
+  { label: "Vault",  href: "/vault" },
+  { label: d.title },
+]
+---
+
+<BaseLayout title={d.title} description={d.description ?? d.title} crumbs={crumbs}>
+  <article class="article">
+    <div class="article__kicker">
+      <span class={`vault-status vault-status--${d.status}`}>
+        {statusIcon[d.status]} {d.status.toUpperCase()}
+      </span>
+      <span class="vault-type-badge">{d.type.toUpperCase()}</span>
+      {d.tags.map((t) => <span class="vault-tag vault-tag--inline">{t}</span>)}
+    </div>
+    <h1 class="article__title">{d.title}</h1>
+    {d.description && <p class="article__sub">{d.description}</p>}
+    {d.created && (
+      <div class="article__meta">
+        <span>PLANTED · {d.created.toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" }).toUpperCase()}</span>
+        <span>· {d.type === "moc" ? "MAP OF CONTENT" : "ZETTEL NOTE"}</span>
+      </div>
+    )}
+  </article>
+
+  <section class="prose">
+    <Content />
+  </section>
+
+  {backlinks.length > 0 && (
+    <aside class="backlinks">
+      <div class="backlinks__header">
+        <span class="backlinks__label">BACKLINKS</span>
+        <span class="backlinks__count">{backlinks.length} note{backlinks.length !== 1 ? "s" : ""} link here</span>
+      </div>
+      <ul class="backlinks__list">
+        {backlinks.map((bl) => {
+          const blSlug = bl.id.replace(/\.[^.]+$/, "")
+          return (
+            <li class="backlinks__item">
+              <a href={`/vault/${blSlug}`} class="backlinks__link">
+                <span class={`vault-status vault-status--${bl.data.status}`}>
+                  {statusIcon[bl.data.status]}
+                </span>
+                <span class="backlinks__title">{bl.data.title}</span>
+                <span class="backlinks__type">{bl.data.type.toUpperCase()}</span>
+                <span class="backlinks__arrow">→</span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </aside>
+  )}
+
+  <nav class="entry-nav">
+    <a href="/vault">
+      <span class="entry-nav__label">↑ Vault</span>
+      <span class="entry-nav__title">All notes</span>
+    </a>
+  </nav>
+</BaseLayout>

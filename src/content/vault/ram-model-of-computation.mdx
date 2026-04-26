@@ -1,0 +1,61 @@
+---
+title: RAM Model of Computation
+type: note
+status: growing
+created: 2025-08-01
+tags: [algorithms, cs-fundamentals, theory]
+description: Abstract machine model for analyzing algorithm complexity, with O(1) random memory access.
+---
+
+The **Random Access Machine (RAM)** is an abstract [[model of computation]] that abstracts the structure of real computers to focus on how [[Algorithm]]s process information.
+
+## Major Components
+
+### Memory
+
+Memory is modeled as an infinite sequence of *cells* (also called *words*), each storing a fixed-width integer.
+
+- Each cell is **directly addressable** in $O(1)$ time — hence "random access"
+- No distinction between cache, RAM, or disk at this abstraction level
+- Practically, word size is assumed to hold values up to $O(\log n)$ bits
+
+### Processor
+
+The model has a single processor that performs basic operations:
+
+- Reading and writing to/from memory cells
+- Arithmetic and logical operations
+- Control flow (conditionals, jumps)
+
+> **Key assumption**: algorithms run **sequentially**, not in parallel. One operation at a time.
+
+### Instruction Set
+
+All operations in the instruction set execute in **$O(1)$ time**:
+
+| Category | Operations |
+|---|---|
+| Data movement | load, store, copy |
+| Arithmetic | add, subtract, multiply, divide |
+| Logical | AND, OR, NOT, XOR, shift |
+| Control flow | jump, branch, call, return |
+
+## Why This Model Matters
+
+The RAM model lets us analyze algorithm complexity **independently of hardware**:
+
+```
+T(n) = number of RAM instructions executed
+S(n) = number of memory cells used
+```
+
+This gives us the clean $O$-notation complexity we use in practice. The model is accurate enough for most algorithms but breaks down for:
+
+- **Cache-oblivious analysis** — where memory hierarchy matters
+- **Parallel algorithms** — where PRAM or BSP models are used
+- **Quantum algorithms** — where quantum gates replace classical ops
+
+## Related
+
+- [[Algorithm]] — what runs on the RAM model
+- [[Computational Problem]] — what the algorithm solves

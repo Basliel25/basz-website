@@ -1,0 +1,139 @@
+@use 'mixins' as *;
+
+// ── Strip divider ─────────────────────────────────────────────────────────
+
+.strip-divider {
+  @include container;
+  margin-top: 72px;
+  margin-bottom: 32px;
+  padding: 10px 32px;
+  background: var(--ink);
+  // Diagonal scan-lines — stencil / silk-screen texture
+  background-image:
+    var(--ink),
+    repeating-linear-gradient(
+      -55deg,
+      transparent 0, transparent 16px,
+      rgba(255,255,255,0.04) 16px, rgba(255,255,255,0.04) 17px
+    );
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 4px;
+  position: relative;
+  overflow: hidden;
+
+  // Accent corner bracket
+  &::after {
+    content: '//';
+    position: absolute;
+    right: 32px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-display);
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    opacity: .7;
+  }
+
+  &--alt {
+    background: var(--paper);
+    background-image: repeating-linear-gradient(
+      -55deg,
+      transparent 0, transparent 16px,
+      rgba(0,0,0,0.025) 16px, rgba(0,0,0,0.025) 17px
+    );
+    color: var(--ink);
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    &::after { color: var(--accent); }
+  }
+}
+
+// ── Filter strip ──────────────────────────────────────────────────────────
+
+.filter-strip {
+  @include container;
+  padding-top: 16px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  &__label { @include mono(9px, 3px); color: var(--ink-dim); margin-right: 8px; }
+}
+
+.filter-btn {
+  @include mono(9px, 1.5px);
+  padding: 5px 10px;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  transition: background .2s, color .2s, transform .15s, box-shadow .15s;
+
+  &:hover { background: var(--ink); color: var(--paper); transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--accent); }
+  &--active { background: var(--ink); color: var(--paper); }
+}
+
+// ── Featured post ─────────────────────────────────────────────────────────
+
+.featured {
+  @include container;
+  margin-top: 48px;
+
+  &__frame  { border: 2px solid var(--ink); background: var(--paper); @include lift(4px); }
+  &__header { @include chrome-header; font-size: 10px; letter-spacing: 3px; align-items: center; }
+  &__body   { padding: 32px; display: grid; grid-template-columns: 25% 1fr; gap: 32px; align-items: start; }
+  &__date-big { @include display(56px, 0px); line-height: 1; color: var(--ink); margin-bottom: 12px; }
+  &__title    { @include serif-italic(28px, 1.2); color: var(--ink); margin-bottom: 16px; }
+  &__excerpt  { font-family: var(--font-mono); font-size: 12px; line-height: 1.8; color: var(--ink-dim); margin-bottom: 20px; max-width: 560px; }
+  &__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @include mono(10px, 2px);
+    color: var(--ink-dim);
+  }
+  &__read { color: var(--accent); transition: letter-spacing .2s; &:hover { letter-spacing: 3px; } }
+}
+
+// ── Post list ─────────────────────────────────────────────────────────────
+
+.posts { @include container; }
+
+.post-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 140px;
+  gap: 32px;
+  padding: 24px 16px;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  transition: background .2s, transform .2s, box-shadow .2s;
+  position: relative;
+
+  &:hover {
+    background: var(--paper);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--accent);
+    z-index: 2;
+    .post-row__title { color: var(--accent); }
+    .post-row__arrow { transform: translateX(4px); color: var(--accent); }
+  }
+
+  &__day     { @include display(42px, 0px); line-height: .95; color: var(--ink); }
+  &__my      { @include mono(9px, 2px); color: var(--ink-dim); margin-top: 6px; }
+  &__content { display: flex; flex-direction: column; gap: 10px; }
+  &__pills   { display: flex; gap: 6px; flex-wrap: wrap; }
+  &__title   { @include serif-italic(22px, 1.25); color: var(--ink); transition: color .2s; }
+  &__excerpt { font-family: var(--font-mono); font-size: 11px; color: var(--ink-dim); line-height: 1.6; }
+  &__meta {
+    text-align: right;
+    @include mono(10px, 2px);
+    color: var(--ink-dim);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  &__arrow { font-family: var(--font-mono); font-size: 18px; color: var(--ink); transition: transform .2s, color .2s; display: inline-block; }
+}

@@ -1,0 +1,80 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Pill from "./Pill.astro"
+import { formatDay, formatMonthYear } from "../lib/dates.ts"
+
+interface Props {
+  posts: CollectionEntry<"blog">[]
+  projects: CollectionEntry<"projects">[]
+}
+
+const { posts, projects } = Astro.props
+
+const statusLabel: Record<string, string> = {
+  shipped: "SHIPPED",
+  wip: "WIP",
+  archived: "ARCHIVE",
+}
+---
+
+<section class="index-recent">
+
+  <div class="ir-block">
+    <div class="ir-block__head">
+      <span class="ir-block__label">RECENT DISPATCHES</span>
+      <a href="/blog" class="ir-block__all">All posts →</a>
+    </div>
+    <div class="ir-block__rows">
+      {posts.map((p) => (
+        <a href={`/blog/${p.id.replace(/\.[^.]+$/, "")}`} class="ir-row">
+          <div class="ir-row__date">
+            <span class="ir-row__day">{formatDay(p.data.date)}</span>
+            <span class="ir-row__my">{formatMonthYear(p.data.date)}</span>
+          </div>
+          <div class="ir-row__body">
+            <div class="ir-row__pills">
+              {p.data.tags.slice(0, 2).map((t) => <Pill variant={t} />)}
+            </div>
+            <div class="ir-row__title">{p.data.title}</div>
+            <div class="ir-row__excerpt">{p.data.excerpt}</div>
+          </div>
+          <div class="ir-row__meta">
+            <span class="ir-row__read-time">{p.data.readTime} MIN</span>
+            <span class="ir-row__arrow">→</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="ir-block">
+    <div class="ir-block__head">
+      <span class="ir-block__label">RECENT PROJECTS</span>
+      <a href="/projects" class="ir-block__all">All projects →</a>
+    </div>
+    <div class="ir-block__rows">
+      {projects.map((p) => (
+        <a href={`/projects/${p.id.replace(/\.[^.]+$/, "")}`} class="ir-row">
+          <div class="ir-row__date">
+            <span class={`ir-row__status ir-row__status--${p.data.status}`}>
+              {statusLabel[p.data.status] ?? p.data.status}
+            </span>
+          </div>
+          <div class="ir-row__body">
+            <div class="ir-row__pills">
+              {p.data.stack.slice(0, 2).map((s) => (
+                <span class="ir-row__stack-tag">{s}</span>
+              ))}
+            </div>
+            <div class="ir-row__title">{p.data.title}</div>
+            <div class="ir-row__excerpt">{p.data.description}</div>
+          </div>
+          <div class="ir-row__meta">
+            <span class="ir-row__arrow">→</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+</section>

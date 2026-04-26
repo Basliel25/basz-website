@@ -1,0 +1,168 @@
+@use 'mixins' as *;
+
+// ── Editorial head (portrait + at-a-glance) ───────────────────────────────
+
+.editorial-head {
+  @include container;
+  padding-top: 48px; padding-bottom: 48px;
+  border-bottom: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 48px;
+  align-items: start;
+
+  &__divider { background: var(--border); align-self: stretch; }
+}
+
+.portrait-label { @include mono(10px, 3px); color: var(--ink-dim); margin-bottom: 16px; }
+.portrait-frame {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+// ── About main: bio + sidebar ─────────────────────────────────────────────
+
+.about-main {
+  @include container;
+  padding-top: 48px; padding-bottom: 48px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.bio {
+  max-width: 640px;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink);
+
+  p { margin-bottom: 20px; }
+  p:first-child::first-letter {
+    @include display(76px);
+    float: left;
+    color: var(--accent);
+    line-height: .9;
+    margin-right: 12px;
+    margin-top: 6px;
+  }
+  h2 {
+    @include display(22px, -.5px);
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 40px 0 16px;
+    &::before { content: '§'; color: var(--accent); margin-right: 10px; font-weight: 400; font-family: var(--font-serif); }
+  }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+}
+
+// ── Sidebar sections ──────────────────────────────────────────────────────
+
+.sidebar   { display: flex; flex-direction: column; gap: 28px; }
+.sb-section {
+  &__label {
+    @include mono(9px, 3px);
+    color: var(--ink-dim);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  &__body {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.85;
+    color: var(--ink);
+
+    .row     { display: flex; gap: 10px; }
+    .row .key { color: var(--ink-dim); text-transform: uppercase; letter-spacing: 1.5px; font-size: 9px; min-width: 70px; padding-top: 2px; }
+    .row .val { flex: 1; }
+    em { font-family: var(--font-serif); font-style: italic; color: var(--ink); }
+    a  { color: var(--ink); border-bottom: 1px solid var(--border); padding-bottom: 1px; }
+    a:hover { color: var(--accent); border-color: var(--accent); }
+  }
+}
+
+// ── Contact strip ─────────────────────────────────────────────────────────
+
+.contact-strip {
+  @include container;
+  padding-top: 48px; padding-bottom: 48px;
+  border-top: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+
+  &__title { @include display(48px, -2px); text-transform: uppercase; line-height: .95; }
+  &__tag   { @include serif-italic(18px, 1.4); color: var(--ink-dim); margin-top: 16px; }
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__row { display: flex; flex-direction: column; gap: 4px; }
+  &__lbl { @include mono(9px, 3px); color: var(--ink-dim); }
+  &__inp {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: box-shadow .15s, transform .15s;
+    &:focus { box-shadow: 4px 4px 0 var(--accent); transform: translate(-2px, -2px); }
+  }
+  textarea { resize: vertical; min-height: 100px; font-family: var(--font-mono); }
+  &__btn {
+    align-self: flex-start;
+    @include mono(10px, 2px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 20px;
+    border: 1.5px solid var(--ink);
+    cursor: crosshair;
+    transition: transform .15s, box-shadow .15s;
+    &:hover { transform: translate(-3px, -3px); box-shadow: 5px 5px 0 var(--accent); }
+    &.sent { background: var(--accent); color: var(--paper); }
+  }
+}
+
+// ── Colophon dark block (bottom of about page) ────────────────────────────
+
+.colo-block {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 48px 32px 64px;
+  border-top: 3px solid var(--ink);
+
+  &__inner    { max-width: 1200px; margin: 0 auto; }
+  &__label    { @include mono(10px, 3px); color: var(--paper); opacity: .6; margin-bottom: 20px; }
+  &__headline {
+    @include display(clamp(28px, 5vw, 48px), -1.5px);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 48px;
+    color: var(--paper);
+  }
+  &__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 48px; }
+  &__col {
+    h3 { font-family: var(--font-display); font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; color: var(--paper); }
+    p  { font-family: var(--font-mono); font-size: 11px; line-height: 1.8; color: var(--paper); opacity: .85; }
+  }
+  &__ticker {
+    border-top: 1px solid rgba(240, 235, 227, .15);
+    padding-top: 24px;
+    @include mono(9px, 3px);
+    opacity: .6;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,34 @@
+---
+title: "On the quiet cost of context switches, and the places they hide"
+subtitle: "A context switch costs a few microseconds on paper. In practice, it costs a cache, a branch predictor, and the quiet coherence you'd built up over the last thousand instructions."
+date: 2025-11-14
+issue: "DISPATCH № 23"
+tags: ["systems", "learning"]
+excerpt: "A context switch costs a few microseconds on paper. In practice, it costs a cache, a branch predictor, and the quiet coherence you'd built up over the last thousand instructions. A walk through perf, some toy benchmarks, and the strange kind of patience required to measure what isn't there."
+readTime: 12
+featured: true
+---
+
+The first time someone asks you how expensive a context switch is, you'll look it up, and you'll find a number. Two microseconds. Five microseconds. It depends on your kernel. It depends on your CPU. It depends on whether _vdso_ is in the mood today. You'll write this number down somewhere, and you'll feel as though you have answered the question.
+
+You have not answered the question.
+
+The direct cost of a context switch — the cycles the kernel spends saving registers, flipping page tables, and reinstalling the timer — is usually small. It's the indirect cost that matters. When the scheduler puts your thread to sleep and wakes another one, you lose more than a few registers. You lose the L1 you'd warmed. You lose the branch history you'd trained. You lose, if you're unlucky, a TLB that took thirty pages of access patterns to populate. None of this shows up in `perf stat -e context-switches`. All of it shows up in the wall clock.
+
+## Measuring what isn't there
+
+The trick, when a cost is diffuse, is to build two worlds that differ only in the thing you're trying to measure, and then race them. Here's the experiment I kept coming back to: a tight loop that walks a 32MB hash table in one world, and the same loop interrupted every millisecond by a thread doing unrelated work in the other. Same hash table. Same loop. Same core. Different neighbours.
+
+> "A model should be as simple as possible, and no simpler." I keep this taped above my monitor; it keeps me honest about the limits of the back of my napkin.
+
+That last point matters. A context switch of the kind I'm describing rarely moves the median. It moves the 99th percentile. If you're mean-watching, you'll miss it and think you're fine. You are not fine. You are just looking at the wrong part of the curve.
+
+## So what do we do about it?
+
+Three things, in decreasing order of how cheaply you can do them:
+
+1. **Measure the tail.** Every latency dashboard should show p99 and p99.9. If it shows only the mean, it is lying to you with numbers.
+2. **Pin your hot threads.** If a thread is worth warming a cache for, it is worth pinning to a core. `sched_setaffinity` is three lines.
+3. **Reduce the working set.** Smaller working sets pay a smaller indirect cost. This is the whole argument for cache-aware data structures, phrased in one sentence.
+
+None of this is novel. All of it is the kind of advice that becomes visible only after you've gone looking for a cost you couldn't see.

@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Pill from "./Pill.astro"
+import { formatDay, formatMonthYear } from "../lib/dates.ts"
+
+interface Props {
+  post: CollectionEntry<"blog">
+}
+
+const { post } = Astro.props
+const d = post.data
+---
+
+<a href={`/blog/${post.id.replace(/\.[^.]+$/, "")}`} class="post-row">
+  <div>
+    <div class="post-row__day">{formatDay(d.date)}</div>
+    <div class="post-row__my">{formatMonthYear(d.date)}</div>
+  </div>
+  <div class="post-row__content">
+    <div class="post-row__pills">
+      {d.tags.map((t) => <Pill variant={t} />)}
+    </div>
+    <h3 class="post-row__title">{d.title}</h3>
+    <p class="post-row__excerpt">{d.excerpt}</p>
+  </div>
+  <div class="post-row__meta">
+    <span>{d.readTime} MIN</span>
+    <span class="post-row__arrow">→</span>
+  </div>
+</a>

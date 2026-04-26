@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>On the quiet cost of context switches, and the places they hide — bas_</title><meta name="description" content="A context switch costs a few microseconds on paper. In practice, it costs a cache, a branch predictor, and the quiet coherence you'd built up over the last thousand instructions. A walk through perf, some toy benchmarks, and the strange kind of patience required to measure what isn't there."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class="active"> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/blog">Dispatches</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">On the quiet cost of context switches, and the places they hide</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="hero__kicker-stamp">DISPATCH № 23</span> <span class="pill pill--systems">SYSTEMS</span><span class="pill pill--learning">LEARNING</span> </div> <h1 class="article__title">On the quiet cost of context switches, and the places they hide</h1> <p class="article__sub">A context switch costs a few microseconds on paper. In practice, it costs a cache, a branch predictor, and the quiet coherence you&#39;d built up over the last thousand instructions.</p> <div class="article__meta"> <span>PUBLISHED · NOV 14, 2025</span> <span>· 12 MIN READ</span> </div> </article> <section class="prose">  <p>The first time someone asks you how expensive a context switch is, you’ll look it up, and you’ll find a number. Two microseconds. Five microseconds. It depends on your kernel. It depends on your CPU. It depends on whether <em>vdso</em> is in the mood today. You’ll write this number down somewhere, and you’ll feel as though you have answered the question.</p>
+<p>You have not answered the question.</p>
+<p>The direct cost of a context switch — the cycles the kernel spends saving registers, flipping page tables, and reinstalling the timer — is usually small. It’s the indirect cost that matters. When the scheduler puts your thread to sleep and wakes another one, you lose more than a few registers. You lose the L1 you’d warmed. You lose the branch history you’d trained. You lose, if you’re unlucky, a TLB that took thirty pages of access patterns to populate. None of this shows up in <code>perf stat -e context-switches</code>. All of it shows up in the wall clock.</p>
+<h2 id="measuring-what-isnt-there">Measuring what isn’t there</h2>
+<p>The trick, when a cost is diffuse, is to build two worlds that differ only in the thing you’re trying to measure, and then race them. Here’s the experiment I kept coming back to: a tight loop that walks a 32MB hash table in one world, and the same loop interrupted every millisecond by a thread doing unrelated work in the other. Same hash table. Same loop. Same core. Different neighbours.</p>
+<blockquote>
+<p>“A model should be as simple as possible, and no simpler.” I keep this taped above my monitor; it keeps me honest about the limits of the back of my napkin.</p>
+</blockquote>
+<p>That last point matters. A context switch of the kind I’m describing rarely moves the median. It moves the 99th percentile. If you’re mean-watching, you’ll miss it and think you’re fine. You are not fine. You are just looking at the wrong part of the curve.</p>
+<h2 id="so-what-do-we-do-about-it">So what do we do about it?</h2>
+<p>Three things, in decreasing order of how cheaply you can do them:</p>
+<ol>
+<li><strong>Measure the tail.</strong> Every latency dashboard should show p99 and p99.9. If it shows only the mean, it is lying to you with numbers.</li>
+<li><strong>Pin your hot threads.</strong> If a thread is worth warming a cache for, it is worth pinning to a core. <code>sched_setaffinity</code> is three lines.</li>
+<li><strong>Reduce the working set.</strong> Smaller working sets pay a smaller indirect cost. This is the whole argument for cache-aware data structures, phrased in one sentence.</li>
+</ol>
+<p>None of this is novel. All of it is the kind of advice that becomes visible only after you’ve gone looking for a cost you couldn’t see.</p>  </section> <nav class="entry-nav"> <a href="/blog"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All dispatches</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

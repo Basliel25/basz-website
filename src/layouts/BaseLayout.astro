@@ -1,0 +1,65 @@
+---
+import "../styles/global.scss"
+import Masthead from "../components/Masthead.astro"
+import Colophon from "../components/Colophon.astro"
+import Breadcrumb from "../components/Breadcrumb.astro"
+
+interface Props {
+  title: string
+  description?: string
+  crumbs?: Array<{ label: string; href?: string }>
+}
+
+const { title, description = "bas_ — systems engineer, writing in public", crumbs } = Astro.props
+const path = Astro.url.pathname
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title === "bas_" ? "bas_" : `${title} — bas_`}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
+    <link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml" />
+    <script is:inline>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script>
+  </head>
+  <body>
+    <Masthead currentPath={path} />
+    {crumbs && <Breadcrumb crumbs={crumbs} />}
+    <main>
+      <slot />
+    </main>
+    <Colophon />
+    <script is:inline>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script>
+  </body>
+</html>

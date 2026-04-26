@@ -1,0 +1,232 @@
+@use 'mixins' as *;
+
+// ── Article header ────────────────────────────────────────────────────────
+
+.article {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 48px 32px 32px;
+
+  &__kicker {
+    @include mono(10px, 3px);
+    color: var(--ink-dim);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  &__title {
+    @include serif-italic(clamp(36px, 5vw, 56px), 1.05);
+    color: var(--ink);
+    margin-bottom: 40px;
+    padding-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  &__sub {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    @include mono(9px, 2px);
+    color: var(--ink-dim);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    margin-bottom: 48px;
+  }
+}
+
+// ── Prose body ────────────────────────────────────────────────────────────
+
+.prose {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 32px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink);
+
+  p { margin-bottom: 24px; }
+
+  // Drop cap on first paragraph — Bebas Neue stencil letter
+  p:first-of-type::first-letter {
+    @include display(80px, 2px);
+    float: left;
+    color: var(--accent);
+    line-height: .88;
+    margin-right: 10px;
+    margin-top: 4px;
+  }
+
+  h2 {
+    @include display(20px, 2px);
+    color: var(--ink);
+    margin: 56px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ink);
+    &::before { content: '//'; color: var(--accent); margin-right: 12px; letter-spacing: 0; }
+  }
+  h3 {
+    @include mono(12px, 2px);
+    color: var(--ink-dim);
+    margin: 36px 0 12px;
+    &::before { content: '›'; color: var(--accent); margin-right: 8px; font-size: 14px; vertical-align: middle; }
+  }
+  a      { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  em     { font-style: italic; }
+  strong { color: var(--ink); font-weight: 600; }
+
+  // Graffiti blockquote — thick left bar, tinted background, spray-mark tag
+  blockquote {
+    position: relative;
+    border-left: 5px solid var(--accent);
+    background: var(--accent-dim);
+    padding: 20px 24px 20px 28px;
+    margin: 36px 0;
+    color: var(--ink-dim);
+    font-style: italic;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: -8px; left: 12px;
+      font-family: var(--font-display);
+      font-size: 72px;
+      color: var(--accent);
+      opacity: .3;
+      line-height: 1;
+    }
+  }
+
+  ul, ol { margin: 0 0 24px 20px; }
+  li     { margin-bottom: 8px; }
+
+  ul li::marker { color: var(--accent); }
+  ol li::marker { color: var(--ink-dim); font-family: var(--font-display); letter-spacing: 1px; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 1px 6px;
+    border: 1px solid rgba(212, 48, 24, .2);
+  }
+
+  // Shiki-rendered fenced code blocks
+  pre {
+    margin: 32px 0;
+    border: 2px solid var(--ink);
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.7;
+
+    code {
+      background: transparent;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+  }
+
+  // Math rendered by KaTeX
+  .katex-display {
+    overflow-x: auto;
+    padding: 8px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 32px 0;
+    font-size: 12px;
+
+    th {
+      @include mono(9px, 2px);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 14px;
+      text-align: left;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px dotted var(--border);
+      &:last-child { border-right: none; }
+    }
+    tr:hover td { background: var(--accent-dim); }
+  }
+
+  hr {
+    border: none;
+    border-top: 2px dashed var(--border);
+    margin: 48px 0;
+    position: relative;
+    &::after {
+      content: '///';
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--accent);
+      background: var(--paper);
+      padding: 0 12px;
+      letter-spacing: 3px;
+      opacity: .6;
+    }
+  }
+}
+
+// ── Entry navigation ──────────────────────────────────────────────────────
+
+.entry-nav {
+  @include container;
+  margin-top: 64px;
+  padding-top: 24px; padding-bottom: 24px;
+  border-top: 3px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  @include mono(10px, 2px);
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--ink-dim);
+    transition: color .2s;
+    &:hover { color: var(--accent); }
+  }
+  &__label { font-size: 9px; }
+  &__title { @include serif-italic(14px, 1.3); color: var(--ink); text-transform: none; letter-spacing: 0; }
+}
+
+// ── Wikilinks ─────────────────────────────────────────────────────────────
+
+.wikilink {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &--unresolved {
+    color: var(--ink-dim);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-decoration: none;
+  }
+}

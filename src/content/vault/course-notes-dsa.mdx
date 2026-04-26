@@ -1,0 +1,124 @@
+---
+title: Course Notes — DSA
+type: note
+status: growing
+created: 2025-08-01
+tags: [algorithms, cs-fundamentals, course-notes]
+description: Running notes for a Data Structures & Algorithms course — concepts, analysis methods, and worked examples.
+---
+
+Running notes for a Data Structures and Algorithms course. Updated as topics progress.
+
+## Basic Concepts
+
+A [[Computational Problem]] asks for a solution in terms of an [[Algorithm]].
+
+The [[Algorithm]] maps a set of instances or cases to a possibly empty set of solutions — so a computational problem is a *relation* that maps instances to solutions.
+
+The behavior of algorithms is described using [[model of computation]]s, which specify how an algorithm handles input/output and what operations it may perform. This course uses the [[RAM Model of Computation]].
+
+Formally, an algorithm $A \subseteq I \times O$ **solves** a computational problem if:
+- It takes inputs $i \in I$
+- It produces outputs $o \in O$  
+- The produced pair $(i, o) \in A$
+
+A [[Data Structure]] stores and organizes data for efficient algorithm access.
+
+## Analysis of Algorithms
+
+While analyzing an algorithm, we evaluate its *efficiency* and *correctness*. The algorithm should:
+
+1. Solve the problem correctly for all valid inputs
+2. Utilize resources efficiently — primarily *time*, secondarily *space*
+
+### Primitive Operations
+
+To analyze at an abstract level, we count **primitive operations** — each defined to run in $O(1)$ time on the RAM model:
+
+- Arithmetic operations (+, −, ×, ÷, mod)
+- Comparison and assignment of variables
+- Array indexing
+- Logical operations
+- Function calls and pointer dereferencing
+
+### Growth of Functions
+
+We study running time $T(n)$ as a function of input size $n$. Three asymptotic notations bound growth:
+
+#### Big-O (upper bound)
+
+$f(n) \in O(g(n))$ if there exist constants $c > 0$ and $n_0$ such that:
+$$f(n) \leq c \cdot g(n) \quad \text{for all } n \geq n_0$$
+
+We say $f$ grows **no faster than** $g$.
+
+#### Big-Omega (lower bound)
+
+$f(n) \in \Omega(g(n))$ if there exist constants $c > 0$ and $n_0$ such that:
+$$f(n) \geq c \cdot g(n) \quad \text{for all } n \geq n_0$$
+
+We say $f$ grows **at least as fast as** $g$.
+
+#### Big-Theta (tight bound)
+
+$f(n) \in \Theta(g(n))$ if $f(n) \in O(g(n))$ and $f(n) \in \Omega(g(n))$.
+
+$f$ and $g$ grow at the **same rate** up to constant factors.
+
+### Common Complexity Classes
+
+| Class | Name | Typical algorithm |
+|---|---|---|
+| $O(1)$ | Constant | Array access, hash lookup |
+| $O(\log n)$ | Logarithmic | Binary search, balanced BST ops |
+| $O(n)$ | Linear | Linear scan, BFS |
+| $O(n \log n)$ | Linearithmic | Merge sort, heap sort |
+| $O(n^2)$ | Quadratic | Insertion sort, bubble sort |
+| $O(n^3)$ | Cubic | Matrix multiplication (naive) |
+| $O(2^n)$ | Exponential | Subset enumeration |
+| $O(n!)$ | Factorial | Permutation enumeration |
+
+## Sorting Algorithms
+
+### Insertion Sort
+
+- **Best case**: $\Theta(n)$ — already sorted
+- **Worst case**: $\Theta(n^2)$ — reverse sorted
+- **Space**: $O(1)$ in-place
+- **Stable**: yes
+
+Works well for small $n$ or nearly-sorted data. Inner loop is tight and cache-friendly.
+
+### Merge Sort
+
+- **All cases**: $\Theta(n \log n)$
+- **Space**: $O(n)$ — requires auxiliary array
+- **Stable**: yes
+
+Divide-and-conquer: split in half, sort each half, merge. The merge step takes $O(n)$; the recurrence is $T(n) = 2T(n/2) + O(n)$, which solves to $O(n \log n)$ by the Master Theorem.
+
+### Heap Sort
+
+- **All cases**: $O(n \log n)$
+- **Space**: $O(1)$ in-place
+- **Stable**: no
+
+Build a max-heap in $O(n)$, then extract-max $n$ times in $O(\log n)$ each.
+
+## Data Structures Covered
+
+| Structure | Access | Search | Insert | Delete |
+|---|---|---|---|---|
+| Array | $O(1)$ | $O(n)$ | $O(n)$ | $O(n)$ |
+| Linked List | $O(n)$ | $O(n)$ | $O(1)$ | $O(1)$ |
+| Stack / Queue | $O(n)$ | $O(n)$ | $O(1)$ | $O(1)$ |
+| Hash Table | — | $O(1)$ avg | $O(1)$ avg | $O(1)$ avg |
+| AVL Tree | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ |
+| Heap | $O(n)$ | — | $O(\log n)$ | $O(\log n)$ |
+
+## Related
+
+- [[Algorithm]] — formal definition
+- [[Computational Problem]] — what we're solving
+- [[RAM Model of Computation]] — the machine model
+- [[Data Structure]] — how data is organized

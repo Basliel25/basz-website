@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Pill from "./Pill.astro"
+import { formatDay, formatDateLong } from "../lib/dates.ts"
+
+interface Props {
+  post: CollectionEntry<"blog">
+}
+
+const { post } = Astro.props
+const d = post.data
+const day = formatDay(d.date)
+const mon = d.date.toLocaleDateString("en-US", { month: "short" }).toUpperCase()
+---
+
+<section class="featured">
+  <article class="featured__frame">
+    <div class="featured__header">
+      <span>LEAD · {formatDateLong(d.date)}</span>
+      <span>{d.readTime} MIN READ</span>
+    </div>
+    <a href={`/blog/${post.id.replace(/\.[^.]+$/, "")}`} class="featured__body">
+      <div>
+        <div class="featured__date-big">{day}<br /><span style="font-size:18px;letter-spacing:0">{mon}</span></div>
+      </div>
+      <div>
+        <div class="post-row__pills">
+          {d.tags.map((t) => <Pill variant={t} />)}
+        </div>
+        <h2 class="featured__title">{d.title}</h2>
+        <p class="featured__excerpt">{d.excerpt}</p>
+        <div class="featured__cta">
+          <span>{d.issue ?? `${d.readTime} min read`}</span>
+          <span class="featured__read">READ →</span>
+        </div>
+      </div>
+    </a>
+  </article>
+</section>

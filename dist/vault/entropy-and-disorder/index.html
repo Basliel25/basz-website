@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Entropy and Disorder — bas_</title><meta name="description" content="Why &#34;entropy = disorder&#34; is wrong, and what entropy actually measures."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Entropy and Disorder</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">information-theory</span><span class="vault-tag vault-tag--inline">physics</span><span class="vault-tag vault-tag--inline">philosophy</span> </div> <h1 class="article__title">Entropy and Disorder</h1> <p class="article__sub">Why &quot;entropy = disorder&quot; is wrong, and what entropy actually measures.</p> <div class="article__meta"> <span>PLANTED · 10 JANUARY 2024</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Entropy is often explained as “disorder,” but that framing is misleading and loses the real insight.</p>
+<h2 id="the-common-misunderstanding">The Common Misunderstanding</h2>
+<blockquote>
+<p><em>“Entropy always increases, so the universe tends toward disorder.”</em></p>
+</blockquote>
+<p>This makes entropy sound like messiness. A messy room has high entropy; a clean room has low entropy. But a room isn’t a thermodynamic system in the relevant sense, and “messy” isn’t a physical quantity.</p>
+<h2 id="what-entropy-actually-measures">What Entropy Actually Measures</h2>
+<p>Entropy quantifies <strong>how many microscopic arrangements produce the same macroscopic state</strong>.</p>
+<p><strong>Example — air molecules in a room:</strong></p>
+<ul>
+<li>All molecules packed into one corner: roughly <strong>1 possible arrangement</strong> → low entropy</li>
+<li>Molecules distributed evenly throughout: roughly <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>10</mn><msup><mn>10</mn><mn>23</mn></msup></msup></mrow><annotation encoding="application/x-tex">10^{10^{23}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9869em"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9869em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight"><span class="mord mtight">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913em"><span style="top:-2.931em;margin-right:0.0714em"><span class="pstrut" style="height:2.5em"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">23</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> possible arrangements → high entropy</li>
+</ul>
+<p>The second state is more <strong>probable</strong>, not more “messy.” Entropy is a statement about probability distributions, not aesthetics.</p>
+<h3 id="shannons-formulation">Shannon’s Formulation</h3>
+<p>In information theory, entropy measures <strong>uncertainty</strong> in a random variable <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.0785em">X</span></span></span></span>:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub><msub><mrow><mi>log</mi><mo>⁡</mo></mrow><mn>2</mn></msub><msub><mi>p</mi><mi>i</mi></msub><mspace width="1em"></mspace><mtext>bits</mtext></mrow><annotation encoding="application/x-tex">H(X) = -\sum_{i} p_i \log_2 p_i \quad \text{bits}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord mathnormal" style="margin-right:0.0813em">H</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0785em">X</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.0139em">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em"><span style="top:-2.4559em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:1em"></span><span class="mord text"><span class="mord">bits</span></span></span></span></span></p>
+<p>A coin flip has <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">H = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.0813em">H</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">1</span></span></span></span> bit. A loaded coin (95% heads) has <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>≈</mo><mn>0.29</mn></mrow><annotation encoding="application/x-tex">H \approx 0.29</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.0813em">H</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">0.29</span></span></span></span> bits. You already know roughly what you’ll get, so there’s less information in the outcome.</p>
+<h2 id="why-this-matters">Why This Matters</h2>
+<p>The correct framing changes how we think about several domains:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Domain</th><th>Wrong framing</th><th>Correct framing</th></tr></thead><tbody><tr><td>Life</td><td>Organisms fight disorder</td><td>Life creates local order by exporting entropy to surroundings</td></tr><tr><td>Computation</td><td>Bits just get processed</td><td>Every irreversible bit operation increases thermodynamic entropy (Landauer’s principle)</td></tr><tr><td>Design</td><td>Systems get messy over time</td><td>Systems drift toward higher-probability states — which may or may not look messy</td></tr></tbody></table>
+<h2 id="the-second-law-correctly">The Second Law, Correctly</h2>
+<p>The second law of thermodynamics says the total entropy of an <strong>isolated system</strong> never decreases. The key word is isolated. Open systems (like a living cell, or a computer cooling fan) can decrease their local entropy at the cost of increasing entropy elsewhere.</p>
+<p>This is why life is possible. It’s not a violation of thermodynamics — it’s thermodynamics doing exactly what it says.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/systems-thinking">Systems Thinking</a> — entropy as a lens on complex systems</li>
+<li><span class="wikilink wikilink--unresolved" data-unresolved="true">Information Theory</span> — Shannon’s formalization</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

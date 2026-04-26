@@ -1,0 +1,16 @@
+---
+interface Props {
+  tags: Array<{ label: string; count: number; active?: boolean }>
+}
+
+const { tags } = Astro.props
+---
+
+<div class="filter-strip">
+  <span class="filter-strip__label">Filter ·</span>
+  {tags.map((t) => (
+    <button class={`filter-btn${t.active ? " filter-btn--active" : ""}`}>
+      {t.label} <span style="opacity:.5">({t.count})</span>
+    </button>
+  ))}
+</div>

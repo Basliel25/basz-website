@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pi Homelab — bas_</title><meta name="description" content="A single-board cluster running self-hosted services behind WireGuard. Built to learn, maintained because it works."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class="active"> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/projects">Projects</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Pi Homelab</span> </nav> <main>  <header class="project-header"> <div class="project-header__main"> <div class="project-header__meta"> <span class="project-header__type">NixOS</span> <span class="project-header__status project-header__status--shipped">Shipped</span> </div> <h1 class="project-header__title">Pi Homelab</h1> <p class="project-header__subtitle">A single-board cluster running self-hosted services behind WireGuard. Built to learn, maintained because it works.</p> </div> <aside class="project-header__sidebar"> <div class="project-header__sidebar-label">Project Info</div> <div class="project-header__stats"> <div class="header-stat"> <span class="header-stat__label">Nodes</span> <span class="header-stat__value">4</span> </div><div class="header-stat"> <span class="header-stat__label">Uptime</span> <span class="header-stat__value">99.1%</span> </div><div class="header-stat"> <span class="header-stat__label">Services</span> <span class="header-stat__value">11</span> </div> <div class="header-stat"> <span class="header-stat__label">Stack</span> <span class="header-stat__value">NixOS · WireGuard · Caddy</span> </div> <div class="header-stat"> <span class="header-stat__label">Updated</span> <span class="header-stat__value">MAR 1, 2024</span> </div> </div> </aside> </header> <section class="prose" style="margin-top:48px">  <p>Four Raspberry Pis, one managed switch, a WireGuard overlay, and more hours of NixOS debugging than I’d care to admit.</p>
+<p>The goal was simple: stop renting things I could run myself, and learn what that actually costs — in time, in patience, in <code>nixos-rebuild switch</code> invocations at midnight. The answer to “what does infrastructure mean at the scale of a bedroom shelf” turned out to be: configuration management is the whole job.</p>
+<h2 id="whats-running">What’s running</h2>
+<p>Eleven services across four nodes. Caddy handles TLS and reverse proxying. Prometheus scrapes everything; Grafana makes it visible. The overlay network means I can add a node from anywhere without touching firewall rules.</p>
+<h2 id="what-i-learned">What I learned</h2>
+<p>NixOS is the correct answer to “how do I reproduce this exact system state.” It is not the correct answer to “I need this working in the next twenty minutes.” Both things are true, and neither cancels the other out.</p>
+<p>The discipline of declaring every package and service in a single file changes how you think about state. Drift becomes visible. Removing a service means removing its declaration and rebuilding — not <code>sudo systemctl disable</code> followed by forgotten files in <code>/etc</code>.</p>
+<h2 id="what-id-do-differently">What I’d do differently</h2>
+<p>Start with monitoring earlier. The first three months I was flying blind; I’d have caught two configuration regressions immediately if Prometheus had been running from day one.</p>  </section> <nav class="entry-nav"> <a href="/projects"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All projects</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

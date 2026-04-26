@@ -1,0 +1,35 @@
+---
+interface Props {
+  section: string
+  issueLabel: string
+  kickerStamp: string
+  kicker: string
+  titleHtml: string
+  tag: string
+  meta?: string[]
+}
+
+const { section, issueLabel, kickerStamp, kicker, titleHtml, tag, meta = [] } = Astro.props
+---
+
+<section class="hero">
+  <div class="hero__grid">
+    <div class="hero__numstack">
+      <div class="hero__section-idx">{section}</div>
+      <span class="hero__issue">{issueLabel}</span>
+    </div>
+    <div class="hero__body">
+      <div class="hero__kicker">
+        <span class="hero__kicker-stamp">{kickerStamp}</span>
+        <span>{kicker}</span>
+      </div>
+      <h1 class="hero__title" set:html={titleHtml} />
+      <p class="hero__tag">{tag}</p>
+      {meta.length > 0 && (
+        <div class="hero__meta">
+          {meta.map((m) => <span>{m}</span>)}
+        </div>
+      )}
+    </div>
+  </div>
+</section>

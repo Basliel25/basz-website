@@ -1,0 +1,27 @@
+---
+interface Props {
+  tag: string
+  stamp?: string
+  meta: Record<string, string>
+}
+
+const { tag, stamp = "Personal site · v1", meta } = Astro.props
+---
+
+<section class="mega-hero">
+  <div class="mega-hero__row1">
+    <div class="mega-hero__logo">BAS<span class="u">_</span></div>
+    <div class="mega-hero__stamp">{stamp}</div>
+  </div>
+  <div class="mega-hero__row2">
+    <p class="mega-hero__tag">{tag}</p>
+    <div class="mega-hero__meta">
+      {Object.entries(meta).map(([k, v]) => (
+        <div class="row">
+          <span class="key">{k}</span>
+          <span class="val">{v}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

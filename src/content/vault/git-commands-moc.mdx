@@ -1,0 +1,134 @@
+---
+title: Git Commands MOC
+type: moc
+status: evergreen
+created: 2025-08-01
+tags: [git, devops, commands]
+description: Command reference for Git — staging, branching, history, remotes.
+---
+
+Command reference for Git 2.50+. Organized by workflow stage, not alphabetically.
+
+## Staging
+
+```shell
+# Stage a specific file
+git add path/to/file
+
+# Stage all changes (tracked + untracked)
+git add -A
+
+# Stage only modifications to tracked files (skip untracked)
+git add -u
+
+# Interactive staging — pick hunks
+git add -p
+```
+
+## Commits
+
+```shell
+# Commit with message
+git commit -m "feat: add OAuth2 middleware"
+
+# Commit and open editor for longer message
+git commit
+
+# Amend the last commit (before push only)
+git commit --amend --no-edit
+
+# Empty commit (trigger CI)
+git commit --allow-empty -m "chore: retrigger pipeline"
+```
+
+## Branching
+
+```shell
+# Create and switch in one step
+git switch -c feat/new-feature
+
+# Switch to existing branch
+git switch main
+
+# List all branches with last commit
+git branch -v
+
+# Delete local branch (safe — won't delete if unmerged)
+git branch -d old-branch
+
+# Force delete
+git branch -D old-branch
+```
+
+## Stashing
+
+```shell
+# Stash working directory changes
+git stash push -m "wip: auth refactor"
+
+# List stashes
+git stash list
+
+# Apply most recent stash (keeps it in list)
+git stash apply
+
+# Pop most recent stash (removes from list)
+git stash pop
+
+# Apply specific stash
+git stash apply stash@{2}
+```
+
+## History & Diff
+
+```shell
+# Compact log with graph
+git log --oneline --graph --all
+
+# Show changes since last commit
+git diff HEAD
+
+# Show staged changes about to be committed
+git diff --cached
+
+# Find commit that introduced a bug (binary search)
+git bisect start
+git bisect bad HEAD
+git bisect good v1.2.0
+```
+
+## Remotes
+
+```shell
+# Show remotes
+git remote -v
+
+# Add a remote
+git remote add upstream https://github.com/org/repo.git
+
+# Fetch + rebase (safer than pull for shared branches)
+git fetch origin && git rebase origin/main
+
+# Push new branch and set upstream
+git push -u origin feat/new-feature
+
+# Delete remote branch
+git push origin --delete old-branch
+```
+
+## Undo / Recovery
+
+```shell
+# Undo last commit, keep changes staged
+git reset --soft HEAD~1
+
+# Undo last commit, keep changes unstaged
+git reset HEAD~1
+
+# Discard all local changes (irreversible)
+git reset --hard HEAD
+
+# Recover a deleted branch (find the commit hash first)
+git reflog
+git checkout -b recovered-branch <hash>
+```

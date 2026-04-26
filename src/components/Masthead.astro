@@ -1,0 +1,33 @@
+---
+interface Props {
+  currentPath: string
+}
+
+const { currentPath } = Astro.props
+
+const nav = [
+  { label: "Projects",   href: "/projects" },
+  { label: "Dispatches", href: "/blog" },
+  { label: "Vault",      href: "/vault" },
+  { label: "About",      href: "/about" },
+  { label: "Showcase",   href: "/showcase" },
+]
+---
+
+<header class="masthead">
+  <a href="/" class="masthead__logo">BAS<span>_</span></a>
+  <nav class="masthead__nav">
+    {nav.map((n) => (
+      <a
+        href={n.href}
+        class={currentPath.startsWith(n.href) ? "active" : ""}
+      >
+        {n.label}
+      </a>
+    ))}
+  </nav>
+  <div class="masthead__meta">
+    <span>Amsterdam · NL</span>
+    <button class="theme-toggle" id="theme-toggle">DARK</button>
+  </div>
+</header>

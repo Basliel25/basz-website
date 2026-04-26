@@ -1,0 +1,10 @@
+---
+interface Props {
+  text: string
+  alt?: boolean
+}
+
+const { text, alt = false } = Astro.props
+---
+
+<div class={`strip-divider${alt ? " strip-divider--alt" : ""}`}>{text}</div>

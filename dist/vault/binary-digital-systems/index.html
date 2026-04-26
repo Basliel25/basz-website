@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Binary Digital Systems — bas_</title><meta name="description" content="Systems that represent and process information using two discrete voltage levels mapped to 0 and 1."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Binary Digital Systems</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--seedling"> ○ SEEDLING </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">digital-systems</span><span class="vault-tag vault-tag--inline">electronics</span><span class="vault-tag vault-tag--inline">cs-fundamentals</span> </div> <h1 class="article__title">Binary Digital Systems</h1> <p class="article__sub">Systems that represent and process information using two discrete voltage levels mapped to 0 and 1.</p> <div class="article__meta"> <span>PLANTED · 19 AUGUST 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>A binary digital system represents and stores all data using exactly <strong>two discrete values</strong> — conventionally <code>0</code> and <code>1</code>. Every piece of information in a modern computer — text, images, programs, network packets — is ultimately a sequence of these bits.</p>
+<h2 id="why-binary">Why Binary?</h2>
+<p>Physical circuits are far more reliable at distinguishing two states (voltage high / voltage low) than at representing analog magnitudes precisely. A transistor is either <em>on</em> or <em>off</em>. Noise and manufacturing variation can shift an analog signal significantly without flipping a well-designed binary signal.</p>
+<p>The two voltage levels are:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Symbol</th><th>Meaning</th><th>Typical voltage</th></tr></thead><tbody><tr><td><code>0</code> (LOW)</td><td>Logic false</td><td>0 V</td></tr><tr><td><code>1</code> (HIGH)</td><td>Logic true</td><td>3.3 V or 5 V</td></tr></tbody></table>
+<h2 id="building-blocks">Building Blocks</h2>
+<h3 id="the-bit">The Bit</h3>
+<p>The <strong>bit</strong> (binary digit) is the elementary unit of information — a single <code>0</code> or <code>1</code>.</p>
+<h3 id="groupings">Groupings</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Group</th><th>Size</th><th>Range</th></tr></thead><tbody><tr><td>Nibble</td><td>4 bits</td><td>0–15</td></tr><tr><td>Byte</td><td>8 bits</td><td>0–255</td></tr><tr><td>Word</td><td>16 / 32 / 64 bits</td><td>Architecture-dependent</td></tr></tbody></table>
+<h3 id="encoding-numbers">Encoding Numbers</h3>
+<p><strong>Unsigned binary</strong>: positional notation in base 2.</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mn>1011</mn><mn>2</mn></msub><mo>=</mo><mn>1</mn><mo>⋅</mo><msup><mn>2</mn><mn>3</mn></msup><mo>+</mo><mn>0</mn><mo>⋅</mo><msup><mn>2</mn><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo>⋅</mo><msup><mn>2</mn><mn>1</mn></msup><mo>+</mo><mn>1</mn><mo>⋅</mo><msup><mn>2</mn><mn>0</mn></msup><mo>=</mo><msub><mn>11</mn><mn>10</mn></msub></mrow><annotation encoding="application/x-tex">1011_2 = 1 \cdot 2^3 + 0 \cdot 2^2 + 1 \cdot 2^1 + 1 \cdot 2^0 = 11_{10}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7944em;vertical-align:-0.15em"></span><span class="mord">101</span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.8141em"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em"><span style="top:-3.063em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.7944em;vertical-align:-0.15em"></span><span class="mord">1</span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">10</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span></span></span></span></p>
+<p><strong>Two’s complement</strong>: the standard for signed integers.</p>
+<p>To negate a number: invert all bits, add 1.</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>=</mo><msub><mn>0101</mn><mn>2</mn></msub><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mtext>invert</mtext></mpadded></mover><msub><mn>1010</mn><mn>2</mn></msub><mover><mo stretchy="true" minsize="3.0em">→</mo><mpadded width="+0.6em" lspace="0.3em"><mrow><mo>+</mo><mn>1</mn></mrow></mpadded></mover><msub><mn>1011</mn><mn>2</mn></msub><mo>=</mo><mo>−</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">5 = 0101_2 \xrightarrow{\text{invert}} 1010_2 \xrightarrow{+1} 1011_2 = -5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:1.2395em;vertical-align:-0.15em"></span><span class="mord">010</span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0895em"><span style="top:-3.322em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">invert</span></span></span></span></span><span class="svg-align" style="top:-2.689em"><span class="pstrut" style="height:2.7em"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:1.2231em;vertical-align:-0.15em"></span><span class="mord">101</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0731em"><span style="top:-3.322em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight x-arrow-pad"><span class="mord mtight"><span class="mord mtight">+</span><span class="mord mtight">1</span></span></span></span><span class="svg-align" style="top:-2.689em"><span class="pstrut" style="height:2.7em"></span><span class="hide-tail" style="height:0.522em;min-width:1.469em"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"></path></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.011em"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.7944em;vertical-align:-0.15em"></span><span class="mord">101</span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em"></span><span class="mord">−</span><span class="mord">5</span></span></span></span></p>
+<p>The MSB is the sign bit. This encoding makes arithmetic circuits identical for signed and unsigned addition.</p>
+<h2 id="logic-gates">Logic Gates</h2>
+<p>All computation reduces to combinations of three fundamental gates:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Gate</th><th>Symbol</th><th>Behavior</th></tr></thead><tbody><tr><td>AND</td><td><code>A · B</code></td><td>Output 1 only if both inputs are 1</td></tr><tr><td>OR</td><td><code>A + B</code></td><td>Output 1 if at least one input is 1</td></tr><tr><td>NOT</td><td><code>¬A</code></td><td>Output 1 if input is 0</td></tr></tbody></table>
+<p>From these three, all other gates (NAND, NOR, XOR, XNOR) and all arithmetic circuits (adders, multipliers) can be constructed. NAND and NOR are individually <strong>functionally complete</strong> — any logic function can be built from only NANDs or only NORs.</p>
+<h2 id="encoding-text">Encoding Text</h2>
+<p>Raw binary numbers need a mapping to represent human-readable characters.</p>
+<ul>
+<li><strong>ASCII</strong> — 7-bit encoding, covers English letters, digits, and control codes (128 characters)</li>
+<li><strong>UTF-8</strong> — variable-width encoding (1–4 bytes) that covers all of Unicode while staying ASCII-compatible</li>
+</ul>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#39;A&#39; = 65 = 0100 0001</span></span>
+<span class="line"><span>&#39;a&#39; = 97 = 0110 0001</span></span>
+<span class="line"><span>&#39;0&#39; = 48 = 0011 0000</span></span></code></pre>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/algorithm">Algorithm</a> — processes sequences of bits</li>
+<li><a href="/vault/data-structure">Data Structure</a> — organizes bits into meaningful structures</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

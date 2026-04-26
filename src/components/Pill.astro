@@ -1,0 +1,10 @@
+---
+interface Props {
+  variant: string
+  label?: string
+}
+
+const { variant, label } = Astro.props
+---
+
+<span class={`pill pill--${variant}`}>{label ?? variant.toUpperCase()}</span>

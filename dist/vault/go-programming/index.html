@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Go Programming Language — bas_</title><meta name="description" content="Notes on designing systems in Go — patterns, idioms, and when not to use it."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Go Programming Language</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">programming</span><span class="vault-tag vault-tag--inline">go</span><span class="vault-tag vault-tag--inline">systems</span> </div> <h1 class="article__title">Go Programming Language</h1> <p class="article__sub">Notes on designing systems in Go — patterns, idioms, and when not to use it.</p> <div class="article__meta"> <span>PLANTED · 15 AUGUST 2023</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Notes on designing systems in Go. Not a tutorial — a working reference for patterns I keep reaching for.</p>
+<h2 id="why-go">Why Go</h2>
+<ul>
+<li><strong>Simplicity</strong> — small language surface, readable by anyone who knows one C-family language</li>
+<li><strong>Concurrency</strong> — goroutines make structured parallelism tractable</li>
+<li><strong>Deployment</strong> — single static binary, no runtime dependency</li>
+<li><strong>Performance</strong> — within 2–3× of C for most I/O-bound systems work</li>
+</ul>
+<p>The compile-time guarantees (no nulls without <code>*</code>, explicit error returns, no implicit conversions) make large codebases surprisingly navigable.</p>
+<h2 id="key-patterns">Key Patterns</h2>
+<h3 id="error-handling">Error Handling</h3>
+<p>Go’s explicit error returns feel verbose until you realize you’re never losing errors in stack traces.</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#FFF">data, err </span><span style="color:#A0A0A0">:=</span><span style="color:#FFF"> os.</span><span style="color:#FFC799">ReadFile</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;config.yaml&quot;</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#A0A0A0">if</span><span style="color:#FFF"> err </span><span style="color:#A0A0A0">!=</span><span style="color:#FFF"> nil {</span></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFF"> fmt.</span><span style="color:#FFC799">Errorf</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;failed to read config: </span><span style="color:#FFF">%w</span><span style="color:#99FFE4">&quot;</span><span style="color:#FFF">, err)</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>The <code>%w</code> verb wraps the original error so callers can use <code>errors.Is</code> / <code>errors.As</code> for structured inspection. The chain of error context reads like a call stack without the runtime overhead.</p>
+<h3 id="interfaces--small-is-powerful">Interfaces — Small is Powerful</h3>
+<p>Go uses <em>structural</em> (duck) typing. Any type implementing the required methods satisfies the interface — no <code>implements</code> keyword.</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> Reader</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">    Read</span><span style="color:#FFF">(p []</span><span style="color:#A0A0A0">byte</span><span style="color:#FFF">) (n </span><span style="color:#A0A0A0">int</span><span style="color:#FFF">, err </span><span style="color:#A0A0A0">error</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#FFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> Writer</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">    Write</span><span style="color:#FFF">(p []</span><span style="color:#A0A0A0">byte</span><span style="color:#FFF">) (n </span><span style="color:#A0A0A0">int</span><span style="color:#FFF">, err </span><span style="color:#A0A0A0">error</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#FFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94">// Composed interfaces stay small</span></span>
+<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> ReadWriter</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">    Reader</span></span>
+<span class="line"><span style="color:#FFC799">    Writer</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This is why <code>io.Reader</code> is everywhere. A file, a network connection, a byte buffer, an HTTP response body — all satisfy <code>io.Reader</code>. You write one function; it works with all of them.</p>
+<h3 id="goroutines-and-channels">Goroutines and Channels</h3>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">func</span><span style="color:#FFC799"> fanOut</span><span style="color:#FFF">(inputs []</span><span style="color:#A0A0A0">string</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">&lt;-chan</span><span style="color:#FFC799"> Result</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFF">    out </span><span style="color:#A0A0A0">:=</span><span style="color:#FFC799"> make</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">chan</span><span style="color:#FFC799"> Result</span><span style="color:#FFF">, </span><span style="color:#FFC799">len</span><span style="color:#FFF">(inputs))</span></span>
+<span class="line"><span style="color:#A0A0A0">    var</span><span style="color:#FFF"> wg </span><span style="color:#FFC799">sync</span><span style="color:#FFF">.</span><span style="color:#FFC799">WaitGroup</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> _, s </span><span style="color:#A0A0A0">:=</span><span style="color:#A0A0A0"> range</span><span style="color:#FFF"> inputs {</span></span>
+<span class="line"><span style="color:#FFF">        wg.</span><span style="color:#FFC799">Add</span><span style="color:#FFF">(</span><span style="color:#FFC799">1</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#A0A0A0">        go</span><span style="color:#A0A0A0"> func</span><span style="color:#FFF">(s </span><span style="color:#A0A0A0">string</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#A0A0A0">            defer</span><span style="color:#FFF"> wg.</span><span style="color:#FFC799">Done</span><span style="color:#FFF">()</span></span>
+<span class="line"><span style="color:#FFF">            out </span><span style="color:#A0A0A0">&lt;-</span><span style="color:#FFC799"> process</span><span style="color:#FFF">(s)</span></span>
+<span class="line"><span style="color:#FFF">        }(s)</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    go</span><span style="color:#A0A0A0"> func</span><span style="color:#FFF">() {</span></span>
+<span class="line"><span style="color:#FFF">        wg.</span><span style="color:#FFC799">Wait</span><span style="color:#FFF">()</span></span>
+<span class="line"><span style="color:#FFC799">        close</span><span style="color:#FFF">(out)</span></span>
+<span class="line"><span style="color:#FFF">    }()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFF"> out</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>Goroutines are cheap (~2KB stack, grows as needed). Channels are typed pipes with built-in backpressure when buffered channels fill. The <code>select</code> statement lets you multiplex across channels without callbacks.</p>
+<h3 id="context-propagation">Context Propagation</h3>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">func</span><span style="color:#FFC799"> fetchUser</span><span style="color:#FFF">(ctx </span><span style="color:#FFC799">context</span><span style="color:#FFF">.</span><span style="color:#FFC799">Context</span><span style="color:#FFF">, id </span><span style="color:#A0A0A0">int64</span><span style="color:#FFF">) (</span><span style="color:#A0A0A0">*</span><span style="color:#FFC799">User</span><span style="color:#FFF">, </span><span style="color:#A0A0A0">error</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFF">    ctx, cancel </span><span style="color:#A0A0A0">:=</span><span style="color:#FFF"> context.</span><span style="color:#FFC799">WithTimeout</span><span style="color:#FFF">(ctx, </span><span style="color:#FFC799">5</span><span style="color:#A0A0A0">*</span><span style="color:#FFF">time.Second)</span></span>
+<span class="line"><span style="color:#A0A0A0">    defer</span><span style="color:#FFC799"> cancel</span><span style="color:#FFF">()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFF"> db.</span><span style="color:#FFC799">QueryRowContext</span><span style="color:#FFF">(ctx, </span><span style="color:#99FFE4">&quot;SELECT * FROM users WHERE id = ?&quot;</span><span style="color:#FFF">, id)</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>Pass <code>context.Context</code> as the <strong>first argument</strong> to every function that does I/O. It carries deadlines, cancellation signals, and request-scoped values down the call tree. When the root context is cancelled (HTTP request gone, timeout exceeded), everything using it stops cleanly.</p>
+<h2 id="module-structure">Module Structure</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>myservice/</span></span>
+<span class="line"><span>├── cmd/</span></span>
+<span class="line"><span>│   └── server/</span></span>
+<span class="line"><span>│       └── main.go      # entry point, wires everything together</span></span>
+<span class="line"><span>├── internal/</span></span>
+<span class="line"><span>│   ├── handler/         # HTTP handlers</span></span>
+<span class="line"><span>│   ├── service/         # business logic</span></span>
+<span class="line"><span>│   └── store/           # database layer</span></span>
+<span class="line"><span>├── pkg/</span></span>
+<span class="line"><span>│   └── middleware/      # reusable, importable by other modules</span></span>
+<span class="line"><span>├── go.mod</span></span>
+<span class="line"><span>└── go.sum</span></span></code></pre>
+<p><code>internal/</code> packages cannot be imported by code outside the module. <code>pkg/</code> packages are explicitly public. <code>cmd/</code> packages are entry points that import from both.</p>
+<h2 id="when-not-to-use-go">When Not to Use Go</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Use case</th><th>Better alternative</th></tr></thead><tbody><tr><td>GUI applications</td><td>Use a dedicated framework (Qt, Flutter)</td></tr><tr><td>Numerical / scientific computing</td><td>Python (NumPy), Julia, Fortran</td></tr><tr><td>Rapid prototyping</td><td>Python, Ruby</td></tr><tr><td>Low-level system programming</td><td>Rust (memory safety without GC)</td></tr><tr><td>Heavy generics / type magic</td><td>Rust, Haskell</td></tr></tbody></table>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/systems-thinking">Systems Thinking</a> — the design philosophy Go embodies</li>
+<li><a href="/vault/rust">Rust</a> — the other systems language worth knowing</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

@@ -1,0 +1,101 @@
+---
+title: Systems Thinking
+type: moc
+status: growing
+created: 2024-02-05
+tags: [systems, philosophy, design]
+description: A map of how complex systems work and how to reason about designing, breaking, and fixing them.
+---
+
+A map of how complex systems work — and how to design, reason about, and fix them. My main lens for both technical and human problems.
+
+## Core Ideas
+
+### Feedback Loops
+
+Systems respond to their own outputs. Two types:
+
+- **Reinforcing (positive) loops** — amplify change. Growth compounds, but so does collapse.
+- **Balancing (negative) loops** — resist change and seek equilibrium. A thermostat is a balancing loop.
+
+Most interesting system behavior comes from the *interaction* between multiple loops.
+
+### Emergence
+
+Properties that appear at the level of the system but not in any individual component.
+
+- Water is wet; H₂O molecules are not
+- Traffic jams emerge without any driver intending to cause one
+- Market prices emerge from individual decisions
+
+You can't predict emergent behavior by studying components in isolation.
+
+### Stocks and Flows
+
+Every system has **stocks** (accumulations — water in a tank, knowledge in memory, money in an account) and **flows** (rates of change — fill rate, learning rate, spending rate).
+
+The key insight: **stocks change slowly**. You can't instantly drain a reservoir. You can't instantly retrain an organization. This is why systems have inertia — and why policy changes take time to show effects.
+
+### Constraints
+
+> "A chain is only as strong as its weakest link."
+
+In any system with a goal, there is always a **binding constraint** — the factor limiting throughput. Goldratt's Theory of Constraints says:
+
+1. Identify the constraint
+2. Exploit it (maximize its throughput)
+3. Subordinate everything else to the constraint
+4. Elevate the constraint
+5. Repeat
+
+Non-constraints have slack. Optimizing non-constraints without addressing the constraint is waste.
+
+## In Software Design
+
+### Distributed Systems
+
+A distributed system is a collection of independent computers that appear to users as a single coherent system. The hard problems:
+
+- **Consistency** — all nodes see the same data at the same time
+- **Availability** — every request gets a response
+- **Partition tolerance** — the system works despite dropped messages
+
+CAP theorem: you can have at most two of the three.
+
+### Conway's Law
+
+> "Organizations which design systems are constrained to produce designs which are copies of the communication structures of those organizations."
+
+Software architecture mirrors org structure, not the other way around. A monolith often signals a team that communicates well. Microservices often signal org fragmentation.
+
+**Inverse Conway Maneuver**: deliberately restructure the team to produce the desired architecture.
+
+### Abstraction Layers
+
+Every useful abstraction hides complexity — and in doing so, creates a **leaky abstraction**. Joel Spolsky's law: "All non-trivial abstractions, to some degree, are leaky."
+
+The abstraction layer decides what complexity to hide. Good layers hide accidental complexity (details of implementation) while exposing essential complexity (semantics that matter to the caller).
+
+## Organizational Systems
+
+### Information Flow
+
+Knowledge moves through teams the same way data moves through networks: with latency, loss, and distortion. Bottlenecks in information flow produce the same effects as bottlenecks in data pipelines — queues build up, decisions get made on stale data.
+
+### Incentives
+
+Systems behave as incentives dictate, not as designers intend. If the incentive structure rewards short-term metrics, you get Goodhart's Law:
+
+> "When a measure becomes a target, it ceases to be a good measure."
+
+## Key References
+
+- Donella Meadows — *Thinking in Systems* (the canonical text)
+- Nassim Taleb — *Antifragile* (systems that gain from disorder)
+- Peter Senge — *The Fifth Discipline* (learning organizations)
+- Eliyahu Goldratt — *The Goal* (Theory of Constraints as a novel)
+
+## Related
+
+- [[Entropy and Disorder]] — entropy as a lens on system state
+- [[Algorithm]] — systems for transforming information

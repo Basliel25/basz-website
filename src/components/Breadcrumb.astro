@@ -1,0 +1,19 @@
+---
+interface Props {
+  crumbs: Array<{ label: string; href?: string }>
+}
+
+const { crumbs } = Astro.props
+---
+
+<nav class="breadcrumb">
+  {crumbs.map((c, i) => (
+    <>
+      {i > 0 && <span class="breadcrumb__sep">/</span>}
+      {c.href && i < crumbs.length - 1
+        ? <a href={c.href}>{c.label}</a>
+        : <span class="breadcrumb__current">{c.label}</span>
+      }
+    </>
+  ))}
+</nav>

@@ -1,0 +1,129 @@
+---
+title: Go Programming Language
+type: note
+status: evergreen
+created: 2023-08-15
+tags: [programming, go, systems]
+description: Notes on designing systems in Go — patterns, idioms, and when not to use it.
+---
+
+Notes on designing systems in Go. Not a tutorial — a working reference for patterns I keep reaching for.
+
+## Why Go
+
+- **Simplicity** — small language surface, readable by anyone who knows one C-family language
+- **Concurrency** — goroutines make structured parallelism tractable
+- **Deployment** — single static binary, no runtime dependency
+- **Performance** — within 2–3× of C for most I/O-bound systems work
+
+The compile-time guarantees (no nulls without `*`, explicit error returns, no implicit conversions) make large codebases surprisingly navigable.
+
+## Key Patterns
+
+### Error Handling
+
+Go's explicit error returns feel verbose until you realize you're never losing errors in stack traces.
+
+```go
+data, err := os.ReadFile("config.yaml")
+if err != nil {
+    return fmt.Errorf("failed to read config: %w", err)
+}
+```
+
+The `%w` verb wraps the original error so callers can use `errors.Is` / `errors.As` for structured inspection. The chain of error context reads like a call stack without the runtime overhead.
+
+### Interfaces — Small is Powerful
+
+Go uses *structural* (duck) typing. Any type implementing the required methods satisfies the interface — no `implements` keyword.
+
+```go
+type Reader interface {
+    Read(p []byte) (n int, err error)
+}
+
+type Writer interface {
+    Write(p []byte) (n int, err error)
+}
+
+// Composed interfaces stay small
+type ReadWriter interface {
+    Reader
+    Writer
+}
+```
+
+This is why `io.Reader` is everywhere. A file, a network connection, a byte buffer, an HTTP response body — all satisfy `io.Reader`. You write one function; it works with all of them.
+
+### Goroutines and Channels
+
+```go
+func fanOut(inputs []string) <-chan Result {
+    out := make(chan Result, len(inputs))
+    var wg sync.WaitGroup
+
+    for _, s := range inputs {
+        wg.Add(1)
+        go func(s string) {
+            defer wg.Done()
+            out <- process(s)
+        }(s)
+    }
+
+    go func() {
+        wg.Wait()
+        close(out)
+    }()
+
+    return out
+}
+```
+
+Goroutines are cheap (~2KB stack, grows as needed). Channels are typed pipes with built-in backpressure when buffered channels fill. The `select` statement lets you multiplex across channels without callbacks.
+
+### Context Propagation
+
+```go
+func fetchUser(ctx context.Context, id int64) (*User, error) {
+    ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+    defer cancel()
+
+    return db.QueryRowContext(ctx, "SELECT * FROM users WHERE id = ?", id)
+}
+```
+
+Pass `context.Context` as the **first argument** to every function that does I/O. It carries deadlines, cancellation signals, and request-scoped values down the call tree. When the root context is cancelled (HTTP request gone, timeout exceeded), everything using it stops cleanly.
+
+## Module Structure
+
+```
+myservice/
+├── cmd/
+│   └── server/
+│       └── main.go      # entry point, wires everything together
+├── internal/
+│   ├── handler/         # HTTP handlers
+│   ├── service/         # business logic
+│   └── store/           # database layer
+├── pkg/
+│   └── middleware/      # reusable, importable by other modules
+├── go.mod
+└── go.sum
+```
+
+`internal/` packages cannot be imported by code outside the module. `pkg/` packages are explicitly public. `cmd/` packages are entry points that import from both.
+
+## When Not to Use Go
+
+| Use case | Better alternative |
+|---|---|
+| GUI applications | Use a dedicated framework (Qt, Flutter) |
+| Numerical / scientific computing | Python (NumPy), Julia, Fortran |
+| Rapid prototyping | Python, Ruby |
+| Low-level system programming | Rust (memory safety without GC) |
+| Heavy generics / type magic | Rust, Haskell |
+
+## Related
+
+- [[Systems Thinking]] — the design philosophy Go embodies
+- [[Rust]] — the other systems language worth knowing

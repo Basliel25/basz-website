@@ -1,0 +1,23 @@
+---
+interface Props {
+  num: string
+  kicker: string
+  title: string
+  desc: string
+  href: string
+  count: string
+}
+
+const { num, kicker, title, desc, href, count } = Astro.props
+---
+
+<a href={href} class="idx-card">
+  <div class="idx-card__num">{num}</div>
+  <div class="idx-card__kicker">{kicker}</div>
+  <div class="idx-card__title">{title}</div>
+  <p class="idx-card__desc">{desc}</p>
+  <div class="idx-card__footer">
+    <span>{count}</span>
+    <span class="arrow">→</span>
+  </div>
+</a>

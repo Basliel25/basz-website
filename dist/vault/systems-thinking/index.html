@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Systems Thinking — bas_</title><meta name="description" content="A map of how complex systems work and how to reason about designing, breaking, and fixing them."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Systems Thinking</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--growing"> ◑ GROWING </span> <span class="vault-type-badge">MOC</span> <span class="vault-tag vault-tag--inline">systems</span><span class="vault-tag vault-tag--inline">philosophy</span><span class="vault-tag vault-tag--inline">design</span> </div> <h1 class="article__title">Systems Thinking</h1> <p class="article__sub">A map of how complex systems work and how to reason about designing, breaking, and fixing them.</p> <div class="article__meta"> <span>PLANTED · 5 FEBRUARY 2024</span> <span>· MAP OF CONTENT</span> </div> </article> <section class="prose"> <p>A map of how complex systems work — and how to design, reason about, and fix them. My main lens for both technical and human problems.</p>
+<h2 id="core-ideas">Core Ideas</h2>
+<h3 id="feedback-loops">Feedback Loops</h3>
+<p>Systems respond to their own outputs. Two types:</p>
+<ul>
+<li><strong>Reinforcing (positive) loops</strong> — amplify change. Growth compounds, but so does collapse.</li>
+<li><strong>Balancing (negative) loops</strong> — resist change and seek equilibrium. A thermostat is a balancing loop.</li>
+</ul>
+<p>Most interesting system behavior comes from the <em>interaction</em> between multiple loops.</p>
+<h3 id="emergence">Emergence</h3>
+<p>Properties that appear at the level of the system but not in any individual component.</p>
+<ul>
+<li>Water is wet; H₂O molecules are not</li>
+<li>Traffic jams emerge without any driver intending to cause one</li>
+<li>Market prices emerge from individual decisions</li>
+</ul>
+<p>You can’t predict emergent behavior by studying components in isolation.</p>
+<h3 id="stocks-and-flows">Stocks and Flows</h3>
+<p>Every system has <strong>stocks</strong> (accumulations — water in a tank, knowledge in memory, money in an account) and <strong>flows</strong> (rates of change — fill rate, learning rate, spending rate).</p>
+<p>The key insight: <strong>stocks change slowly</strong>. You can’t instantly drain a reservoir. You can’t instantly retrain an organization. This is why systems have inertia — and why policy changes take time to show effects.</p>
+<h3 id="constraints">Constraints</h3>
+<blockquote>
+<p>“A chain is only as strong as its weakest link.”</p>
+</blockquote>
+<p>In any system with a goal, there is always a <strong>binding constraint</strong> — the factor limiting throughput. Goldratt’s Theory of Constraints says:</p>
+<ol>
+<li>Identify the constraint</li>
+<li>Exploit it (maximize its throughput)</li>
+<li>Subordinate everything else to the constraint</li>
+<li>Elevate the constraint</li>
+<li>Repeat</li>
+</ol>
+<p>Non-constraints have slack. Optimizing non-constraints without addressing the constraint is waste.</p>
+<h2 id="in-software-design">In Software Design</h2>
+<h3 id="distributed-systems">Distributed Systems</h3>
+<p>A distributed system is a collection of independent computers that appear to users as a single coherent system. The hard problems:</p>
+<ul>
+<li><strong>Consistency</strong> — all nodes see the same data at the same time</li>
+<li><strong>Availability</strong> — every request gets a response</li>
+<li><strong>Partition tolerance</strong> — the system works despite dropped messages</li>
+</ul>
+<p>CAP theorem: you can have at most two of the three.</p>
+<h3 id="conways-law">Conway’s Law</h3>
+<blockquote>
+<p>“Organizations which design systems are constrained to produce designs which are copies of the communication structures of those organizations.”</p>
+</blockquote>
+<p>Software architecture mirrors org structure, not the other way around. A monolith often signals a team that communicates well. Microservices often signal org fragmentation.</p>
+<p><strong>Inverse Conway Maneuver</strong>: deliberately restructure the team to produce the desired architecture.</p>
+<h3 id="abstraction-layers">Abstraction Layers</h3>
+<p>Every useful abstraction hides complexity — and in doing so, creates a <strong>leaky abstraction</strong>. Joel Spolsky’s law: “All non-trivial abstractions, to some degree, are leaky.”</p>
+<p>The abstraction layer decides what complexity to hide. Good layers hide accidental complexity (details of implementation) while exposing essential complexity (semantics that matter to the caller).</p>
+<h2 id="organizational-systems">Organizational Systems</h2>
+<h3 id="information-flow">Information Flow</h3>
+<p>Knowledge moves through teams the same way data moves through networks: with latency, loss, and distortion. Bottlenecks in information flow produce the same effects as bottlenecks in data pipelines — queues build up, decisions get made on stale data.</p>
+<h3 id="incentives">Incentives</h3>
+<p>Systems behave as incentives dictate, not as designers intend. If the incentive structure rewards short-term metrics, you get Goodhart’s Law:</p>
+<blockquote>
+<p>“When a measure becomes a target, it ceases to be a good measure.”</p>
+</blockquote>
+<h2 id="key-references">Key References</h2>
+<ul>
+<li>Donella Meadows — <em>Thinking in Systems</em> (the canonical text)</li>
+<li>Nassim Taleb — <em>Antifragile</em> (systems that gain from disorder)</li>
+<li>Peter Senge — <em>The Fifth Discipline</em> (learning organizations)</li>
+<li>Eliyahu Goldratt — <em>The Goal</em> (Theory of Constraints as a novel)</li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/entropy-and-disorder">Entropy and Disorder</a> — entropy as a lens on system state</li>
+<li><a href="/vault/algorithm">Algorithm</a> — systems for transforming information</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

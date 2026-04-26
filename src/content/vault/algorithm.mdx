@@ -1,0 +1,41 @@
+---
+title: Algorithm
+type: note
+status: growing
+created: 2025-08-01
+tags: [algorithms, cs-fundamentals]
+description: A finite set of procedural steps transforming specific inputs to specific outputs.
+---
+
+An algorithm is a finite set of procedural and elementary computational steps to transform a specific set of *inputs* to a specific set of *outputs*.
+
+More technically, for a *set of inputs $I$* and a *set of outputs $O$*, an algorithm is a function $f : I \rightarrow O$ where inputs are mapped to outputs.
+
+Algorithms are designed, analyzed and optimized on the theoretical basis of a [[model of computation]] and operate within those specifications.
+
+## Key Properties
+
+- **Finiteness** — must terminate after a finite number of steps
+- **Definiteness** — each step must be precisely defined
+- **Input** — zero or more well-defined inputs
+- **Output** — one or more well-defined outputs
+- **Effectiveness** — each operation must be basic enough to be done exactly in finite time
+
+## Complexity Classes
+
+Algorithm efficiency is measured in terms of *time* and *space* as functions of input size $n$:
+
+| Notation | Name | Example |
+|---|---|---|
+| $O(1)$ | Constant | Array access |
+| $O(\log n)$ | Logarithmic | Binary search |
+| $O(n)$ | Linear | Linear scan |
+| $O(n \log n)$ | Linearithmic | Merge sort |
+| $O(n^2)$ | Quadratic | Bubble sort |
+| $O(2^n)$ | Exponential | Subset enumeration |
+
+## Related
+
+- [[Computational Problem]] — what algorithms solve
+- [[RAM Model of Computation]] — the abstract machine algorithms run on
+- [[Data Structure]] — how algorithms organize their working data

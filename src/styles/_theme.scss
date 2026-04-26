@@ -1,0 +1,42 @@
+@use 'tokens' as *;
+
+// ── CSS custom properties + theme switching ───────────────────────────────
+
+:root {
+  --paper:       #{$paper};
+  --ink:         #{$ink};
+  --ink-dim:     #{$ink-dim};
+  --ink-ghost:   #{$ink-ghost};
+  --border:      #{$border};
+  --accent:      #{$accent};
+  --accent-dim:  rgba(212, 48, 24, .07);
+  --green:       #{$green};
+  --yellow:      #{$yellow};
+  --blue:        #{$blue};
+  --purple:      #{$purple};
+  --font-display: #{$font-display};
+  --font-serif:   #{$font-serif};
+  --font-mono:    #{$font-mono};
+
+  // Noise — multiply on light: darkens the grain into the concrete
+  --noise-opacity: 0.11;
+  --noise-blend:   multiply;
+}
+
+[data-theme="dark"] {
+  --paper:      #0d0c0a;    // carbon black
+  --ink:        #dedad3;
+  --ink-dim:    #787470;
+  --ink-ghost:  #383532;
+  --border:     #252220;
+  --accent:     #e84e2a;    // slightly hotter on dark for visibility
+  --accent-dim: rgba(232, 78, 42, .09);
+  --green:      #4aaa5a;
+  --yellow:     #c8981a;
+  --blue:       #5090d0;
+  --purple:     #a07efc;
+
+  // Noise — screen on dark: brightens grain against the carbon
+  --noise-opacity: 0.16;
+  --noise-blend:   screen;
+}

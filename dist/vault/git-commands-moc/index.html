@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Git Commands MOC — bas_</title><meta name="description" content="Command reference for Git — staging, branching, history, remotes."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Git Commands MOC</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">MOC</span> <span class="vault-tag vault-tag--inline">git</span><span class="vault-tag vault-tag--inline">devops</span><span class="vault-tag vault-tag--inline">commands</span> </div> <h1 class="article__title">Git Commands MOC</h1> <p class="article__sub">Command reference for Git — staging, branching, history, remotes.</p> <div class="article__meta"> <span>PLANTED · 1 AUGUST 2025</span> <span>· MAP OF CONTENT</span> </div> </article> <section class="prose"> <p>Command reference for Git 2.50+. Organized by workflow stage, not alphabetically.</p>
+<h2 id="staging">Staging</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Stage a specific file</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> add</span><span style="color:#99FFE4"> path/to/file</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Stage all changes (tracked + untracked)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> add</span><span style="color:#99FFE4"> -A</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Stage only modifications to tracked files (skip untracked)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> add</span><span style="color:#99FFE4"> -u</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Interactive staging — pick hunks</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> add</span><span style="color:#99FFE4"> -p</span></span></code></pre>
+<h2 id="commits">Commits</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Commit with message</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> commit</span><span style="color:#99FFE4"> -m</span><span style="color:#99FFE4"> &quot;feat: add OAuth2 middleware&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Commit and open editor for longer message</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> commit</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Amend the last commit (before push only)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> commit</span><span style="color:#99FFE4"> --amend</span><span style="color:#99FFE4"> --no-edit</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Empty commit (trigger CI)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> commit</span><span style="color:#99FFE4"> --allow-empty</span><span style="color:#99FFE4"> -m</span><span style="color:#99FFE4"> &quot;chore: retrigger pipeline&quot;</span></span></code></pre>
+<h2 id="branching">Branching</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Create and switch in one step</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> switch</span><span style="color:#99FFE4"> -c</span><span style="color:#99FFE4"> feat/new-feature</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Switch to existing branch</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> switch</span><span style="color:#99FFE4"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># List all branches with last commit</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> branch</span><span style="color:#99FFE4"> -v</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Delete local branch (safe — won&#39;t delete if unmerged)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> branch</span><span style="color:#99FFE4"> -d</span><span style="color:#99FFE4"> old-branch</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Force delete</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> branch</span><span style="color:#99FFE4"> -D</span><span style="color:#99FFE4"> old-branch</span></span></code></pre>
+<h2 id="stashing">Stashing</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Stash working directory changes</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> stash</span><span style="color:#99FFE4"> push</span><span style="color:#99FFE4"> -m</span><span style="color:#99FFE4"> &quot;wip: auth refactor&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># List stashes</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> stash</span><span style="color:#99FFE4"> list</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Apply most recent stash (keeps it in list)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> stash</span><span style="color:#99FFE4"> apply</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Pop most recent stash (removes from list)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> stash</span><span style="color:#99FFE4"> pop</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Apply specific stash</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> stash</span><span style="color:#99FFE4"> apply</span><span style="color:#99FFE4"> stash@{</span><span style="color:#FFC799">2</span><span style="color:#99FFE4">}</span></span></code></pre>
+<h2 id="history--diff">History &amp; Diff</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Compact log with graph</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> log</span><span style="color:#99FFE4"> --oneline</span><span style="color:#99FFE4"> --graph</span><span style="color:#99FFE4"> --all</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Show changes since last commit</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> diff</span><span style="color:#99FFE4"> HEAD</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Show staged changes about to be committed</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> diff</span><span style="color:#99FFE4"> --cached</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Find commit that introduced a bug (binary search)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> bisect</span><span style="color:#99FFE4"> start</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> bisect</span><span style="color:#99FFE4"> bad</span><span style="color:#99FFE4"> HEAD</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> bisect</span><span style="color:#99FFE4"> good</span><span style="color:#99FFE4"> v1.2.0</span></span></code></pre>
+<h2 id="remotes">Remotes</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Show remotes</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> remote</span><span style="color:#99FFE4"> -v</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Add a remote</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> remote</span><span style="color:#99FFE4"> add</span><span style="color:#99FFE4"> upstream</span><span style="color:#99FFE4"> https://github.com/org/repo.git</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Fetch + rebase (safer than pull for shared branches)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> fetch</span><span style="color:#99FFE4"> origin</span><span style="color:#FFF"> &amp;&amp; </span><span style="color:#FFC799">git</span><span style="color:#99FFE4"> rebase</span><span style="color:#99FFE4"> origin/main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Push new branch and set upstream</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> push</span><span style="color:#99FFE4"> -u</span><span style="color:#99FFE4"> origin</span><span style="color:#99FFE4"> feat/new-feature</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Delete remote branch</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> push</span><span style="color:#99FFE4"> origin</span><span style="color:#99FFE4"> --delete</span><span style="color:#99FFE4"> old-branch</span></span></code></pre>
+<h2 id="undo--recovery">Undo / Recovery</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Undo last commit, keep changes staged</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> reset</span><span style="color:#99FFE4"> --soft</span><span style="color:#99FFE4"> HEAD~1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Undo last commit, keep changes unstaged</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> reset</span><span style="color:#99FFE4"> HEAD~1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Discard all local changes (irreversible)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> reset</span><span style="color:#99FFE4"> --hard</span><span style="color:#99FFE4"> HEAD</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B8B8B94"># Recover a deleted branch (find the commit hash first)</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> reflog</span></span>
+<span class="line"><span style="color:#FFC799">git</span><span style="color:#99FFE4"> checkout</span><span style="color:#99FFE4"> -b</span><span style="color:#99FFE4"> recovered-branch</span><span style="color:#A0A0A0"> &lt;</span><span style="color:#99FFE4">has</span><span style="color:#FFF">h</span><span style="color:#A0A0A0">&gt;</span></span></code></pre> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

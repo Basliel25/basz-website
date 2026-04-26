@@ -1,0 +1,98 @@
+@use 'mixins' as *;
+
+// ── Masthead ──────────────────────────────────────────────────────────────
+
+.masthead {
+  @include container;
+  padding-top: 24px; padding-bottom: 24px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 48px;
+  border-bottom: 3px solid var(--ink);
+
+  &__logo {
+    @include display(32px, -2px);
+    text-transform: uppercase;
+    color: var(--ink);
+    line-height: 1;
+    span { color: var(--accent); }
+  }
+
+  &__nav {
+    display: flex;
+    gap: 32px;
+    justify-self: center;
+
+    a {
+      @include mono(10px, 2px);
+      color: var(--ink);
+      position: relative;
+      padding: 4px 0;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 0; height: 2px;
+        background: var(--accent);
+        transition: width .25s;
+      }
+      &:hover::after, &.active::after { width: 100%; }
+      &.active { color: var(--accent); }
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    @include mono(10px, 2px);
+    color: var(--ink-dim);
+  }
+}
+
+.theme-toggle {
+  @include mono(10px, 2px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 12px;
+  transition: background .2s, color .2s;
+  &:hover { background: var(--accent); color: var(--paper); }
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────────────────
+
+.breadcrumb {
+  @include container;
+  padding-top: 12px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-dim);
+  text-transform: lowercase;
+  letter-spacing: 1px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  a:hover { color: var(--accent); }
+  &__sep     { color: var(--ink-ghost); }
+  &__current { color: var(--ink); }
+}
+
+// ── Colophon ──────────────────────────────────────────────────────────────
+
+.colophon {
+  @include container;
+  padding-top: 32px; padding-bottom: 32px;
+  border-top: 3px solid var(--ink);
+
+  &__copy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    @include mono(9px, 2px);
+    color: var(--ink-dim);
+  }
+}

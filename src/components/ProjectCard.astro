@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from "astro:content"
+import Pill from "./Pill.astro"
+
+interface Props {
+  project: CollectionEntry<"projects">
+}
+
+const { project } = Astro.props
+const d = project.data
+const statusLabel = { shipped: "SHIPPED", wip: "WIP", archived: "ARCHIVED" }[d.status]
+---
+
+<a href={`/projects/${project.id.replace(/\.[^.]+$/, "")}`} class="project-card">
+  <div class="project-card__header">
+    <span>{d.stack[0] ?? "PROJECT"}</span>
+    <span class={`project-card__status project-card__status--${d.status}`}>{statusLabel}</span>
+  </div>
+  <div class="project-card__body">
+    <h3 class="project-card__title">{d.title}</h3>
+    <p class="project-card__desc">{d.description}</p>
+    {d.stats.length > 0 && (
+      <div class="project-card__stats">
+        {d.stats.slice(0, 3).map((s) => (
+          <div class="project-card__stat">
+            <span class="project-card__stat-label">{s.label}</span>
+            <span class="project-card__stat-value">{s.value}</span>
+          </div>
+        ))}
+      </div>
+    )}
+    <div class="project-card__tags">
+      {d.tags.map((t) => <Pill variant={t} />)}
+    </div>
+    <div class="project-card__footer">
+      <span class="project-card__read">VIEW →</span>
+    </div>
+  </div>
+</a>

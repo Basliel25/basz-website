@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "./BaseLayout.astro"
+import Pill from "../components/Pill.astro"
+import { formatDateLong } from "../lib/dates.ts"
+
+interface Props {
+  post: CollectionEntry<"blog">
+}
+
+const { post } = Astro.props
+const d = post.data
+const crumbs = [
+  { label: "bas_", href: "/" },
+  { label: "Dispatches", href: "/blog" },
+  { label: d.title },
+]
+---
+
+<BaseLayout title={d.title} description={d.excerpt} crumbs={crumbs}>
+  <article class="article">
+    <div class="article__kicker">
+      {d.issue && <span class="hero__kicker-stamp">{d.issue}</span>}
+      {d.tags.map((t) => <Pill variant={t} />)}
+    </div>
+    <h1 class="article__title">{d.title}</h1>
+    {d.subtitle && <p class="article__sub">{d.subtitle}</p>}
+    <div class="article__meta">
+      <span>PUBLISHED · {formatDateLong(d.date)}</span>
+      <span>· {d.readTime} MIN READ</span>
+    </div>
+  </article>
+  <section class="prose">
+    <slot />
+  </section>
+  <nav class="entry-nav">
+    <a href="/blog">
+      <span class="entry-nav__label">↑ Index</span>
+      <span class="entry-nav__title">All dispatches</span>
+    </a>
+  </nav>
+</BaseLayout>

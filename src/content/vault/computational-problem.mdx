@@ -1,0 +1,48 @@
+---
+title: Computational Problem
+type: note
+status: growing
+created: 2025-08-01
+tags: [algorithms, cs-fundamentals]
+description: A problem that can be solved by discrete computational steps specified with an algorithm.
+---
+
+A computational problem is a problem that can be solved by discrete computational steps specified with an [[Algorithm]].
+
+## Formal Definition
+
+A computational problem $P$ consists of:
+
+- A *set of instances* $I$ — the valid inputs
+- A *set of solutions* $O$ — the valid outputs
+- A *relation* $R \subseteq I \times O$ — mapping instances to their valid solutions
+
+An [[Algorithm]] $A$ **solves** $P$ if for every instance $i \in I$, it produces an output $o \in O$ such that $(i, o) \in R$.
+
+## Problem Specifications
+
+Every computational problem is defined by three things:
+
+1. **Input** — the set of instances or cases that are processed as inputs
+2. **Constraints** — conditions the input must satisfy
+3. **Output conditions** — what the produced output must satisfy
+
+## Example: Sorting
+
+- **Input**: a sequence of $n$ numbers $\langle a_1, a_2, \ldots, a_n \rangle$
+- **Output**: a permutation $\langle a_1', a_2', \ldots, a_n' \rangle$ such that $a_1' \leq a_2' \leq \ldots \leq a_n'$
+- **Constraints**: none (works for any comparable sequence)
+
+## Types of Computational Problems
+
+| Type | Description | Example |
+|---|---|---|
+| Decision | Yes/No answer | Is $n$ prime? |
+| Search | Find a solution | Find shortest path |
+| Optimization | Find the best solution | Minimum spanning tree |
+| Counting | Count solutions | How many valid colorings? |
+
+## Related
+
+- [[Algorithm]] — the mechanism that solves computational problems
+- [[RAM Model of Computation]] — the abstract machine on which problems are solved

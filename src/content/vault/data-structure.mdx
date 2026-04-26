@@ -1,0 +1,76 @@
+---
+title: Data Structure
+type: note
+status: seedling
+created: 2025-08-19
+tags: [algorithms, cs-fundamentals]
+description: A collection of data values, the relationships among them, and the operations available on them.
+---
+
+A data structure is a collection of data values, the relationships among them, and the operations that can be performed on those values. It is the **organizational layer** that algorithms operate on.
+
+## Formal View
+
+A data structure is an algebraic structure about data, defined by:
+
+1. **A set of values** — the data being stored
+2. **Relations** — how values are connected (e.g. ordering, parent-child, key-value)
+3. **Operations** — what you can do (insert, delete, search, traverse)
+
+The choice of data structure determines the *time and space complexity* of the operations an algorithm needs.
+
+## Fundamental Structures
+
+### Arrays
+
+- Fixed-size, contiguous memory
+- $O(1)$ random access by index
+- $O(n)$ insertion/deletion (requires shifting)
+- Cache-friendly — spatial locality
+
+### Linked Lists
+
+- Dynamic size, nodes connected by pointers
+- $O(1)$ insertion/deletion at known node
+- $O(n)$ access by position
+- Poor cache locality
+
+### Hash Tables
+
+- Key-value store via hash function
+- $O(1)$ average for insert, delete, lookup
+- $O(n)$ worst-case (hash collisions)
+- No inherent ordering
+
+### Trees
+
+| Variant | Search | Insert | Delete | Notes |
+|---|---|---|---|---|
+| BST (unbalanced) | $O(n)$ worst | $O(n)$ worst | $O(n)$ worst | Degenerates on sorted input |
+| AVL Tree | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | Height-balanced |
+| Red-Black Tree | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | Used in Linux scheduler |
+| B-Tree | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | Optimized for disk I/O |
+| Heap | $O(n)$ | $O(\log n)$ | $O(\log n)$ | $O(1)$ min/max access |
+
+### Graphs
+
+General structure: vertices $V$ and edges $E$.
+
+- **Adjacency matrix** — $O(1)$ edge lookup, $O(V^2)$ space
+- **Adjacency list** — $O(V + E)$ space, better for sparse graphs
+
+## Choosing a Data Structure
+
+The right structure depends on the dominant operations:
+
+- Mostly lookups by key → **hash table**
+- Ordered traversal + balanced ops → **balanced BST**
+- Priority queue / scheduling → **heap**
+- Graph traversal (BFS, DFS) → **adjacency list**
+- Time-series / sliding window → **deque** or **circular buffer**
+
+## Related
+
+- [[Algorithm]] — uses data structures to process inputs
+- [[RAM Model of Computation]] — the machine model that determines operation costs
+- [[Computational Problem]] — the problem a data structure helps solve

@@ -1,0 +1,44 @@
+@use 'tokens' as *;
+
+// ── Responsive breakpoint ($break: 840px) ────────────────────────────────
+
+@media (max-width: $break) {
+  .masthead {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px $pad-x-sm;
+    &__nav  { justify-self: start; flex-wrap: wrap; }
+    &__meta { justify-self: start; }
+  }
+
+  .hero__grid      { grid-template-columns: 1fr; gap: 16px; }
+  .hero__numstack  { border-right: none; border-bottom: 2px solid var(--ink); padding-right: 0; padding-bottom: 16px; }
+
+  .index-sections  { grid-template-columns: 1fr 1fr; }
+  .index-recent,
+  .mega-hero__row2,
+  .about-main,
+  .contact-strip,
+  .editorial-head  { grid-template-columns: 1fr; gap: 32px; }
+
+  .editorial-head__divider { display: none; }
+  .featured__body  { grid-template-columns: 1fr; gap: 16px; }
+  .project-grid    { grid-template-columns: 1fr; padding: 0 $pad-x-sm; }
+
+  .post-row {
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    &__meta { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+
+  .colo-block__grid { grid-template-columns: 1fr; gap: 28px; }
+  .prose            { padding: 0 $pad-x-sm; }
+
+  // Uniform side padding on all container-level elements
+  .article, .mega-hero, .hero, .breadcrumb, .colophon, .filter-strip,
+  .strip-divider, .featured, .posts, .colo-block, .contact-strip,
+  .editorial-head, .about-main, .index-recent, .index-sections, .entry-nav {
+    padding-left: $pad-x-sm;
+    padding-right: $pad-x-sm;
+  }
+}

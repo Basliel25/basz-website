@@ -1,0 +1,65 @@
+@use 'tokens' as *;
+
+// ── Mixins ────────────────────────────────────────────────────────────────
+
+@mixin container($pb: 0) {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 $pad-x $pb;
+}
+
+@mixin mono($size: 10px, $ls: 2px, $up: true) {
+  font-family: var(--font-mono);
+  font-size: $size;
+  letter-spacing: $ls;
+  @if $up { text-transform: uppercase; }
+}
+
+// Stencil-cut heavy — Bebas Neue, naturally all-caps, no italic
+@mixin serif-italic($size: 22px, $lh: 1.2) {
+  font-family: var(--font-display);
+  font-size: $size;
+  line-height: $lh;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@mixin display($size: 42px, $ls: 1px) {
+  font-family: var(--font-display);
+  font-weight: 400;  // Bebas Neue is single-weight
+  font-size: $size;
+  letter-spacing: $ls;
+  text-transform: uppercase;
+}
+
+@mixin lift($off: 4px, $shadow: var(--accent)) {
+  transition: transform $t-med, box-shadow $t-med, border-color $t-med, color $t-med;
+  &:hover {
+    transform: translate(-#{$off}, -#{$off});
+    box-shadow: #{$off * 2} #{$off * 2} 0 $shadow;
+  }
+}
+
+@mixin stamp($color: var(--accent), $rot: -2deg, $bw: 1.5px) {
+  display: inline-block;
+  transform: rotate($rot);
+  border: $bw solid $color;
+  color: $color;
+  padding: 3px 10px;
+  letter-spacing: 2px;
+}
+
+@mixin block-chrome($bw: 2px) {
+  margin: 32px 0;
+  border: $bw solid var(--ink);
+  background: var(--paper);
+}
+
+@mixin chrome-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  @include mono(9px, 2px);
+}

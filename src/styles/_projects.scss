@@ -1,0 +1,100 @@
+@use 'mixins' as *;
+
+// ── Project grid + cards ──────────────────────────────────────────────────
+
+.project-grid {
+  @include container;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 64px;
+}
+
+.project-card {
+  border: 1px solid var(--border);
+  margin: -0.5px;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  position: relative;
+
+  &:hover {
+    border-color: var(--ink);
+    z-index: 3;
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 var(--accent);
+    .project-card__title { color: var(--accent); }
+    .project-card__read  { transform: translateX(4px); }
+  }
+
+  &__header { @include chrome-header; align-items: center; }
+  &__status {
+    padding: 2px 6px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    border: 1px solid currentColor;
+    &--shipped { color: var(--green); }
+    &--wip     { color: var(--yellow); }
+  }
+
+  &__body  { padding: 20px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+  &__title { @include serif-italic(22px, 1.2); color: var(--ink); transition: color .2s; }
+  &__desc  { font-family: var(--font-mono); font-size: 11px; line-height: 1.7; color: var(--ink-dim); }
+
+  &__stats      { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  &__stat       { display: flex; flex-direction: column; gap: 2px; }
+  &__stat-label { @include mono(9px, 2px); color: var(--ink-dim); }
+  &__stat-value { @include display(16px, -.5px); color: var(--ink); }
+
+  &__tags   { display: flex; flex-wrap: wrap; gap: 4px; }
+  &__tag    { @include mono(9px, 1px); padding: 2px 6px; border: 1px solid var(--border); color: var(--ink-dim); }
+
+  &__footer { margin-top: auto; display: flex; justify-content: flex-end; padding-top: 12px; border-top: 1px solid var(--border); }
+  &__read   { @include mono(10px, 2px); color: var(--accent); display: inline-block; transition: transform .2s; }
+}
+
+// ── Project entry header (2-col: main + stats sidebar) ───────────────────
+
+.project-header {
+  @include container;
+  padding-top: 48px; padding-bottom: 0;
+  border-bottom: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 48px;
+  padding-bottom: 48px;
+
+  &__main    { display: flex; flex-direction: column; }
+  &__meta    { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+  &__type    { @include mono(9px, 2px); color: var(--ink-dim); }
+  &__status  {
+    font-size: 8px; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 10px; border: 1px solid;
+    &--shipped  { color: var(--green); border-color: var(--green); }
+    &--wip      { color: var(--yellow); border-color: var(--yellow); }
+    &--archived { color: var(--ink-dim); border-color: var(--ink-dim); }
+  }
+  &__title    { @include serif-italic(42px, 1.1); margin-bottom: 16px; }
+  &__subtitle { font-family: var(--font-mono); font-size: 14px; color: var(--ink-dim); line-height: 1.6; max-width: 560px; }
+
+  &__sidebar       { border-left: 1px solid var(--border); padding-left: 32px; }
+  &__sidebar-label { @include mono(9px, 2px); color: var(--ink-dim); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  &__stats         { display: flex; flex-direction: column; }
+}
+
+.header-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  &:last-child { border-bottom: none; }
+  &__label { color: var(--ink-ghost); text-transform: uppercase; letter-spacing: 1px; }
+  &__value { color: var(--ink); font-weight: 500; }
+}
+
+@media (max-width: 840px) {
+  .project-header { grid-template-columns: 1fr; }
+  .project-header__sidebar { border-left: none; border-top: 1px solid var(--border); padding-left: 0; padding-top: 24px; }
+}

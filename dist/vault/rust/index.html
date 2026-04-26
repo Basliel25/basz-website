@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rust — bas_</title><meta name="description" content="Systems language with memory safety guarantees enforced at compile time via the borrow checker."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.DbshK9oF.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BAS<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Amsterdam · NL</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Rust</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--seedling"> ○ SEEDLING </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">programming</span><span class="vault-tag vault-tag--inline">systems</span><span class="vault-tag vault-tag--inline">rust</span> </div> <h1 class="article__title">Rust</h1> <p class="article__sub">Systems language with memory safety guarantees enforced at compile time via the borrow checker.</p> <div class="article__meta"> <span>PLANTED · 19 AUGUST 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Rust enforces memory safety at <strong>compile time</strong> through its ownership and borrow-checker system — no garbage collector, no null pointer exceptions, no data races by default.</p>
+<h2 id="the-ownership-model">The Ownership Model</h2>
+<p>Every value in Rust has exactly <strong>one owner</strong>. When the owner goes out of scope, the value is dropped (memory freed).</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> main</span><span style="color:#FFF">() {</span></span>
+<span class="line"><span style="color:#A0A0A0">    let</span><span style="color:#FFF"> s1 </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> String</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">from</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;hello&quot;</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#A0A0A0">    let</span><span style="color:#FFF"> s2 </span><span style="color:#A0A0A0">=</span><span style="color:#FFF"> s1;  </span><span style="color:#8B8B8B94">// s1 is MOVED into s2; s1 is now invalid</span></span>
+<span class="line"><span style="color:#8B8B8B94">    // println!(&quot;{}&quot;, s1);  // compile error: use of moved value</span></span>
+<span class="line"><span style="color:#FFC799">    println!</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;{}&quot;</span><span style="color:#FFF">, s2);     </span><span style="color:#8B8B8B94">// fine</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This makes use-after-free impossible by construction.</p>
+<h2 id="borrowing">Borrowing</h2>
+<p>You can <em>borrow</em> a value without taking ownership — either immutably (many borrows ok) or mutably (one at a time, exclusive):</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> length</span><span style="color:#FFF">(s</span><span style="color:#A0A0A0">:</span><span style="color:#A0A0A0"> &amp;</span><span style="color:#FFC799">String</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> usize</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFF">    s</span><span style="color:#A0A0A0">.</span><span style="color:#FFC799">len</span><span style="color:#FFF">()   </span><span style="color:#8B8B8B94">// borrows s, does not own it</span></span>
+<span class="line"><span style="color:#FFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> append</span><span style="color:#FFF">(s</span><span style="color:#A0A0A0">:</span><span style="color:#A0A0A0"> &amp;mut</span><span style="color:#FFC799"> String</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFF">    s</span><span style="color:#A0A0A0">.</span><span style="color:#FFC799">push_str</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;, world&quot;</span><span style="color:#FFF">);   </span><span style="color:#8B8B8B94">// mutable borrow, exclusive</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>The borrow checker ensures: <strong>no mutable reference can coexist with any other reference to the same data</strong>. This eliminates data races at the type-system level.</p>
+<h2 id="error-handling">Error Handling</h2>
+<p>Rust has no exceptions. Errors are values:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">use</span><span style="color:#FFC799"> std</span><span style="color:#A0A0A0">::</span><span style="color:#FFF">fs;</span></span>
+<span class="line"><span style="color:#FFC799">use</span><span style="color:#FFC799"> std</span><span style="color:#A0A0A0">::</span><span style="color:#FFF">io;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> read_config</span><span style="color:#FFF">(path</span><span style="color:#A0A0A0">:</span><span style="color:#A0A0A0"> &amp;</span><span style="color:#FFC799">str</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> Result</span><span style="color:#FFF">&lt;</span><span style="color:#FFC799">String</span><span style="color:#FFF">, io</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">Error</span><span style="color:#FFF">&gt; {</span></span>
+<span class="line"><span style="color:#FFC799">    fs</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">read_to_string</span><span style="color:#FFF">(path)</span></span>
+<span class="line"><span style="color:#FFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> main</span><span style="color:#FFF">() {</span></span>
+<span class="line"><span style="color:#A0A0A0">    match</span><span style="color:#FFC799"> read_config</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;config.toml&quot;</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFC799">        Ok</span><span style="color:#FFF">(contents) </span><span style="color:#A0A0A0">=&gt;</span><span style="color:#FFC799"> println!</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;{}&quot;</span><span style="color:#FFF">, contents),</span></span>
+<span class="line"><span style="color:#FFC799">        Err</span><span style="color:#FFF">(e)       </span><span style="color:#A0A0A0">=&gt;</span><span style="color:#FFC799"> eprintln!</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;error: {}&quot;</span><span style="color:#FFF">, e),</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>The <code>?</code> operator propagates errors up the call stack without boilerplate:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> process</span><span style="color:#FFF">() </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> Result</span><span style="color:#FFF">&lt;(), io</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">Error</span><span style="color:#FFF">&gt; {</span></span>
+<span class="line"><span style="color:#A0A0A0">    let</span><span style="color:#FFF"> contents </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> fs</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">read_to_string</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;config.toml&quot;</span><span style="color:#FFF">)</span><span style="color:#A0A0A0">?</span><span style="color:#FFF">;</span></span>
+<span class="line"><span style="color:#8B8B8B94">    // if the above errors, ? returns early with that error</span></span>
+<span class="line"><span style="color:#FFC799">    println!</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;{}&quot;</span><span style="color:#FFF">, contents);</span></span>
+<span class="line"><span style="color:#FFC799">    Ok</span><span style="color:#FFF">(())</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<h2 id="traits">Traits</h2>
+<p>Traits are Rust’s interfaces — they define shared behavior:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#A0A0A0">trait</span><span style="color:#FFC799"> Summary</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">    fn</span><span style="color:#FFC799"> summarize</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">&amp;self</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> String</span><span style="color:#FFF">;</span></span>
+<span class="line"><span style="color:#FFC799">    fn</span><span style="color:#FFC799"> author</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">&amp;self</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> String</span><span style="color:#FFF"> { </span><span style="color:#FFC799">String</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">from</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;(unknown)&quot;</span><span style="color:#FFF">) }  </span><span style="color:#8B8B8B94">// default impl</span></span>
+<span class="line"><span style="color:#FFF">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">struct</span><span style="color:#FFC799"> Article</span><span style="color:#FFF"> { title</span><span style="color:#A0A0A0">:</span><span style="color:#FFC799"> String</span><span style="color:#FFF">, body</span><span style="color:#A0A0A0">:</span><span style="color:#FFC799"> String</span><span style="color:#FFF"> }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#FFC799">impl</span><span style="color:#FFC799"> Summary</span><span style="color:#A0A0A0"> for</span><span style="color:#FFC799"> Article</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">    fn</span><span style="color:#FFC799"> summarize</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">&amp;self</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> String</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">        format!</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;{}: {}...&quot;</span><span style="color:#FFF">, </span><span style="color:#A0A0A0">self.</span><span style="color:#FFF">title, </span><span style="color:#A0A0A0">&amp;self.</span><span style="color:#FFF">body[</span><span style="color:#A0A0A0">..</span><span style="color:#FFC799">100</span><span style="color:#FFF">])</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<h2 id="when-rust-shines">When Rust Shines</h2>
+<ul>
+<li><strong>Systems programming</strong> — OS kernels, embedded, WebAssembly</li>
+<li><strong>Performance-critical services</strong> — game engines, databases, network daemons</li>
+<li><strong>Any context where a memory bug would be catastrophic</strong> — cryptography, aerospace, automotive</li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/go-programming">Go Programming Language</a> — the other practical systems language</li>
+<li><a href="/vault/data-structure">Data Structure</a> — understanding how Rust models ownership of data structures</li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Amsterdam, NL</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

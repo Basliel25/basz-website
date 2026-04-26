@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import Hero from "../../components/Hero.astro"
+import FilterStrip from "../../components/FilterStrip.astro"
+import StripDivider from "../../components/StripDivider.astro"
+import ProjectCard from "../../components/ProjectCard.astro"
+
+const all = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+
+const tagCounts = new Map<string, number>()
+for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
+const tags = [...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))
+
+const active   = all.filter((p) => p.data.status === "wip")
+const shipped  = all.filter((p) => p.data.status === "shipped")
+const archived = all.filter((p) => p.data.status === "archived")
+
+const crumbs = [{ label: "bas_", href: "/" }, { label: "Projects" }]
+---
+
+<BaseLayout
+  title="Projects"
+  description="Things I've built — infrastructure, tools, side experiments."
+  crumbs={crumbs}
+>
+  <Hero
+    section="01"
+    issueLabel={`Section · ${all.length} projects`}
+    kickerStamp="PROJECTS"
+    kicker="/ the things I've built"
+    titleHtml={`<strong>Tools</strong>, systems, <span class="u">shipped</span>`}
+    tag="Infrastructure experiments, developer tools, side projects. Some shipped; all learned from."
+    meta={[`${all.length} PROJECTS`, `${active.length} IN PROGRESS`, `${shipped.length} SHIPPED`]}
+  />
+  {tags.length > 0 && <FilterStrip {tags} />}
+  {active.length > 0 && (
+    <>
+      <StripDivider text="· CURRENTLY SHIPPING ·" />
+      <div class="project-grid">
+        {active.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </>
+  )}
+  {shipped.length > 0 && (
+    <>
+      <StripDivider text="· SHIPPED ·" alt />
+      <div class="project-grid">
+        {shipped.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </>
+  )}
+  {archived.length > 0 && (
+    <>
+      <StripDivider text="· ARCHIVE ·" alt />
+      <div class="project-grid">
+        {archived.map((p) => <ProjectCard project={p} />)}
+      </div>
+    </>
+  )}
+</BaseLayout>

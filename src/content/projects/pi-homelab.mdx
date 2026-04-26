@@ -1,0 +1,32 @@
+---
+title: "Pi Homelab"
+status: "shipped"
+description: "A single-board cluster running self-hosted services behind WireGuard. Built to learn, maintained because it works."
+excerpt: "Four Raspberry Pis, one managed switch, a WireGuard overlay, and more hours of NixOS debugging than I'd care to admit. The goal was to understand what 'infrastructure' means at the scale of a bedroom shelf."
+date: 2024-03-01
+tags: ["linux", "foss", "systems"]
+stack: ["NixOS", "WireGuard", "Caddy", "Prometheus", "Grafana"]
+stats:
+  - { label: "Nodes", value: "4" }
+  - { label: "Uptime", value: "99.1%" }
+  - { label: "Services", value: "11" }
+featured: true
+---
+
+Four Raspberry Pis, one managed switch, a WireGuard overlay, and more hours of NixOS debugging than I'd care to admit.
+
+The goal was simple: stop renting things I could run myself, and learn what that actually costs — in time, in patience, in `nixos-rebuild switch` invocations at midnight. The answer to "what does infrastructure mean at the scale of a bedroom shelf" turned out to be: configuration management is the whole job.
+
+## What's running
+
+Eleven services across four nodes. Caddy handles TLS and reverse proxying. Prometheus scrapes everything; Grafana makes it visible. The overlay network means I can add a node from anywhere without touching firewall rules.
+
+## What I learned
+
+NixOS is the correct answer to "how do I reproduce this exact system state." It is not the correct answer to "I need this working in the next twenty minutes." Both things are true, and neither cancels the other out.
+
+The discipline of declaring every package and service in a single file changes how you think about state. Drift becomes visible. Removing a service means removing its declaration and rebuilding — not `sudo systemctl disable` followed by forgotten files in `/etc`.
+
+## What I'd do differently
+
+Start with monitoring earlier. The first three months I was flying blind; I'd have caught two configuration regressions immediately if Prometheus had been running from day one.
