@@ -123,7 +123,18 @@
   }
 
   // Shiki-rendered fenced code blocks — base styles from _components.scss
-  pre { margin: 32px 0; }
+  pre {
+    margin: 32px 0;
+
+    // Reset inline-code styles that bleed in from the `code` rule above
+    code {
+      background: transparent;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+    }
+  }
 
   // Math rendered by KaTeX
   .katex-display {
