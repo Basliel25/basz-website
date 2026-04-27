@@ -6,8 +6,9 @@
           (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         document.documentElement.dataset.theme = t
       })()
-    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Hyprland Keybinds</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">wayland</span> </div> <h1 class="article__title">Hyprland Keybinds</h1> <p class="article__sub">Global Hyprland bindings, organized by modifier convention.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Global bindings. Source: <code>hypr/keybinds.conf</code>.</p>
-<h2 id="apps">Apps</h2>
+    </script><link rel="stylesheet" href="/_astro/_slug_.F2ViqwG7.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Hyprland Keybinds</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">wayland</span> </div> <h1 class="article__title">Hyprland Keybinds</h1> <p class="article__sub">Global Hyprland bindings, organized by modifier convention.</p> <div class="article__meta"> <span>PLANTED · 28 APRIL 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Global bindings. Source: <code>hypr/keybinds.conf</code>.</p>
+<h2 id="core-operations">Core Operations</h2>
+<p>The physical interface is mapped to the system’s logic via a series of standard bindings.</p>
 
 
 
@@ -41,12 +42,68 @@
 
 
 
-<table><thead><tr><th>Bind</th><th>Action</th></tr></thead><tbody><tr><td><code>SUPER + T</code></td><td>kitty</td></tr><tr><td><code>SUPER + N</code></td><td>kitty → nvim in CWD</td></tr><tr><td><code>SUPER + SPACE</code></td><td>wofi launcher</td></tr><tr><td><code>SUPER + V</code></td><td>clipboard history (<code>cliphist</code> + wofi)</td></tr><tr><td><code>SUPER + U</code></td><td>theme switcher (<a href="/vault/theme-switcher-script">Theme Switcher Script</a>)</td></tr><tr><td><code>SUPER + M</code></td><td>hyprexpo workspace overview</td></tr></tbody></table>
-<h2 id="convention">Convention</h2>
-<p>Most-used → <code>SUPER + &lt;single letter&gt;</code>. Window ops → <code>SUPER + SHIFT</code>. System → <code>SUPER + CTRL</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Binding</th><th style="text-align:left">Action</th><th style="text-align:left">Description</th></tr></thead><tbody><tr><td style="text-align:left"><code>SUPER + C</code></td><td style="text-align:left"><code>killactive</code></td><td style="text-align:left">Terminate the focused window.</td></tr><tr><td style="text-align:left"><code>SUPER + T</code></td><td style="text-align:left"><code>exec $terminal</code></td><td style="text-align:left">Launch Kitty.</td></tr><tr><td style="text-align:left"><code>SUPER + E</code></td><td style="text-align:left"><code>exec $fileManager</code></td><td style="text-align:left">Open Thunar.</td></tr><tr><td style="text-align:left"><code>SUPER + SPACE</code></td><td style="text-align:left"><code>exec $menu</code></td><td style="text-align:left">Open Wofi launcher.</td></tr><tr><td style="text-align:left"><code>SUPER + N</code></td><td style="text-align:left"><code>exec kitty nvim .</code></td><td style="text-align:left">Instant-start IDE.</td></tr><tr><td style="text-align:left"><code>SUPER + L</code></td><td style="text-align:left"><code>exec hyprlock</code></td><td style="text-align:left">Secure the session.</td></tr><tr><td style="text-align:left"><code>SUPER + U</code></td><td style="text-align:left"><code>exec themeSelect</code></td><td style="text-align:left">Trigger the Theme Engine UI.</td></tr></tbody></table>
+<h2 id="navigation--layout-vim-style">Navigation &amp; Layout (Vim-Style)</h2>
+<p>Navigation follows a strict Vim-style logic using <code>h/j/k/l</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Binding</th><th style="text-align:left">Action</th><th style="text-align:left">Target</th></tr></thead><tbody><tr><td style="text-align:left"><code>SUPER + h/j/k/l</code></td><td style="text-align:left"><code>movefocus</code></td><td style="text-align:left">Left / Down / Up / Right</td></tr><tr><td style="text-align:left"><code>SUPER + SHIFT + h/j/k/l</code></td><td style="text-align:left"><code>movewindow</code></td><td style="text-align:left">Move window in direction</td></tr><tr><td style="text-align:left"><code>SUPER + F</code></td><td style="text-align:left"><code>fullscreen</code></td><td style="text-align:left">Toggle full viewport</td></tr><tr><td style="text-align:left"><code>SUPER + P</code></td><td style="text-align:left"><code>pseudo</code></td><td style="text-align:left">Toggle Dwindle Pseudo-tile</td></tr><tr><td style="text-align:left"><code>SUPER + J</code></td><td style="text-align:left"><code>togglesplit</code></td><td style="text-align:left">Flip Dwindle split orientation</td></tr></tbody></table>
+<h2 id="layout-submap-precision-resizing">Layout Submap (Precision Resizing)</h2>
+<p>Activated via <code>SUPER + SHIFT + R</code>. This mode repurposes the movement keys for window resizing:</p>
+<ul>
+<li><code>l</code>: Resize Right (+24)</li>
+<li><code>h</code>: Resize Left (-24)</li>
+<li><code>j</code>: Resize Up (-24)</li>
+<li><code>k</code>: Resize Down (+24)</li>
+<li><code>ESC</code>: Return to Global Map</li>
+</ul>
 <h2 id="conflict-check">Conflict check</h2>
-<p>Before adding:</p>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFC799">grep</span><span style="color:#99FFE4"> -i</span><span style="color:#99FFE4"> &#39;bind.*&lt;key&gt;&#39;</span><span style="color:#99FFE4"> ~/dotfiles/hypr/.config/hypr/keybinds.conf</span></span></code></pre>
+<p>Before adding: <code>grep -i &#39;bind.*&lt;key&gt;&#39; ~/dotfiles/hypr/.config/hypr/keybinds.conf</code></p>
 <h2 id="related">Related</h2>
 <ul>
 <li><a href="/vault/hyprland-config">Hyprland Config</a></li>

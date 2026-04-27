@@ -5,7 +5,7 @@ description: "A single-board cluster running self-hosted services behind WireGua
 excerpt: "Four Raspberry Pis, one managed switch, a WireGuard overlay, and more hours of NixOS debugging than I'd care to admit. The goal was to understand what 'infrastructure' means at the scale of a bedroom shelf."
 date: 2024-03-01
 tags: ["linux", "foss", "systems"]
-stack: ["NixOS", "WireGuard", "Caddy", "Prometheus", "Grafana"]
+stack: ["NixOS", "WireGuard", "Caddy", "Docker", "Prometheus", "Grafana"]
 stats:
   - { label: "Nodes", value: "4" }
   - { label: "Uptime", value: "99.1%" }
@@ -19,14 +19,32 @@ The goal was simple: stop renting things I could run myself, and learn what that
 
 ## What's running
 
-Eleven services across four nodes. Caddy handles TLS and reverse proxying. Prometheus scrapes everything; Grafana makes it visible. The overlay network means I can add a node from anywhere without touching firewall rules.
+Caddy sits in front of everything and handles TLS plus reverse-proxying to internal services by hostname. Prometheus scrapes the node exporters; Grafana renders the dashboards I actually look at. The WireGuard overlay means every node has a stable address regardless of which physical network it's on, so I can add a node from anywhere without touching firewall rules.
+
+The application layer runs as Docker containers, declared in NixOS so the host config and the container set are part of the same rebuild. The services I actually use day-to-day:
+
+- **Gitea** — primary git remote for everything personal. Mirrors of GitHub repos for the things I publish, plus a long tail of unpublished half-projects that don't need to leave the house.
+- **Linkding** — the bookmark store that replaced the bookmark folder graveyard. Tagged, full-text searchable, accessible from the LAN and over WireGuard from anywhere else.
+- **A small Docker stack** behind Caddy for the rest — file sharing, dashboards, and a couple of utilities that only ever need to be reachable on the LAN. Nothing in this layer is exposed to the public internet; if I'm not on the local network or the WireGuard mesh, it doesn't exist.
+
+The split matters. Public services (the ones with TLS and a real hostname) get treated as production. LAN-only services get treated as appliances — they restart on boot, they back up nightly, and beyond that I do not think about them.
+
+## How the network is laid out
+
+The managed switch carves the LAN into two VLANs: one for trusted devices, one for everything else (IoT junk, guest devices). The Pis live on the trusted VLAN. Nothing on the IoT VLAN can reach the homelab subnet; the firewall rules on the gateway enforce that, and the WireGuard server checks it again on the way in.
+
+WireGuard is the part of the build I'd recommend to anyone running more than one machine. Once every node has a peer entry on a `10.x` subnet, the rest of the system stops caring about NAT, DHCP leases, or which café's wifi I happen to be on. Gitea is reachable at the same address from my laptop on the LAN and my phone on cellular. Linkding's bookmarklet works on either.
 
 ## What I learned
 
-NixOS is the correct answer to "how do I reproduce this exact system state." It is not the correct answer to "I need this working in the next twenty minutes." Both things are true, and neither cancels the other out.
+NixOS is the correct answer to "how do I reproduce this exact system state." It is also a punishing answer to "I need this working in the next twenty minutes." Both things are true, and neither cancels the other out. The first time I lost a microSD card and rebuilt the node from the flake in under an hour, the cost-benefit math swung permanently in NixOS's favour.
 
-The discipline of declaring every package and service in a single file changes how you think about state. Drift becomes visible. Removing a service means removing its declaration and rebuilding — not `sudo systemctl disable` followed by forgotten files in `/etc`.
+The discipline of declaring every package and service in a single file changes how you think about state. Drift becomes visible. Removing a service means deleting its block from `services.nix` and rebuilding — no `sudo systemctl disable`, no orphan files in `/etc` that you'll find a year later and not remember why they exist. The system is the file.
+
+Running Docker on top of Nix took some getting used to. There's a temptation to do everything in Nix-native packages, and for hosts I do, but the application catalogue (Gitea, Linkding, the rest of the stack) moves at a pace where pinning to upstream container images is the right tradeoff. Nix declares the container, the volume mounts, the network, and the systemd unit that supervises it; the image itself is the upstream blob. I get the reproducibility where it matters and the upstream's release cadence where it matters.
 
 ## What I'd do differently
 
-Start with monitoring earlier. The first three months I was flying blind; I'd have caught two configuration regressions immediately if Prometheus had been running from day one.
+Start with monitoring earlier. The first three months I was flying blind; I'd have caught two configuration regressions immediately if Prometheus had been running from day one. The dashboards aren't impressive — CPU, memory, disk, container health — but the number of times I've answered "is the box dying or is my laptop's wifi flaky" with a glance at Grafana has more than paid for the afternoon I spent setting it up.
+
+The other thing I'd do differently is to not skimp on storage. The Pis boot from microSD because that's the path of least resistance, and microSD cards die. The next iteration is USB-attached SSDs across the board, with the SD reduced to a bootloader. That work is queued.

@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Obsidian Config — basz_</title><meta name="description" content="Technical specification for a local-first, Vim-driven knowledge base."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.F2ViqwG7.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Obsidian Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">computing</span> </div> <h1 class="article__title">Obsidian Config</h1> <p class="article__sub">Technical specification for a local-first, Vim-driven knowledge base.</p> <div class="article__meta"> <span>PLANTED · 21 FEBRUARY 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <h2 id="description">Description</h2>
+<p>Personal knowledge management interface optimized for semantic density and keyboard-driven navigation.</p>
+<h2 id="environment--core">Environment &amp; Core</h2>
+<p>The vault operates on a local-first principle using Markdown as the source of truth.</p>
+<ul>
+<li><strong>Vim Mode:</strong> Enabled globally via <code>app.json</code> for modal editing.</li>
+<li><strong>Note Routing:</strong> New files inherit the current folder context.</li>
+<li><strong>Attachments:</strong> Strictly routed to <code>Attachments/</code> to prevent root-level clutter.</li>
+<li><strong>Tab Size:</strong> 7 spaces (consistent with project-wide indentation standards).</li>
+</ul>
+<h2 id="folder-topology">Folder Topology</h2>
+<p>The directory structure follows a lifecycle-based routing system:</p>
+<ul>
+<li><code>0. Inbox/</code> — Entry point for fleeting thoughts.</li>
+<li><code>1. Active/</code> — Active projects, journals, and study sprints.</li>
+<li><code>2. Zettelkasten/</code> — Semantic core (Seedlings → Growing → Evergreen).</li>
+<li><code>3. Resources/</code> — Static documentation and literature notes.</li>
+<li><code>_System/</code> — Templates, Dashboards, and internal metadata.</li>
+</ul>
+<h2 id="keybinds-reflex-system">Keybinds (Reflex System)</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th style="text-align:left">Binding</th><th style="text-align:left">Action</th><th style="text-align:left">Target</th></tr></thead><tbody><tr><td style="text-align:left"><code>Ctrl + P</code></td><td style="text-align:left">Command Palette</td><td style="text-align:left">Global access</td></tr><tr><td style="text-align:left"><code>Ctrl + Shift + F</code></td><td style="text-align:left">Global Search</td><td style="text-align:left">Vault-wide fuzzy find</td></tr><tr><td style="text-align:left"><code>Ctrl + Shift + H</code></td><td style="text-align:left">Split Vertical</td><td style="text-align:left">Workspace management</td></tr><tr><td style="text-align:left"><code>Ctrl + Shift + V</code></td><td style="text-align:left">Split Horizontal</td><td style="text-align:left">Workspace management</td></tr><tr><td style="text-align:left"><code>Ctrl + C</code></td><td style="text-align:left">Quick Capture</td><td style="text-align:left">Inbox dump via QuickAdd</td></tr><tr><td style="text-align:left"><code>Ctrl + Shift + B</code></td><td style="text-align:left">Git Push</td><td style="text-align:left">Remote sync</td></tr><tr><td style="text-align:left"><code>Alt + 1-8</code></td><td style="text-align:left">Switch Tabs</td><td style="text-align:left">Tab navigation</td></tr></tbody></table>
+<h2 id="plugin-stack">Plugin Stack</h2>
+<ul>
+<li><strong>Dataview:</strong> Dynamic indices and dashboard generation.</li>
+<li><strong>Templater:</strong> Metadata and frontmatter automation.</li>
+<li><strong>QuickAdd:</strong> Low-friction capture workflows.</li>
+<li><strong>Obsidian Git:</strong> Automated versioning and remote backup.</li>
+<li><strong>Copilot:</strong> Local-first LLM indexing.</li>
+</ul>
+<hr/>
+<p><em>Part of the <a href="/vault/system-config-moc">System Config MOC</a>.</em></p> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

@@ -1,0 +1,253 @@
+---
+title: "HiveParser: a multi-threaded log parser in C"
+date: 2026-03-27
+status: shipped
+description: "A weekend log parser that taught me what 'mechanical sympathy' actually feels like — heap locks, false sharing, and the moment eight threads finally stopped tripping over each other."
+excerpt: "I was halfway through OSTEP, writing C for fun, and wanted something heavier than a textbook exercise. HiveParser is what came out of it: a small syslog ingester that turned into a long argument with glibc's allocator."
+repo: "https://github.com/Basliel25/hiveParser"
+tags: ["systems", "linux", "portfolio"]
+stack: ["C", "Pthreads", "Valgrind"]
+featured: true
+---
+
+I was working through OSTEP at the time, somewhere around the concurrency chapters, and the textbook examples had stopped scratching the itch. I wanted something where I could actually watch threads step on each other — a program big enough that the locks I was reading about would show up as real, measurable pain. So I wrote a syslog parser in C and called it HiveParser.
+
+The job is small on paper. Read a syslog file, pull out the severity field on each line, fold the counts into a report. The whole thing fits in a few hundred lines. The interesting part lives in how those lines arrange themselves around eight cores.
+
+## Starting where every concurrency tutorial starts
+
+I built the obvious version first, the one every tutorial draws on the whiteboard. One producer, a shared queue behind a mutex, a pool of workers, and one global report struct guarded by another mutex. It worked. It was also slower with eight threads than with one, which is the kind of result that makes you sit up straight.
+
+<figure class="diagram">
+  <figcaption class="diagram__cap">Initial design — every worker funnels through two locks before doing real work.</figcaption>
+  <svg class="svg-fig" viewBox="0 0 1000 500" role="img" aria-label="Sequence of lock operations between producer, queue, two workers, and the global report">
+    <defs>
+      <marker id="hp-arrow-ink" class="svg-arrow-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z"></path>
+      </marker>
+      <marker id="hp-arrow-stall" class="svg-arrow-stall" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z"></path>
+      </marker>
+    </defs>
+
+    <text x="100" y="22" text-anchor="middle" class="svg-label svg-label--dim">Producer</text>
+    <text x="300" y="22" text-anchor="middle" class="svg-label svg-label--dim">Queue · mutex</text>
+    <text x="500" y="22" text-anchor="middle" class="svg-label svg-label--dim">Worker A</text>
+    <text x="700" y="22" text-anchor="middle" class="svg-label svg-label--dim">Worker B</text>
+    <text x="900" y="22" text-anchor="middle" class="svg-label svg-label--dim">Report · mutex</text>
+    <line x1="0" y1="38" x2="1000" y2="38" class="svg-track" stroke-width="1"></line>
+
+    <line x1="100" y1="50" x2="100" y2="490" class="svg-track" stroke-dasharray="2 5"></line>
+    <line x1="300" y1="50" x2="300" y2="490" class="svg-track" stroke-dasharray="2 5"></line>
+    <line x1="500" y1="50" x2="500" y2="490" class="svg-track" stroke-dasharray="2 5"></line>
+    <line x1="700" y1="50" x2="700" y2="490" class="svg-track" stroke-dasharray="2 5"></line>
+    <line x1="900" y1="50" x2="900" y2="490" class="svg-track" stroke-dasharray="2 5"></line>
+
+    <line x1="115" y1="90" x2="285" y2="90" class="svg-edge" marker-end="url(#hp-arrow-ink)"></line>
+    <text x="200" y="83" text-anchor="middle" class="svg-label">enqueue line</text>
+    <circle cx="100" cy="90" r="14" class="svg-num"></circle>
+    <text x="100" y="95" text-anchor="middle" class="svg-num-text">1</text>
+
+    <line x1="485" y1="150" x2="315" y2="150" class="svg-edge svg-edge--stall" marker-end="url(#hp-arrow-stall)"></line>
+    <text x="400" y="143" text-anchor="middle" class="svg-label">lock — wait</text>
+    <circle cx="500" cy="150" r="14" class="svg-num svg-num--stall"></circle>
+    <text x="500" y="155" text-anchor="middle" class="svg-num-text">2</text>
+
+    <line x1="685" y1="210" x2="315" y2="210" class="svg-edge svg-edge--stall" marker-end="url(#hp-arrow-stall)"></line>
+    <text x="500" y="203" text-anchor="middle" class="svg-label">lock — wait</text>
+    <circle cx="700" cy="210" r="14" class="svg-num svg-num--stall"></circle>
+    <text x="700" y="215" text-anchor="middle" class="svg-num-text">3</text>
+
+    <line x1="485" y1="270" x2="315" y2="270" class="svg-edge" marker-end="url(#hp-arrow-ink)"></line>
+    <text x="400" y="263" text-anchor="middle" class="svg-label">dequeue</text>
+    <circle cx="500" cy="270" r="14" class="svg-num"></circle>
+    <text x="500" y="275" text-anchor="middle" class="svg-num-text">4</text>
+
+    <line x1="515" y1="330" x2="885" y2="330" class="svg-edge" marker-end="url(#hp-arrow-ink)"></line>
+    <text x="700" y="323" text-anchor="middle" class="svg-label">update report</text>
+    <circle cx="500" cy="330" r="14" class="svg-num"></circle>
+    <text x="500" y="335" text-anchor="middle" class="svg-num-text">5</text>
+
+    <line x1="715" y1="390" x2="885" y2="390" class="svg-edge svg-edge--stall" marker-end="url(#hp-arrow-stall)"></line>
+    <text x="800" y="383" text-anchor="middle" class="svg-label">lock — wait</text>
+    <circle cx="700" cy="390" r="14" class="svg-num svg-num--stall"></circle>
+    <text x="700" y="395" text-anchor="middle" class="svg-num-text">6</text>
+
+    <line x1="715" y1="450" x2="885" y2="450" class="svg-edge" marker-end="url(#hp-arrow-ink)"></line>
+    <text x="800" y="443" text-anchor="middle" class="svg-label">update report</text>
+    <circle cx="700" cy="450" r="14" class="svg-num"></circle>
+    <text x="700" y="455" text-anchor="middle" class="svg-num-text">7</text>
+  </svg>
+</figure>
+
+Watching it under `perf` made the story plain. The threads spent most of their lives waiting on each other. The queue lock was a turnstile; the report lock was a second turnstile right behind it. Adding workers only added more people to the queue.
+
+That part I expected. OSTEP had already warned me. The part I did not expect was how much of the cost lived somewhere else entirely.
+
+## The allocator was the real bottleneck
+
+The hot loop looked like this:
+
+```c
+void *worker(void *arg) {
+    while (1) {
+        char *line = dequeue(queue);
+
+        log_entry_t *entry = malloc(sizeof(log_entry_t));
+        parse_line(line, entry);
+
+        pthread_mutex_lock(&lock);
+        update_global_report(entry);
+        pthread_mutex_unlock(&lock);
+
+        free(entry);
+    }
+}
+```
+
+I had assumed `malloc` was free, or close enough. It is not. glibc's allocator holds its own internal locks to keep the heap consistent across threads, and when eight workers all call `malloc` and `free` on every single line, they end up serializing through the allocator the same way they serialized through my queue. I had built a second contention point and decorated it with my own mutex on top.
+
+I found this the unglamorous way: I added timing around each segment of the loop, expected `update_global_report` to dominate, and watched `malloc` win by a wide margin. That was the moment the project stopped being about pthreads and started being about memory.
+
+## Moving the entry to the stack
+
+The fix is small once you see it. A `log_entry_t` lives for exactly one iteration. It never escapes the worker. There is no reason for it to ever touch the heap.
+
+```c
+void *worker(void *arg) {
+    report_t local_report = {0};
+
+    while (1) {
+        char *line = dequeue(queue);
+
+        log_entry_t entry;
+        parse_line(line, &entry);
+
+        update_report(&entry, &local_report);
+        free(line);
+    }
+
+    return merge_into_global(&local_report);
+}
+```
+
+Two changes. The entry moved onto the stack, so allocation became a register adjustment. The per-thread `report_t` moved with it, so each worker accumulated into its own private struct and only touched shared memory once, at the end, after `pthread_join`.
+
+<figure class="diagram">
+  <figcaption class="diagram__cap">Final design — one shared queue feeds N independent thread-local pipelines that fold into the master report on join.</figcaption>
+  <svg class="svg-fig" viewBox="0 0 1000 620" role="img" aria-label="Architecture: shared queue fans out to thread-local stacks, which merge into a master report after pthread_join">
+    <defs>
+      <marker id="hp-arrow-down" class="svg-arrow-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z"></path>
+      </marker>
+    </defs>
+
+    <rect x="350" y="20" width="300" height="84" class="svg-node svg-node--accent"></rect>
+    <text x="500" y="44" text-anchor="middle" class="svg-label svg-label--dim">SHARED</text>
+    <text x="500" y="68" text-anchor="middle" class="svg-label--head">work_queue</text>
+    <text x="500" y="90" text-anchor="middle" class="svg-label svg-label--dim">line pointers · mutex</text>
+
+    <line x1="500" y1="104" x2="500" y2="138" class="svg-edge"></line>
+    <line x1="180" y1="138" x2="820" y2="138" class="svg-edge"></line>
+    <line x1="180" y1="138" x2="180" y2="190" class="svg-edge" marker-end="url(#hp-arrow-down)"></line>
+    <line x1="500" y1="138" x2="500" y2="190" class="svg-edge" marker-end="url(#hp-arrow-down)"></line>
+    <line x1="820" y1="138" x2="820" y2="190" class="svg-edge" marker-end="url(#hp-arrow-down)"></line>
+
+    <g transform="translate(40 200)">
+      <rect width="280" height="240" class="svg-node" stroke-dasharray="4 4" fill="none"></rect>
+      <text x="140" y="28" text-anchor="middle" class="svg-label svg-label--dim">THREAD 1</text>
+      <rect x="20" y="56" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="56" x2="20" y2="120" class="svg-cell-rule"></line>
+      <text x="36" y="93" class="svg-label">log_entry_t · stack</text>
+      <rect x="20" y="140" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="140" x2="20" y2="204" class="svg-cell-rule"></line>
+      <text x="36" y="177" class="svg-label">local_report · stack</text>
+    </g>
+
+    <g transform="translate(360 200)">
+      <rect width="280" height="240" class="svg-node" stroke-dasharray="4 4" fill="none"></rect>
+      <text x="140" y="28" text-anchor="middle" class="svg-label svg-label--dim">THREAD 2</text>
+      <rect x="20" y="56" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="56" x2="20" y2="120" class="svg-cell-rule"></line>
+      <text x="36" y="93" class="svg-label">log_entry_t · stack</text>
+      <rect x="20" y="140" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="140" x2="20" y2="204" class="svg-cell-rule"></line>
+      <text x="36" y="177" class="svg-label">local_report · stack</text>
+    </g>
+
+    <g transform="translate(680 200)">
+      <rect width="280" height="240" class="svg-node" stroke-dasharray="4 4" fill="none"></rect>
+      <text x="140" y="28" text-anchor="middle" class="svg-label svg-label--dim">THREAD N</text>
+      <rect x="20" y="56" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="56" x2="20" y2="120" class="svg-cell-rule"></line>
+      <text x="36" y="93" class="svg-label">log_entry_t · stack</text>
+      <rect x="20" y="140" width="240" height="64" class="svg-cell"></rect>
+      <line x1="20" y1="140" x2="20" y2="204" class="svg-cell-rule"></line>
+      <text x="36" y="177" class="svg-label">local_report · stack</text>
+    </g>
+
+    <line x1="180" y1="450" x2="180" y2="478" class="svg-edge svg-edge--dashed"></line>
+    <line x1="500" y1="450" x2="500" y2="478" class="svg-edge svg-edge--dashed"></line>
+    <line x1="820" y1="450" x2="820" y2="478" class="svg-edge svg-edge--dashed"></line>
+    <line x1="180" y1="478" x2="820" y2="478" class="svg-edge svg-edge--dashed"></line>
+    <line x1="500" y1="478" x2="500" y2="514" class="svg-edge" marker-end="url(#hp-arrow-down)"></line>
+
+    <rect x="380" y="488" width="240" height="22" rx="11" class="svg-pill"></rect>
+    <text x="500" y="503" text-anchor="middle" class="svg-label svg-label--dim">pthread_join · merge</text>
+
+    <rect x="350" y="524" width="300" height="84" class="svg-node svg-node--accent"></rect>
+    <text x="500" y="548" text-anchor="middle" class="svg-label svg-label--dim">SHARED</text>
+    <text x="500" y="572" text-anchor="middle" class="svg-label--head">master_report</text>
+    <text x="500" y="594" text-anchor="middle" class="svg-label svg-label--dim">folded once · lock-free</text>
+  </svg>
+</figure>
+
+The pattern OSTEP calls a sloppy counter. Each worker keeps its own tally; the main thread does one cheap pass to fold them together once everyone is done. The global mutex disappeared from the hot path entirely.
+
+## What the numbers ended up looking like
+
+After the refactor, scaling started behaving the way the textbook promised. Doubling the threads roughly halved the wall-clock time, until the box ran out of physical cores.
+
+<figure class="diagram">
+  <figcaption class="diagram__cap">Wall-clock time vs thread count · 2.1M-line syslog · 8-core box.</figcaption>
+  <svg class="svg-fig" viewBox="0 0 800 320" role="img" aria-label="Wall-clock time vs thread count: 1 thread 4.2 seconds, 2 threads 2.2 seconds, 4 threads 1.1 seconds, 8 threads 0.6 seconds">
+    <line x1="140" y1="40" x2="140" y2="290" class="svg-track" stroke-width="1"></line>
+    <line x1="140" y1="290" x2="700" y2="290" class="svg-track" stroke-width="1"></line>
+
+    <text x="0" y="68" class="svg-label svg-label--dim">1 thread</text>
+    <rect x="140" y="50" width="540" height="26" class="svg-bar-track"></rect>
+    <rect x="140" y="50" width="540" height="26" class="svg-bar"></rect>
+    <text x="694" y="68" text-anchor="end" class="svg-label--head">4.2 s</text>
+
+    <text x="0" y="128" class="svg-label svg-label--dim">2 threads</text>
+    <rect x="140" y="110" width="540" height="26" class="svg-bar-track"></rect>
+    <rect x="140" y="110" width="283" height="26" class="svg-bar"></rect>
+    <text x="694" y="128" text-anchor="end" class="svg-label--head">2.2 s</text>
+
+    <text x="0" y="188" class="svg-label svg-label--dim">4 threads</text>
+    <rect x="140" y="170" width="540" height="26" class="svg-bar-track"></rect>
+    <rect x="140" y="170" width="141" height="26" class="svg-bar"></rect>
+    <text x="694" y="188" text-anchor="end" class="svg-label--head">1.1 s</text>
+
+    <text x="0" y="248" class="svg-label svg-label--dim">8 threads</text>
+    <rect x="140" y="230" width="540" height="26" class="svg-bar-track"></rect>
+    <rect x="140" y="230" width="77" height="26" class="svg-bar svg-bar--best"></rect>
+    <text x="694" y="248" text-anchor="end" class="svg-label--head">0.6 s</text>
+
+    <text x="140" y="312" class="svg-label svg-label--dim">0 s</text>
+    <text x="410" y="312" text-anchor="middle" class="svg-label svg-label--dim">2 s</text>
+    <text x="680" y="312" text-anchor="end" class="svg-label svg-label--dim">≈ 4 s</text>
+  </svg>
+</figure>
+
+Eight threads finished in 0.6 seconds against the single-threaded 4.2. The remaining gap from perfect linear scaling is the queue itself, which I left on a single mutex because the producer is fast and the workers spend most of their time parsing rather than dequeuing. A lock-free MPMC queue is the obvious next step, and also the point where the project stops being a weekend exercise and starts being a real engineering job, so I stopped.
+
+## What I'd tell past me
+
+The lesson I keep coming back to is that the locks you write are usually visible to you, and the locks you inherit usually are not. I spent the first evening optimizing my own mutex and the second evening discovering that `malloc` had been the problem the whole time. Profile before you theorize. The allocator counts as part of your concurrency model whether you like it or not.
+
+The other thing, smaller but worth saying out loud: stack allocation is genuinely free in a way that's easy to forget after years of writing in higher-level languages. C will let you put a struct in a register-adjacent slot and walk away. Use that.
+
+---
+
+*Part of the [[system-config-moc|System Config MOC]].*

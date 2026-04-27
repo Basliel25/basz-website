@@ -10,6 +10,7 @@ const projects = defineCollection({
     description: z.string(),
     excerpt:     z.string(),
     date:        z.coerce.date(),
+    repo:        z.string().url().optional(),
     tags:        z.array(z.enum(pillVariants)).default([]),
     stack:       z.array(z.string()).default([]),
     stats:       z.array(z.object({ label: z.string(), value: z.string() })).default([]),

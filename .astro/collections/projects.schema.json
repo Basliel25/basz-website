@@ -37,6 +37,10 @@
             }
           ]
         },
+        "repo": {
+          "type": "string",
+          "format": "uri"
+        },
         "tags": {
           "type": "array",
           "items": {

@@ -13,4 +13,5 @@
 @use 'prose';       // article, prose, entry-nav
 @use 'components';  // pills, code-block, terminal, math, callout, figure, toc
 @use 'about';       // editorial-head, bio, sidebar, contact, colo-block
+@use 'diagrams';    // hand-rolled MDX diagrams (swimlane, arch map, bench bars)
 @use 'responsive';  // breakpoint overrides

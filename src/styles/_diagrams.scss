@@ -1,0 +1,116 @@
+// ── Hand-rolled SVG diagrams (used in MDX articles) ──────────────────
+.diagram {
+  margin: 48px 0;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: 28px 24px 32px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.diagram__cap {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ink-dim);
+  margin: 0 0 22px;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.svg-fig {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+// Tracks / lane separators
+.svg-track {
+  stroke: var(--border);
+  fill: none;
+}
+
+// Edges (arrows, connectors)
+.svg-edge {
+  stroke: var(--ink);
+  stroke-width: 1.75;
+  fill: none;
+}
+
+.svg-edge--stall {
+  stroke: var(--accent, #d43018);
+  stroke-dasharray: 6 4;
+}
+
+.svg-edge--dashed {
+  stroke-dasharray: 4 4;
+}
+
+// Numbered step circles
+.svg-num { fill: var(--ink); }
+.svg-num--stall { fill: var(--accent, #d43018); }
+.svg-num-text {
+  fill: var(--paper);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+// Boxes / nodes
+.svg-node {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.svg-node--accent { stroke-width: 2.5; }
+
+.svg-cell {
+  fill: color-mix(in srgb, var(--ink) 6%, transparent);
+  stroke: var(--ink);
+  stroke-width: 0;
+}
+
+.svg-cell-rule {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.svg-pill {
+  fill: var(--paper);
+  stroke: var(--border);
+  stroke-dasharray: 3 3;
+}
+
+// Text styles
+.svg-label {
+  fill: var(--ink);
+  font-size: 14px;
+}
+
+.svg-label--dim {
+  fill: var(--ink-dim);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.svg-label--head {
+  fill: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+// Bench bars
+.svg-bar-track {
+  fill: color-mix(in srgb, var(--ink) 5%, transparent);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.svg-bar { fill: var(--ink); }
+.svg-bar--best { fill: var(--accent, #d43018); }
+
+// Arrow markers — use fill-via-class so theme tokens apply.
+// (Inline `fill="var(--ink)"` in attributes does not resolve.)
+.svg-arrow-ink path { fill: var(--ink); }
+.svg-arrow-stall path { fill: var(--accent, #d43018); }

@@ -1,0 +1,174 @@
+---
+interface Props {
+  content?: string;
+}
+const { content } = Astro.props;
+---
+<div class="mermaid-container" data-diagram={content}>
+  <div class="mermaid-wrap">
+    <div class="mermaid-wrap__header">
+       <div class="terminal__header-dots">
+         <span></span><span></span><span></span>
+       </div>
+       <span class="terminal__header-title">DIAGRAM::VIEWER</span>
+    </div>
+    <div class="mermaid-wrap__body">
+       {!content && <template class="mermaid-src"><slot /></template>}
+       <div class="mermaid-target"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'
+
+  const renderDiagrams = async () => {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    
+    // Explicitly configure a high-contrast base theme
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      fontFamily: 'JetBrains Mono, monospace',
+      securityLevel: 'loose',
+      // Bigger defaults so text is legible once we stretch the SVG to 100%
+      fontSize: 22,
+      flowchart: { useMaxWidth: false, htmlLabels: true, nodeSpacing: 90, rankSpacing: 110, padding: 28, diagramPadding: 24 },
+      sequence: { useMaxWidth: false, actorFontSize: 22, noteFontSize: 20, messageFontSize: 20, width: 260, boxMargin: 18, height: 70, mirrorActors: false },
+      pie: { useMaxWidth: false, textPosition: 0.7 },
+      xyChart: { useMaxWidth: false, width: 1100, height: 560, titleFontSize: 24, xAxisLabelFontSize: 18, yAxisLabelFontSize: 18, xAxisTitleFontSize: 20, yAxisTitleFontSize: 20 },
+      themeCSS: `
+        .nodeLabel, .edgeLabel, .messageText, .actor, .loopText, .noteText, .labelText, .cluster-label text, .titleText { font-size: 20px !important; font-weight: 500 !important; }
+        .edgeLabel { background-color: var(--paper, #fcfaf7); padding: 2px 6px; }
+        .pieTitleText { font-size: 26px !important; }
+        .slice { font-size: 20px !important; }
+        .legend text { font-size: 18px !important; }
+      `,
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#0d0f0d' : '#fcfaf7',
+        primaryColor: '#d43018',
+        primaryTextColor: isDark ? '#cec8be' : '#0a0908',
+        primaryBorderColor: isDark ? '#3e3830' : '#0a0908',
+        lineColor: isDark ? '#cec8be' : '#0a0908',
+        secondaryColor: isDark ? '#1a1714' : '#e2e8e2',
+        tertiaryColor: isDark ? '#0d0f0d' : '#fcfaf7',
+        mainBkg: isDark ? '#0d0f0d' : '#fcfaf7',
+        nodeBorder: isDark ? '#3e3830' : '#0a0908',
+        clusterBkg: isDark ? '#1a1714' : '#f0ede4',
+        titleColor: '#d43018',
+        edgeLabelBackground: isDark ? '#1a1714' : '#fcfaf7',
+      }
+    });
+
+    const containers = document.querySelectorAll('.mermaid-container');
+    for (const container of containers) {
+      const target = container.querySelector('.mermaid-target');
+      if (!target) continue;
+      if (target.hasAttribute('data-processed')) continue;
+
+      const propCode = container.getAttribute('data-diagram');
+      const src = container.querySelector('.mermaid-src');
+      const slotCode = src
+        ? (src.content ? src.content.textContent : src.textContent) || ''
+        : '';
+      const code = (propCode || slotCode).trim();
+      if (!code) continue;
+
+      // Unique ID for each render to avoid conflicts
+      const id = 'mermaid-' + Math.random().toString(36).substring(2, 11);
+      
+      try {
+        const { svg } = await mermaid.render(id, code);
+        target.innerHTML = svg;
+        target.setAttribute('data-processed', 'true');
+        
+        // Force the SVG to fill the viewer width by stripping the
+        // intrinsic width/height mermaid bakes in and letting the
+        // viewBox handle scaling.
+        const svgEl = target.querySelector('svg');
+        if (svgEl) {
+          svgEl.removeAttribute('width');
+          svgEl.removeAttribute('height');
+          // Mermaid sometimes sets `style="max-width: <px>"` which caps it tiny.
+          svgEl.style.cssText = 'width: 100%; height: auto; max-width: 100%; display: block;';
+          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        }
+      } catch (err) {
+        target.innerHTML = `<pre class="mermaid-error">COMPILATION_ERROR: ${err.message}</pre>`;
+      }
+    }
+  }
+
+  // Initial render
+  renderDiagrams();
+
+  // Re-render on theme changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'data-theme') {
+        document.querySelectorAll('.mermaid-target').forEach(el => el.removeAttribute('data-processed'));
+        renderDiagrams();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true });
+
+  // Handle Astro page transitions
+  document.addEventListener('astro:page-load', renderDiagrams);
+</script>
+
+<style is:global>
+  .mermaid-wrap {
+    margin: 48px 0;
+    border: 1px solid var(--border);
+    background: var(--paper);
+  }
+
+  .mermaid-target {
+    padding: 24px;
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .mermaid-target svg {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    min-height: 480px;
+    display: block;
+  }
+
+  /* xychart-beta and pie diagrams render taller; give them room. */
+  .mermaid-target svg[aria-roledescription="xychart"],
+  .mermaid-target svg[aria-roledescription="pie"] {
+    min-height: 560px;
+  }
+
+  /* Belt-and-suspenders: bump any text node mermaid emits, in case
+     themeCSS gets overridden by the base theme stylesheet. */
+  .mermaid-target svg text,
+  .mermaid-target svg tspan {
+    font-size: 18px;
+  }
+  .mermaid-target svg .titleText,
+  .mermaid-target svg .pieTitleText {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  /* Prevent first-letter hacks from prose.scss */
+  .mermaid-container *::first-letter {
+    all: unset !important;
+    float: none !important;
+    margin: 0 !important;
+  }
+
+  .mermaid-error {
+    color: var(--accent);
+    font-size: 10px;
+    padding: 20px;
+    background: #000;
+  }
+</style>

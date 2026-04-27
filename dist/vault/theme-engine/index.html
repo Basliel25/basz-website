@@ -6,9 +6,9 @@
           (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         document.documentElement.dataset.theme = t
       })()
-    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Theme Engine</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">theming</span> </div> <h1 class="article__title">Theme Engine</h1> <p class="article__sub">Variable-injection theme system — configs as compilation targets.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Variable-injection theme system. Treats configs as compilation targets, not source.</p>
+    </script><link rel="stylesheet" href="/_astro/_slug_.F2ViqwG7.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Theme Engine</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">theming</span> </div> <h1 class="article__title">Theme Engine</h1> <p class="article__sub">Variable-injection theme system — configs as compilation targets.</p> <div class="article__meta"> <span>PLANTED · 7 APRIL 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Variable-injection theme system. Treats configs as compilation targets, not source.</p>
 <h2 id="layout">Layout</h2>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>themes/</span></span>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>themes/</span></span>
 <span class="line"><span>├── &lt;theme&gt;/</span></span>
 <span class="line"><span>│   ├── theme.conf       # variable exports</span></span>
 <span class="line"><span>│   └── wallpaper.png</span></span>
@@ -18,9 +18,15 @@
 <span class="line"><span>│   └── wofi-style.css.tpl</span></span>
 <span class="line"><span>├── switch.sh            # compiler</span></span>
 <span class="line"><span>└── select.sh            # wofi front-end</span></span></code></pre>
+<h2 id="animation-bezier-curves">Animation Bezier Curves</h2>
+<p>The system utilizes high-precision cubic-bezier curves for organic movement:</p>
+<ul>
+<li><strong><code>easeOutQuint</code></strong>: <code>0.23, 1, 0.32, 1</code></li>
+<li><strong><code>easeInOutQuart</code></strong>: <code>0.76, 0, 0.24, 1</code></li>
+</ul>
 <h2 id="variable-contract">Variable contract</h2>
 <p>Every <code>theme.conf</code> must export:</p>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>ACCENT1, ACCENT2</span></span>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>ACCENT1, ACCENT2</span></span>
 <span class="line"><span>GAPS_IN, GAPS_OUT</span></span>
 <span class="line"><span>HYPR_ROUNDING</span></span>
 <span class="line"><span>OPACITY_TERMINAL</span></span></code></pre>

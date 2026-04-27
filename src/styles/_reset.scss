@@ -6,7 +6,7 @@
 
 html { 
   scroll-behavior: smooth; 
-  cursor: crosshair; 
+  cursor: default; 
   background-color: var(--paper);
   background-image: 
     var(--bg-pattern),
@@ -27,6 +27,7 @@ body {
   color: var(--ink);
   transition: color $t-slow;
   min-height: 100vh;
+  cursor: default;
 
   // Concrete grain — visible grit, theme-switched blend mode
   &::after {
@@ -42,5 +43,5 @@ body {
   }
 }
 
-a      { color: inherit; text-decoration: none; }
-button { background: none; border: none; cursor: crosshair; font-family: inherit; color: inherit; }
+a      { color: inherit; text-decoration: none; cursor: pointer; }
+button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }

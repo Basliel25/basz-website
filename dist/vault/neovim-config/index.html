@@ -6,9 +6,9 @@
           (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         document.documentElement.dataset.theme = t
       })()
-    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Neovim Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span> </div> <h1 class="article__title">Neovim Config</h1> <p class="article__sub">Lua-only Neovim — modular core / plugins / per-server LSP.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Lua-only. Modular: <code>core/</code> for vim primitives, <code>plugins/</code> for features, <code>lsp/</code> per-server.</p>
+    </script><link rel="stylesheet" href="/_astro/_slug_.F2ViqwG7.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Neovim Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span> </div> <h1 class="article__title">Neovim Config</h1> <p class="article__sub">Lua-only Neovim — modular core / plugins / per-server LSP.</p> <div class="article__meta"> <span>PLANTED · 23 OCTOBER 2024</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Lua-only. Modular: <code>core/</code> for vim primitives, <code>plugins/</code> for features, <code>lsp/</code> per-server.</p>
 <h2 id="tree">Tree</h2>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>nvim/</span></span>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="plaintext"><code><span class="line"><span>nvim/</span></span>
 <span class="line"><span>├── init.lua</span></span>
 <span class="line"><span>├── lua/</span></span>
 <span class="line"><span>│   ├── core/</span></span>
@@ -24,10 +24,10 @@
 <span class="line"><span>    └── pyright.lua</span></span></code></pre>
 <h2 id="stack">Stack</h2>
 <ul>
-<li>LSP — <code>nvim-lspconfig</code> + <code>nvim-cmp</code></li>
-<li>Find — <code>telescope.nvim</code></li>
-<li>UI — <code>lualine.nvim</code> (theme-synced)</li>
-<li>Format — <code>formatter.lua</code></li>
+<li>LSP: <code>nvim-lspconfig</code> + <code>nvim-cmp</code></li>
+<li>Find: <code>telescope.nvim</code></li>
+<li>UI: <code>lualine.nvim</code> (theme-synced)</li>
+<li>Format: <code>formatter.lua</code></li>
 </ul>
 <h2 id="adding-a-language">Adding a language</h2>
 <ol>
@@ -37,6 +37,19 @@
 </ol>
 <h2 id="gotcha">Gotcha</h2>
 <p>Lua keymap callbacks must be wrapped, not invoked. <code>function() require(&#39;x&#39;).y() end</code>, not <code>require(&#39;x&#39;).y()</code>.</p>
+<h2 id="essential-keymaps">Essential Keymaps</h2>
+<p>The editor is tuned for rapid navigation and minimal mode-switching:</p>
+<ul>
+<li><code>leader + pv</code>: Open File Explorer (<code>Ex</code>).</li>
+<li><code>leader + pt</code>: Open integrated terminal in a bottom split.</li>
+<li><code>jj</code>: Exit Insert mode (The fastest exit).</li>
+<li><code>Ctrl + h/l</code>: Navigate between splits.</li>
+<li><code>v + J/K</code>: Move selected blocks of code vertically.</li>
+</ul>
+<h2 id="system-clipboard-integration">System Clipboard Integration</h2>
+<p>I bypass the internal register for global utility:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="lua"><code><span class="line"><span style="color:#FFF">vim.keymap.</span><span style="color:#FFC799">set</span><span style="color:#FFF">({</span><span style="color:#99FFE4">&#39;n&#39;</span><span style="color:#FFF">, </span><span style="color:#99FFE4">&#39;v&#39;</span><span style="color:#FFF">}, </span><span style="color:#99FFE4">&#39;&lt;leader&gt;y&#39;</span><span style="color:#FFF">, </span><span style="color:#99FFE4">&#39;&quot;+y&#39;</span><span style="color:#FFF">) </span><span style="color:#8B8B8B94">-- Yank to System</span></span>
+<span class="line"><span style="color:#FFF">vim.keymap.</span><span style="color:#FFC799">set</span><span style="color:#FFF">({</span><span style="color:#99FFE4">&#39;n&#39;</span><span style="color:#FFF">, </span><span style="color:#99FFE4">&#39;v&#39;</span><span style="color:#FFF">}, </span><span style="color:#99FFE4">&#39;&lt;leader&gt;p&#39;</span><span style="color:#FFF">, </span><span style="color:#99FFE4">&#39;&quot;+p&#39;</span><span style="color:#FFF">) </span><span style="color:#8B8B8B94">-- Paste from System</span></span></code></pre>
 <h2 id="related">Related</h2>
 <ul>
 <li><a href="/vault/system-config-moc">System Config MOC</a></li>

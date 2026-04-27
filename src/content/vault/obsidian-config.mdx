@@ -1,0 +1,48 @@
+---
+title: Obsidian Config
+type: note
+status: evergreen
+created: 2025-02-21
+tags: [dotfiles, computing]
+description: Technical specification for a local-first, Vim-driven knowledge base.
+---
+
+## Description
+Personal knowledge management interface optimized for semantic density and keyboard-driven navigation.
+
+## Environment & Core
+The vault operates on a local-first principle using Markdown as the source of truth.
+- **Vim Mode:** Enabled globally via `app.json` for modal editing.
+- **Note Routing:** New files inherit the current folder context.
+- **Attachments:** Strictly routed to `Attachments/` to prevent root-level clutter.
+- **Tab Size:** 7 spaces (consistent with project-wide indentation standards).
+
+## Folder Topology
+The directory structure follows a lifecycle-based routing system:
+- `0. Inbox/` — Entry point for fleeting thoughts.
+- `1. Active/` — Active projects, journals, and study sprints.
+- `2. Zettelkasten/` — Semantic core (Seedlings → Growing → Evergreen).
+- `3. Resources/` — Static documentation and literature notes.
+- `_System/` — Templates, Dashboards, and internal metadata.
+
+## Keybinds (Reflex System)
+| Binding | Action | Target |
+| :--- | :--- | :--- |
+| `Ctrl + P` | Command Palette | Global access |
+| `Ctrl + Shift + F` | Global Search | Vault-wide fuzzy find |
+| `Ctrl + Shift + H` | Split Vertical | Workspace management |
+| `Ctrl + Shift + V` | Split Horizontal | Workspace management |
+| `Ctrl + C` | Quick Capture | Inbox dump via QuickAdd |
+| `Ctrl + Shift + B` | Git Push | Remote sync |
+| `Alt + 1-8` | Switch Tabs | Tab navigation |
+
+## Plugin Stack
+- **Dataview:** Dynamic indices and dashboard generation.
+- **Templater:** Metadata and frontmatter automation.
+- **QuickAdd:** Low-friction capture workflows.
+- **Obsidian Git:** Automated versioning and remote backup.
+- **Copilot:** Local-first LLM indexing.
+
+---
+
+*Part of the [[system-config-moc|System Config MOC]].*

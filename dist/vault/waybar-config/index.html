@@ -6,7 +6,7 @@
           (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         document.documentElement.dataset.theme = t
       })()
-    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Waybar Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">wayland</span> </div> <h1 class="article__title">Waybar Config</h1> <p class="article__sub">Status bar — CSS-styled, JSON-configured, glass.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Status bar. CSS-styled, JSON-configured. Glassmorphism.</p>
+    </script><link rel="stylesheet" href="/_astro/_slug_.F2ViqwG7.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Waybar Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">wayland</span> </div> <h1 class="article__title">Waybar Config</h1> <p class="article__sub">Status bar — CSS-styled, JSON-configured, glass.</p> <div class="article__meta"> <span>PLANTED · 24 MARCH 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Status bar. CSS-styled, JSON-configured. Glassmorphism.</p>
 <h2 id="files">Files</h2>
 <ul>
 <li><code>waybar/.config/waybar/config.jsonc</code> — modules + layout</li>
@@ -17,13 +17,15 @@
 <li><strong>Left</strong> — workspaces, window title</li>
 <li><strong>Right</strong> — bluetooth · pulseaudio · network · battery · <code>custom/notification</code></li>
 </ul>
-<h2 id="custom-modules">Custom modules</h2>
+<h2 id="modules--telemetry">Modules &amp; Telemetry</h2>
+<p>The top bar is a live JSON-fed telemetry system providing real-time system state.</p>
 <ul>
-<li><code>custom/notification</code> → <a href="/vault/swaync-config">Swaync Config</a></li>
-<li><code>custom/media</code> → <code>media.py</code> (<a href="/vault/custom-scripts">Custom Scripts</a>)</li>
+<li><strong>Active Modules</strong>: <code>workspaces</code>, <code>window</code>, <code>clock</code>, <code>bluetooth</code>, <code>pulseaudio</code>, <code>network</code>, <code>battery</code>.</li>
 </ul>
+<h2 id="styling">Styling</h2>
+<p>The bar uses CSS templates injected with generative theme colors (e.g., <code>rgba(${ACCENT1_RGB}, 0.8)</code>). This ensures the UI remains visually consistent with the current theme engine state.</p>
 <h2 id="reload">Reload</h2>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#FFC799">pkill</span><span style="color:#99FFE4"> -SIGUSR2</span><span style="color:#99FFE4"> waybar</span></span></code></pre>
+<p><code>pkill -SIGUSR2 waybar</code></p>
 <h2 id="related">Related</h2>
 <ul>
 <li><a href="/vault/theme-engine">Theme Engine</a></li>
