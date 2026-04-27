@@ -3,15 +3,14 @@ title: Theme Engine
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [theming, dotfiles, scripting]
+tags: [dotfiles, theming]
 description: Variable-injection theme system — configs as compilation targets.
 ---
 
 Variable-injection theme system. Treats configs as compilation targets, not source.
 
 ## Layout
-
-```text
+```
 themes/
 ├── <theme>/
 │   ├── theme.conf       # variable exports
@@ -24,11 +23,14 @@ themes/
 └── select.sh            # wofi front-end
 ```
 
+## Animation Bezier Curves
+The system utilizes high-precision cubic-bezier curves for organic movement:
+- **`easeOutQuint`**: `0.23, 1, 0.32, 1`
+- **`easeInOutQuart`**: `0.76, 0, 0.24, 1`
+
 ## Variable contract
-
 Every `theme.conf` must export:
-
-```text
+```
 ACCENT1, ACCENT2
 GAPS_IN, GAPS_OUT
 HYPR_ROUNDING
@@ -36,11 +38,9 @@ OPACITY_TERMINAL
 ```
 
 ## Themes
-
 - `kiboDesk` · `pixelAlley` · `skyGlitch` · `titanDusk` · `twoFish`
 
 ## Related
-
 - [[Theme Switcher Script]]
 - [[Hyprland Config]]
 - [[Waybar Config]]

@@ -2,11 +2,10 @@ import fs from "fs"
 import path from "path"
 import { visit } from "unist-util-visit"
 
-let cache = null
-
 function buildCache(contentDir) {
-  if (cache) return cache
-  cache = new Map()
+  // Always rebuild — content set is small, and this guarantees new
+  // vault/blog/projects entries resolve immediately in dev.
+  const cache = new Map()
 
   // blog + projects: map by filename slug
   for (const col of ["blog", "projects"]) {

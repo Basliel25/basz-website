@@ -3,24 +3,23 @@ title: Tmuxinator Config
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [tmux, tmuxinator, dotfiles]
+tags: [dotfiles]
 description: YAML-defined tmux project layouts.
 ---
 
 YAML-defined tmux project layouts. `mux <name>` to start.
 
 ## Projects
+Projects are defined by YAML manifests that automate workspace orchestration.
 
-- `website` — frontend/backend split
-- `MapReduce` — distributed systems sandbox
-- `log_parser` — log analysis layout
+- **website.yml**: Automates a split-pane view with `nvim` and `npm dev` for synchronous development.
+- **MapReduce.yml**: Orchestrates distributed testing nodes for complex backend verification.
+- **log_parser.yml**: Specialized layout for high-volume telemetry analysis.
 
 ## File pattern
-
 `~/.config/tmuxinator/<name>.yml`
 
 ## Skeleton
-
 ```yaml
 name: project
 root: ~/path
@@ -33,6 +32,5 @@ windows:
 ```
 
 ## Related
-
 - [[Kitty Config]]
 - [[System Config MOC]]

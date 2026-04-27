@@ -41,9 +41,9 @@
 <table><thead><tr><th>Concept</th><th>What it is</th></tr></thead><tbody><tr><td>Image</td><td>Read-only template for creating containers</td></tr><tr><td>Container</td><td>Running instance of an image</td></tr><tr><td>Dockerfile</td><td>Script that builds an image step-by-step</td></tr><tr><td>Registry</td><td>Storage for images (Docker Hub, GHCR, ECR)</td></tr><tr><td>Compose</td><td>Tool for multi-container apps via YAML</td></tr></tbody></table>
 <h2 id="essential-commands">Essential Commands</h2>
 <pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="shell"><code><span class="line"><span style="color:#8B8B8B94"># Build an image from a Dockerfile in current directory</span></span>
-<span class="line"><span style="color:#FFF">docker build -t myapp:latest .</span></span>
+<span class="line"><span style="color:#FFC799">docker</span><span style="color:#99FFE4"> build</span><span style="color:#99FFE4"> -t</span><span style="color:#99FFE4"> myapp:latest</span><span style="color:#99FFE4"> .</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#99FFE4">#</span><span style="color:#99FFE4"> Run</span><span style="color:#99FFE4"> a</span><span style="color:#99FFE4"> container</span><span style="color:#FFF"> (detached, </span><span style="color:#99FFE4">port</span><span style="color:#99FFE4"> mapped</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#8B8B8B94"># Run a container (detached, port mapped)</span></span>
 <span class="line"><span style="color:#FFC799">docker</span><span style="color:#99FFE4"> run</span><span style="color:#99FFE4"> -d</span><span style="color:#99FFE4"> -p</span><span style="color:#99FFE4"> 8080:80</span><span style="color:#99FFE4"> --name</span><span style="color:#99FFE4"> myapp</span><span style="color:#99FFE4"> myapp:latest</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#8B8B8B94"># List running containers</span></span>

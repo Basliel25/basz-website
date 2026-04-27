@@ -3,20 +3,18 @@ title: Dotfiles Repo Workflow
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [dotfiles, git, workflow, stow]
+tags: [dotfiles, workflow]
 description: Bare repo + GNU Stow workflow for ~/dotfiles.
 ---
 
 Bare repo + Stow workflow for `~/dotfiles`.
 
 ## Topology
-
-- **Bare repo** — `~/repos/dotfiles.git`
-- **Working tree** — `~/dotfiles/`
-- **Symlinks** — managed by GNU Stow into `~/.config/` and `~/`
+- **Bare repo**: `~/repos/dotfiles.git`
+- **Working tree**: `~/dotfiles/`
+- **Symlinks**: managed by GNU Stow into `~/.config/` and `~/`
 
 ## Add a config
-
 ```bash
 cd ~/dotfiles
 mkdir -p <pkg>/.config/<pkg>
@@ -27,15 +25,12 @@ git push
 ```
 
 ## Edit
-
 Edit through symlink or working tree — same file. Then commit.
 
 ## Restow after structure change
-
 ```bash
 stow -R <pkg>
 ```
 
 ## Related
-
 - [[System Config MOC]]

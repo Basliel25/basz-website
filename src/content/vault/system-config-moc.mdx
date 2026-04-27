@@ -3,7 +3,7 @@ title: System Config MOC
 type: moc
 status: evergreen
 created: 2026-04-27
-tags: [dotfiles, hyprland, theming, linux, moc]
+tags: [dotfiles, moc]
 description: Hub for system configuration notes — Hyprland stack, theming engine, editor, shell.
 featured: true
 ---
@@ -11,32 +11,32 @@ featured: true
 Reference index for `~/dotfiles` (stowed). One note per config. Edits flow through `~/dotfiles` → git → stow symlinks.
 
 ## Stack
-
-- **WM** — [[Hyprland Config]]
-- **Bar** — [[Waybar Config]]
-- **Launcher** — [[Wofi Config]]
-- **Terminal** — [[Kitty Config]]
-- **Editor** — [[Neovim Config]]
-- **Multiplexer** — [[Tmuxinator Config]]
-- **Notifications** — [[Swaync Config]]
-- **Lock / Idle** — [[Hyprlock Config]] · [[Hypridle Config]]
+- **WM**: [[Hyprland Config]]
+- **Bar**: [[Waybar Config]]
+- **Launcher**: [[Wofi Config]]
+- **Terminal**: [[Kitty Config]]
+- **Editor**: [[Neovim Config]]
+- **Multiplexer**: [[Tmuxinator Config]]
+- **Notifications**: [[Swaync Config]]
+- **Lock/Idle**: [[Hyprlock Config]] · [[Hypridle Config]]
 
 ## Theming
-
 - [[Theme Engine]] — variable injection via `envsubst` + pywal sync
 - [[Theme Switcher Script]] — `switch.sh` / `select.sh`
 
 ## Scripts & Utilities
-
 - [[Custom Scripts]] — `windowSwitch.sh`, `media.py`
 - [[Htop Config]]
 - [[AIMP Config]]
 
-## Workflow
+## Dataview — auto-list
+```dataview
+table file.ctime as "Created", file.mtime as "Modified"
+from "2. Zettelkasten/Configs"
+where contains(tags, "config")
+sort file.mtime desc
+```
 
-- [[Dotfiles Repo Workflow]] — bare repo + Stow
-
-## Hyprland deep-dives
-
-- [[Hyprland Keybinds]]
-- [[Hyprland Plugins]]
+## Related
+- [[Command MOCs Index]]
+- [[Dotfiles Repo Workflow]]

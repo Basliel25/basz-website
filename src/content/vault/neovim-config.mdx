@@ -3,15 +3,14 @@ title: Neovim Config
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [neovim, editor, lua, dotfiles]
+tags: [dotfiles]
 description: Lua-only Neovim — modular core / plugins / per-server LSP.
 ---
 
 Lua-only. Modular: `core/` for vim primitives, `plugins/` for features, `lsp/` per-server.
 
 ## Tree
-
-```text
+```
 nvim/
 ├── init.lua
 ├── lua/
@@ -29,22 +28,33 @@ nvim/
 ```
 
 ## Stack
-
-- LSP — `nvim-lspconfig` + `nvim-cmp`
-- Find — `telescope.nvim`
-- UI — `lualine.nvim` (theme-synced)
-- Format — `formatter.lua`
+- LSP: `nvim-lspconfig` + `nvim-cmp`
+- Find: `telescope.nvim`
+- UI: `lualine.nvim` (theme-synced)
+- Format: `formatter.lua`
 
 ## Adding a language
-
 1. Create `nvim/lsp/<server>.lua`
 2. `require` it in `init.lua`
 3. Install via `:Mason` or system pkg
 
 ## Gotcha
-
 Lua keymap callbacks must be wrapped, not invoked. `function() require('x').y() end`, not `require('x').y()`.
 
-## Related
+## Essential Keymaps
+The editor is tuned for rapid navigation and minimal mode-switching:
+- `leader + pv`: Open File Explorer (`Ex`).
+- `leader + pt`: Open integrated terminal in a bottom split.
+- `jj`: Exit Insert mode (The fastest exit).
+- `Ctrl + h/l`: Navigate between splits.
+- `v + J/K`: Move selected blocks of code vertically.
 
+## System Clipboard Integration
+I bypass the internal register for global utility:
+```lua
+vim.keymap.set({'n', 'v'}, '<leader>y', '"+y') -- Yank to System
+vim.keymap.set({'n', 'v'}, '<leader>p', '"+p') -- Paste from System
+```
+
+## Related
 - [[System Config MOC]]

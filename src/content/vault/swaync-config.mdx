@@ -3,28 +3,22 @@ title: Swaync Config
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [swaync, notifications, wayland, dotfiles]
+tags: [dotfiles, wayland]
 description: Notification daemon + control center, exposed to Waybar.
 ---
 
 Notification daemon + control center. Exposes count to [[Waybar Config]] via `custom/notification`.
 
 ## Files
-
 - `swaync/.config/swaync/config.json`
 - `swaync/.config/swaync/style.css` — theme-synced
 
 ## Spotify integration
-
 Track-change notifications via `playerctl` watcher → `notify-send`. Uses album-art image path. See [[Custom Scripts]].
 
 ## Reload
-
-```bash
-swaync-client -R
-```
+`swaync-client -R`
 
 ## Related
-
 - [[Waybar Config]]
 - [[Custom Scripts]]

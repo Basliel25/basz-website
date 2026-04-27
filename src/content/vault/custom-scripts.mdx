@@ -3,24 +3,25 @@ title: Custom Scripts
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [scripting, dotfiles, hyprland]
+tags: [dotfiles, scripting]
 description: Standalone scripts referenced by configs — windowSwitch, media, spotify notifier.
 ---
 
 Standalone scripts referenced by configs. Live in `scripts/` package.
 
 ## Inventory
+The system relies on a suite of custom scripts to handle complex logic outside of static configuration files.
 
-- **`windowSwitch.sh`** — directional window traversal for Hyprland. Bound in [[Hyprland Keybinds]].
-- **`media.py`** — Python bridge: `playerctl` → JSON for [[Waybar Config]] `custom/media` module.
-- **Spotify notifier** — `playerctl --follow metadata` → `notify-send` with album art. See [[Swaync Config]].
+- **`run_terminal.sh`**: Intelligent terminal instantiation, handling session persistence.
+- **`windowSwitcher.sh`**: Wofi-based fuzzy finder for active windows, enabling non-spatial navigation.
+- **`capture.sh`**: Quick-note capture system for the Zettelkasten, handling metadata and timestamping.
+- **`media.py`**: Python bridge converting `playerctl` state to JSON for the Waybar media module.
+- **`switch.sh`**: The core of the generative UI, acting as a compiler for system themes.
 
 ## Gotcha
-
 `notify-send -i <path>` expects absolute path. Use `awk -F'\t'` not `-F' '` for tab-delimited `playerctl` output — IFS bites here.
 
 ## Related
-
 - [[Hyprland Config]]
 - [[Waybar Config]]
 - [[Swaync Config]]

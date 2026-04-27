@@ -28,7 +28,7 @@
 <p>The borrow checker ensures: <strong>no mutable reference can coexist with any other reference to the same data</strong>. This eliminates data races at the type-system level.</p>
 <h2 id="error-handling">Error Handling</h2>
 <p>Rust has no exceptions. Errors are values:</p>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">use</span><span style="color:#FFC799"> std</span><span style="color:#A0A0A0">::fs;</span></span>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="rust"><code><span class="line"><span style="color:#FFC799">use</span><span style="color:#FFC799"> std</span><span style="color:#A0A0A0">::</span><span style="color:#FFF">fs;</span></span>
 <span class="line"><span style="color:#FFC799">use</span><span style="color:#FFC799"> std</span><span style="color:#A0A0A0">::</span><span style="color:#FFF">io;</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#FFC799">fn</span><span style="color:#FFC799"> read_config</span><span style="color:#FFF">(path</span><span style="color:#A0A0A0">:</span><span style="color:#A0A0A0"> &amp;</span><span style="color:#FFC799">str</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">-&gt;</span><span style="color:#FFC799"> Result</span><span style="color:#FFF">&lt;</span><span style="color:#FFC799">String</span><span style="color:#FFF">, io</span><span style="color:#A0A0A0">::</span><span style="color:#FFC799">Error</span><span style="color:#FFF">&gt; {</span></span>

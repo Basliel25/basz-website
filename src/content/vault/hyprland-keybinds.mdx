@@ -3,36 +3,47 @@ title: Hyprland Keybinds
 type: note
 status: evergreen
 created: 2026-04-27
-tags: [hyprland, keybinds, dotfiles]
+tags: [dotfiles, wayland]
 description: Global Hyprland bindings, organized by modifier convention.
 ---
 
 Global bindings. Source: `hypr/keybinds.conf`.
 
-## Apps
+## Core Operations
+The physical interface is mapped to the system's logic via a series of standard bindings.
 
-| Bind | Action |
-|---|---|
-| `SUPER + T` | kitty |
-| `SUPER + N` | kitty → nvim in CWD |
-| `SUPER + SPACE` | wofi launcher |
-| `SUPER + V` | clipboard history (`cliphist` + wofi) |
-| `SUPER + U` | theme switcher ([[Theme Switcher Script]]) |
-| `SUPER + M` | hyprexpo workspace overview |
+| Binding | Action | Description |
+| :--- | :--- | :--- |
+| `SUPER + C` | `killactive` | Terminate the focused window. |
+| `SUPER + T` | `exec $terminal` | Launch Kitty. |
+| `SUPER + E` | `exec $fileManager` | Open Thunar. |
+| `SUPER + SPACE` | `exec $menu` | Open Wofi launcher. |
+| `SUPER + N` | `exec kitty nvim .` | Instant-start IDE. |
+| `SUPER + L` | `exec hyprlock` | Secure the session. |
+| `SUPER + U` | `exec themeSelect` | Trigger the Theme Engine UI. |
 
-## Convention
+## Navigation & Layout (Vim-Style)
+Navigation follows a strict Vim-style logic using `h/j/k/l`.
 
-Most-used → `SUPER + <single letter>`. Window ops → `SUPER + SHIFT`. System → `SUPER + CTRL`.
+| Binding | Action | Target |
+| :--- | :--- | :--- |
+| `SUPER + h/j/k/l` | `movefocus` | Left / Down / Up / Right |
+| `SUPER + SHIFT + h/j/k/l` | `movewindow` | Move window in direction |
+| `SUPER + F` | `fullscreen` | Toggle full viewport |
+| `SUPER + P` | `pseudo` | Toggle Dwindle Pseudo-tile |
+| `SUPER + J` | `togglesplit` | Flip Dwindle split orientation |
+
+## Layout Submap (Precision Resizing)
+Activated via `SUPER + SHIFT + R`. This mode repurposes the movement keys for window resizing:
+- `l`: Resize Right (+24)
+- `h`: Resize Left (-24)
+- `j`: Resize Up (-24)
+- `k`: Resize Down (+24)
+- `ESC`: Return to Global Map
 
 ## Conflict check
-
-Before adding:
-
-```bash
-grep -i 'bind.*<key>' ~/dotfiles/hypr/.config/hypr/keybinds.conf
-```
+Before adding: `grep -i 'bind.*<key>' ~/dotfiles/hypr/.config/hypr/keybinds.conf`
 
 ## Related
-
 - [[Hyprland Config]]
 - [[Wofi Config]]
