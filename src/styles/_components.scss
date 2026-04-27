@@ -64,11 +64,42 @@
 .astro-code, pre {
   margin: 32px 0;
   border: 2px solid var(--ink);
-  border-top: none;
+  padding: 20px 24px;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.7;
+
+  code {
+    background: transparent;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+  }
+}
+
+// Terminal-style for shell/bash/console code blocks
+pre[data-language="bash"],
+pre[data-language="sh"],
+pre[data-language="shell"],
+pre[data-language="console"],
+pre[data-language="zsh"] {
+  background: #0a0908 !important;
+  color: #cec8be;
+  border-color: var(--ink);
+  position: relative;
+
+  &::before {
+    content: "● ● ●";
+    display: block;
+    font-size: 8px;
+    letter-spacing: 4px;
+    color: var(--ink-ghost);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #2e2820;
+  }
 }
 
 // ── Terminal ──────────────────────────────────────────────────────────────
