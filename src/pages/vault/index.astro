@@ -3,12 +3,17 @@ import { getCollection } from "astro:content"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import Hero from "../../components/Hero.astro"
 import StripDivider from "../../components/StripDivider.astro"
+import FilterStrip from "../../components/FilterStrip.astro"
 
 const all = (await getCollection("vault", ({ data }) => !data.draft))
   .sort((a, b) => {
-    const order = { evergreen: 0, growing: 1, seedling: 2 }
+    const order: Record<string, number> = { evergreen: 0, growing: 1, seedling: 2 }
     return order[a.data.status] - order[b.data.status] || a.data.title.localeCompare(b.data.title)
   })
+
+const tagCounts = new Map<string, number>()
+for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
+const tags = [{ label: "ALL", count: all.length, active: true }, ...[...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))]
 
 const notes = all.filter((e) => e.data.type === "note")
 const mocs  = all.filter((e) => e.data.type === "moc")
@@ -37,60 +42,76 @@ const crumbs = [{ label: "bas_", href: "/" }, { label: "Vault" }]
     meta={[`${notes.length} NOTES`, `${mocs.length} MOCs`, "ALWAYS GROWING"]}
   />
 
-  <StripDivider text="· MAPS OF CONTENT ·" />
+  {tags.length > 0 && <FilterStrip {tags} />}
 
-  <div class="vault-grid">
-    {mocs.map((note) => {
-      const slug = note.id.replace(/\.[^.]+$/, "")
-      return (
-        <a href={`/vault/${slug}`} class="vault-card vault-card--moc">
-          <div class="vault-card__status">
-            <span class={`vault-status vault-status--${note.data.status}`}>
-              {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
-            </span>
-            <span class="vault-card__type">MAP</span>
-          </div>
-          <h3 class="vault-card__title">{note.data.title}</h3>
-          {note.data.description && (
-            <p class="vault-card__desc">{note.data.description}</p>
-          )}
-          <div class="vault-card__footer">
-            <div class="vault-card__tags">
-              {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
-            </div>
-            <span class="vault-card__arrow">→</span>
-          </div>
-        </a>
-      )
-    })}
+  <div id="no-results" class="is-hidden" style="padding: 48px; text-align: center; color: var(--ink-dim); font-family: var(--font-mono);">
+    NO NOTES MATCHING SELECTED TAG.
   </div>
 
-  <StripDivider text="· ZETTELKASTEN NOTES ·" alt />
-
-  <div class="vault-grid">
-    {notes.map((note) => {
-      const slug = note.id.replace(/\.[^.]+$/, "")
-      return (
-        <a href={`/vault/${slug}`} class="vault-card">
-          <div class="vault-card__status">
-            <span class={`vault-status vault-status--${note.data.status}`}>
-              {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
-            </span>
-            <span class="vault-card__type">NOTE</span>
-          </div>
-          <h3 class="vault-card__title">{note.data.title}</h3>
-          {note.data.description && (
-            <p class="vault-card__desc">{note.data.description}</p>
-          )}
-          <div class="vault-card__footer">
-            <div class="vault-card__tags">
-              {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
+  <div class="filterable-group">
+    <StripDivider text="· MAPS OF CONTENT ·" />
+    <div class="vault-grid">
+      {mocs.map((note) => {
+        const slug = note.id.replace(/\.[^.]+$/, "")
+        return (
+          <a 
+            href={`/vault/${slug}`} 
+            class="vault-card vault-card--moc filterable-item"
+            data-tags={note.data.tags.map(t => t.toLowerCase()).join(' ')}
+          >
+            <div class="vault-card__status">
+              <span class={`vault-status vault-status--${note.data.status}`}>
+                {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
+              </span>
+              <span class="vault-card__type">MAP</span>
             </div>
-            <span class="vault-card__arrow">→</span>
-          </div>
-        </a>
-      )
-    })}
+            <h3 class="vault-card__title">{note.data.title}</h3>
+            {note.data.description && (
+              <p class="vault-card__desc">{note.data.description}</p>
+            )}
+            <div class="vault-card__footer">
+              <div class="vault-card__tags">
+                {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
+              </div>
+              <span class="vault-card__arrow">→</span>
+            </div>
+          </a>
+        )
+      })}
+    </div>
+  </div>
+
+  <div class="filterable-group">
+    <StripDivider text="· ZETTELKASTEN NOTES ·" alt />
+    <div class="vault-grid">
+      {notes.map((note) => {
+        const slug = note.id.replace(/\.[^.]+$/, "")
+        return (
+          <a 
+            href={`/vault/${slug}`} 
+            class="vault-card filterable-item"
+            data-tags={note.data.tags.map(t => t.toLowerCase()).join(' ')}
+          >
+            <div class="vault-card__status">
+              <span class={`vault-status vault-status--${note.data.status}`}>
+                {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
+              </span>
+              <span class="vault-card__type">NOTE</span>
+            </div>
+            <h3 class="vault-card__title">{note.data.title}</h3>
+            {note.data.description && (
+              <p class="vault-card__desc">{note.data.description}</p>
+            )}
+            <div class="vault-card__footer">
+              <div class="vault-card__tags">
+                {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
+              </div>
+              <span class="vault-card__arrow">→</span>
+            </div>
+          </a>
+        )
+      })}
+    </div>
   </div>
 
 </BaseLayout>

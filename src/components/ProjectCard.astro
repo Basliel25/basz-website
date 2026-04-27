@@ -11,7 +11,11 @@ const d = project.data
 const statusLabel = { shipped: "SHIPPED", wip: "WIP", archived: "ARCHIVED" }[d.status]
 ---
 
-<a href={`/projects/${project.id.replace(/\.[^.]+$/, "")}`} class="project-card">
+<a 
+  href={`/projects/${project.id.replace(/\.[^.]+$/, "")}`} 
+  class="project-card filterable-item"
+  data-tags={d.tags.map(t => t.toLowerCase()).join(' ')}
+>
   <div class="project-card__header">
     <span>{d.stack[0] ?? "PROJECT"}</span>
     <span class={`project-card__status project-card__status--${d.status}`}>{statusLabel}</span>

@@ -29,6 +29,13 @@ const crumbs = [
       <span>PUBLISHED · {formatDateLong(d.date)}</span>
       <span>· {d.readTime} MIN READ</span>
     </div>
+    {d.repo && (
+      <div class="article__repo">
+        <a href={d.repo} target="_blank" rel="noopener">
+          <span class="repo-label">REPO_SOURCE:</span> {d.repo.replace('https://', '')}
+        </a>
+      </div>
+    )}
   </article>
   <section class="prose">
     <slot />

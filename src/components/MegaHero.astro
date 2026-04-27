@@ -1,27 +1,51 @@
 ---
 interface Props {
-  tag: string
   stamp?: string
   meta: Record<string, string>
+  manifesto?: string
 }
 
-const { tag, stamp = "Personal site · v1", meta } = Astro.props
+const {
+  stamp = "Personal site · v1",
+  meta,
+  manifesto = "An explorer working on systems and models — with the window open.",
+} = Astro.props
 ---
 
 <section class="mega-hero">
   <div class="mega-hero__row1">
-    <div class="mega-hero__logo">BAS<span class="u">_</span></div>
+    <div class="mega-hero__logo">BASZ<span class="u">_</span></div>
     <div class="mega-hero__stamp">{stamp}</div>
   </div>
+
   <div class="mega-hero__row2">
-    <p class="mega-hero__tag">{tag}</p>
-    <div class="mega-hero__meta">
-      {Object.entries(meta).map(([k, v]) => (
-        <div class="row">
-          <span class="key">{k}</span>
-          <span class="val">{v}</span>
-        </div>
-      ))}
+    <div class="mega-hero__left">
+      <div class="mega-hero__meta">
+        {Object.entries(meta).map(([k, v]) => (
+          <div class="row">
+            <span class="key">{k}</span>
+            <span class="val">{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <hr class="mega-hero__sep" />
+
+      <p class="mega-hero__manifesto">{manifesto}</p>
     </div>
+
+    <figure class="mega-hero__epigraph">
+      <span class="mega-hero__quotemark" aria-hidden="true">&ldquo;</span>
+      <blockquote>
+        One who works with the <em>door open</em> gets all kinds of
+        interruptions, but they also occasionally get <mark>clues</mark>
+        as to what the world is and what might be <em>important</em>.
+      </blockquote>
+      <figcaption>
+        <span class="rule" aria-hidden="true"></span>
+        <span class="who">Richard&nbsp;W.&nbsp;Hamming</span>
+        <span class="src">You and Your Research · 1986</span>
+      </figcaption>
+    </figure>
   </div>
 </section>

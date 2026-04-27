@@ -5,6 +5,8 @@ draft: false
 tags: [public, portfolio, linux, learning]
 excerpt: "Learning Concurrency in C the hard way"
 readTime: 5   # estimated minutes
+featured: true
+repo: "https://github.com/rasBas/hiveParser"
 ---
 
 ## The Problem
@@ -44,7 +46,7 @@ The per-thread-then-merge pattern is the same one I used in the OSTEP sloppy cou
 
 The queue itself is a textbook intrusive linked list with a head pointer, a tail pointer, a size counter, a mutex, a condvar, and a done flag:
 
-```c
+```C
 typedef struct __workQueue_t {
     struct Node *head;
     struct Node *tail;

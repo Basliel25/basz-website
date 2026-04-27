@@ -4,18 +4,19 @@
 
 .masthead {
   @include container;
-  padding-top: 24px; padding-bottom: 24px;
+  padding-top: 32px; padding-bottom: 32px;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 48px;
-  border-bottom: 3px solid var(--ink);
 
   &__logo {
-    @include display(32px, -2px);
+    @include display(28px, 1px);
+    font-weight: 700;
     text-transform: uppercase;
     color: var(--ink);
     line-height: 1;
+    display: inline-block;
     span { color: var(--accent); }
   }
 
@@ -58,7 +59,7 @@
   color: var(--paper);
   padding: 6px 12px;
   transition: background .2s, color .2s;
-  &:hover { background: var(--accent); color: var(--paper); }
+  &:hover { background: var(--purple); color: var(--paper); }
 }
 
 // ── Breadcrumb ────────────────────────────────────────────────────────────
@@ -86,7 +87,7 @@
 .colophon {
   @include container;
   padding-top: 32px; padding-bottom: 32px;
-  border-top: 3px solid var(--ink);
+  border-top: 2px dashed var(--ink); // zine cut-out line
 
   &__copy {
     display: flex;

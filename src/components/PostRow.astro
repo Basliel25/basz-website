@@ -11,7 +11,11 @@ const { post } = Astro.props
 const d = post.data
 ---
 
-<a href={`/blog/${post.id.replace(/\.[^.]+$/, "")}`} class="post-row">
+<a 
+  href={`/blog/${post.id.replace(/\.[^.]+$/, "")}`} 
+  class="post-row filterable-item"
+  data-tags={d.tags.map(t => t.toLowerCase()).join(' ')}
+>
   <div>
     <div class="post-row__day">{formatDay(d.date)}</div>
     <div class="post-row__my">{formatMonthYear(d.date)}</div>

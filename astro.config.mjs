@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx"
 import sitemap from "@astrojs/sitemap"
 import { remarkWikilinks } from "./src/lib/remark-wikilinks.mjs"
 import { rehypeResolveWikilinks } from "./src/lib/rehype-resolve-wikilinks.mjs"
+import { rehypeStripShikiPreStyle } from "./src/lib/rehype-strip-shiki-pre-style.mjs"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 
@@ -13,7 +14,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkWikilinks, remarkMath],
     // rehypeResolveWikilinks runs after remark to upgrade unresolved spans → real links
-    rehypePlugins: [rehypeResolveWikilinks, rehypeKatex],
+    rehypePlugins: [rehypeResolveWikilinks, rehypeKatex, rehypeStripShikiPreStyle],
     shikiConfig: { theme: "vesper" },
   },
 })

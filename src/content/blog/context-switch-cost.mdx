@@ -6,7 +6,6 @@ issue: "DISPATCH № 23"
 tags: ["systems", "learning"]
 excerpt: "A context switch costs a few microseconds on paper. In practice, it costs a cache, a branch predictor, and the quiet coherence you'd built up over the last thousand instructions. A walk through perf, some toy benchmarks, and the strange kind of patience required to measure what isn't there."
 readTime: 12
-featured: true
 ---
 
 The first time someone asks you how expensive a context switch is, you'll look it up, and you'll find a number. Two microseconds. Five microseconds. It depends on your kernel. It depends on your CPU. It depends on whether _vdso_ is in the mood today. You'll write this number down somewhere, and you'll feel as though you have answered the question.

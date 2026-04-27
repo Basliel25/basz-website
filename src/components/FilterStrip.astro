@@ -6,11 +6,83 @@ interface Props {
 const { tags } = Astro.props
 ---
 
-<div class="filter-strip">
+<div class="filter-strip" id="filter-strip">
   <span class="filter-strip__label">Filter ·</span>
   {tags.map((t) => (
-    <button class={`filter-btn${t.active ? " filter-btn--active" : ""}`}>
+    <button 
+      class={`filter-btn${t.active ? " filter-btn--active" : ""}`}
+      data-target-tag={t.label.toLowerCase()}
+    >
       {t.label} <span style="opacity:.5">({t.count})</span>
     </button>
   ))}
 </div>
+
+<script>
+  function setupFiltering() {
+    const strip = document.getElementById('filter-strip');
+    if (!strip) return;
+
+    const buttons = strip.querySelectorAll('.filter-btn');
+    const items = document.querySelectorAll('.filterable-item');
+    const groups = document.querySelectorAll('.filterable-group');
+    const noResults = document.getElementById('no-results');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = (btn as HTMLElement).dataset.targetTag;
+        if (!target) return;
+
+        // Toggle active state
+        buttons.forEach(b => b.classList.remove('filter-btn--active'));
+        btn.classList.add('filter-btn--active');
+
+        let totalVisible = 0;
+
+        // Filter items
+        items.forEach(item => {
+          const el = item as HTMLElement;
+          const itemTags = el.dataset.tags || '';
+          
+          if (target === 'all' || itemTags.split(' ').includes(target)) {
+            el.classList.remove('is-hidden');
+            totalVisible++;
+          } else {
+            el.classList.add('is-hidden');
+          }
+        });
+
+        // Hide empty groups
+        groups.forEach(group => {
+          const el = group as HTMLElement;
+          const visibleInGroup = el.querySelectorAll('.filterable-item:not(.is-hidden)');
+          if (visibleInGroup.length === 0) {
+            el.classList.add('is-hidden');
+          } else {
+            el.classList.remove('is-hidden');
+          }
+        });
+
+        // Handle no results message
+        if (noResults) {
+          if (totalVisible === 0) {
+            noResults.classList.remove('is-hidden');
+          } else {
+            noResults.classList.add('is-hidden');
+          }
+        }
+      });
+    });
+  }
+
+  // Initial setup
+  setupFiltering();
+
+  // Re-run on view transitions if needed
+  document.addEventListener('astro:after-swap', setupFiltering);
+</script>
+
+<style lang="scss">
+  // We keep this here to ensure it's always available when this component is used
+  :global(.is-hidden) { display: none !important; }
+</style>

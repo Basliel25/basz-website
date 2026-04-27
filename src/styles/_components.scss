@@ -62,13 +62,60 @@
 
 // Shiki output container
 .astro-code, pre {
-  margin: 32px 0;
-  border: 2px solid var(--ink);
-  padding: 20px 24px;
+  position: relative;
+  margin: 40px 0;
+  border: 2px solid var(--border);
+  padding: 32px 24px 24px;
+  background-color: #0d0f0d !important; 
+  color: #e2e8e2;
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: 11px;
+  line-height: 1.8;
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
+
+  // Technical header bar
+  &::before {
+    content: "ENV: " attr(data-language);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 22px;
+    background: var(--border);
+    color: var(--ink);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    background-image: repeating-linear-gradient(
+      -55deg,
+      transparent 0, transparent 8px,
+      rgba(0,0,0,0.03) 8px, rgba(0,0,0,0.03) 9px
+    );
+    text-transform: uppercase;
+  }
+
+  // Fallback for no language
+  &:not([data-language])::before {
+    content: "ENV: NULL";
+  }
+
+  // Terminal dots in header
+  &::after {
+    content: "";
+    position: absolute;
+    top: 6px; right: 12px;
+    width: 32px; height: 8px;
+    background-image: 
+      radial-gradient(circle, var(--accent) 2px, transparent 2px),
+      radial-gradient(circle, var(--purple) 2px, transparent 2px),
+      radial-gradient(circle, var(--ink-dim) 2px, transparent 2px);
+    background-size: 10px 10px;
+    background-position: 0 0, 10px 0, 20px 0;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+  }
 
   code {
     background: transparent;
@@ -76,7 +123,19 @@
     border: none;
     padding: 0;
     font-size: inherit;
+    
+    // Syntax overrides via CSS variables if Shiki theme supports it, 
+    // or standard Shiki span colors. Let's add some typical class-based overrides.
+    span {
+      // Shiki uses inline colors, but we can try to nudge them or use filter
+      // Alternatively, we can target common spans if they exist.
+    }
   }
+
+  // Custom scrollbar for code
+  &::-webkit-scrollbar { height: 6px; }
+  &::-webkit-scrollbar-track { background: #0d0f0d; }
+  &::-webkit-scrollbar-thumb { background: var(--border); &:hover { background: var(--accent); } }
 }
 
 // Terminal-style for shell/bash/console code blocks
@@ -85,21 +144,11 @@ pre[data-language="sh"],
 pre[data-language="shell"],
 pre[data-language="console"],
 pre[data-language="zsh"] {
-  background: #0a0908 !important;
-  color: #cec8be;
-  border-color: var(--ink);
-  position: relative;
+  background: #0d0f0d !important;
+  color: var(--accent);
+  border-color: var(--border);
 
-  &::before {
-    content: "● ● ●";
-    display: block;
-    font-size: 8px;
-    letter-spacing: 4px;
-    color: var(--ink-ghost);
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #2e2820;
-  }
+  &::before { display: none; }
 }
 
 // ── Terminal ──────────────────────────────────────────────────────────────
@@ -452,29 +501,50 @@ pre[data-language="zsh"] {
   padding-bottom: 48px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
+  gap: 24px;
 }
 
 .vault-card {
   border: 1px solid var(--border);
-  margin: -.5px;
-  padding: 24px 20px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   background: var(--paper);
-  transition: transform .2s, box-shadow .2s, border-color .2s;
-  min-height: 200px;
+  transition: all .35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 160px;
   position: relative;
   color: var(--ink);
+  overflow: hidden;
 
   &:hover {
-    border-color: var(--ink);
-    transform: translate(-4px, -4px);
-    box-shadow: 8px 8px 0 var(--accent);
+    background: var(--ink);
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -12px rgba(0,0,0,0.3);
     z-index: 2;
+
     .vault-card__title { color: var(--accent); }
+    .vault-card__desc { 
+      opacity: 1; 
+      max-height: 200px; 
+      color: var(--paper);
+      margin-top: 8px;
+    }
     .vault-card__arrow { transform: translateX(4px); color: var(--accent); }
+    .vault-card__footer { border-color: var(--ink-dim); }
+    .vault-card__type { color: var(--accent); opacity: .8; }
+  }
+
+  &__desc { 
+    font-family: var(--font-mono); 
+    font-size: 11px; 
+    line-height: 1.65; 
+    color: var(--ink-dim);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all .4s ease;
   }
 
   // MOC cards get a subtle ink-tinted background

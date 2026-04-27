@@ -15,21 +15,46 @@
   @if $up { text-transform: uppercase; }
 }
 
-// Stencil-cut heavy — Bebas Neue, naturally all-caps, no italic
-@mixin serif-italic($size: 22px, $lh: 1.2) {
-  font-family: var(--font-display);
+// Typewriter italic — Special Elite, photocopied-zine character
+@mixin serif-italic($size: 22px, $lh: 1.35) {
+  font-family: var(--font-accent);
   font-size: $size;
   line-height: $lh;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  font-style: normal;
+  text-transform: none;
 }
 
-@mixin display($size: 42px, $ls: 1px) {
+// Brutal stencil — Anton, naturally condensed all-caps
+@mixin display($size: 42px, $ls: 0) {
   font-family: var(--font-display);
-  font-weight: 400;  // Bebas Neue is single-weight
+  font-weight: 400;
   font-size: $size;
   letter-spacing: $ls;
   text-transform: uppercase;
+}
+
+// Chunky tag weight — Archivo Black for graffiti-poster moments
+@mixin heavy($size: 42px, $ls: -0.5px) {
+  font-family: var(--font-heavy);
+  font-weight: 900;
+  font-size: $size;
+  letter-spacing: $ls;
+  text-transform: uppercase;
+  line-height: 0.92;
+}
+
+// Marker-style underline — uneven, slightly skewed, accent-colored
+@mixin marker-underline($color: var(--accent), $h: 6px) {
+  background-image: linear-gradient(
+    to top,
+    $color 0,
+    $color $h,
+    transparent $h
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 0 2px;
 }
 
 @mixin lift($off: 4px, $shadow: var(--accent)) {

@@ -12,7 +12,7 @@ const all = (await getCollection("blog", ({ data }) => !data.draft))
 
 const tagCounts = new Map<string, number>()
 for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
-const tags = [...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))
+const tags = [{ label: "ALL", count: all.length, active: true }, ...[...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))]
 
 const featured = all.find((p) => p.data.featured) ?? all[0]
 const rest = featured ? all.filter((p) => p !== featured) : all
@@ -43,13 +43,18 @@ const crumbs = [{ label: "bas_", href: "/" }, { label: "Dispatches" }]
     meta={[`${all.length} DISPATCHES`, "LONG-FORM · NO ADS · RSS"]}
   />
   {tags.length > 0 && <FilterStrip {tags} />}
+
+  <div id="no-results" class="is-hidden" style="padding: 48px; text-align: center; color: var(--ink-dim); font-family: var(--font-mono);">
+    NO DISPATCHES MATCHING SELECTED TAG.
+  </div>
+
   {featured && <Featured post={featured} />}
   {years.map((year) => (
-    <>
+    <div class="filterable-group">
       <StripDivider text={`· ${year} ·`} alt />
       <div class="posts">
         {byYear.get(year)!.map((p) => <PostRow post={p} />)}
       </div>
-    </>
+    </div>
   ))}
 </BaseLayout>

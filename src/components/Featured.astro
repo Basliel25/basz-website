@@ -14,7 +14,10 @@ const mon = d.date.toLocaleDateString("en-US", { month: "short" }).toUpperCase()
 ---
 
 <section class="featured">
-  <article class="featured__frame">
+  <article 
+    class="featured__frame filterable-item"
+    data-tags={d.tags.map(t => t.toLowerCase()).join(' ')}
+  >
     <div class="featured__header">
       <span>LEAD · {formatDateLong(d.date)}</span>
       <span>{d.readTime} MIN READ</span>

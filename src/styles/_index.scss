@@ -7,33 +7,52 @@
   padding-top: 48px; padding-bottom: 48px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0;
+  gap: 24px; // Added padding between cards
 }
 
 .idx-card {
   border: 1px solid var(--border);
-  margin: -.5px;
-  padding: 28px 20px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   background: var(--paper);
-  transition: transform .2s, box-shadow .2s, border-color .2s;
-  min-height: 240px;
+  transition: all .35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 180px;
   position: relative;
+  overflow: hidden;
 
   &:hover {
-    border-color: var(--ink);
-    transform: translate(-4px, -4px);
-    box-shadow: 8px 8px 0 var(--accent);
+    background: var(--ink);
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -12px rgba(0,0,0,0.3);
     z-index: 2;
-    .idx-card__title { color: var(--accent); }
+
+    .idx-card__num, .idx-card__title, .idx-card__kicker { color: var(--accent); }
+    .idx-card__desc { 
+      opacity: 1; 
+      max-height: 200px; 
+      color: var(--paper);
+      margin-top: 8px;
+    }
+    .idx-card__footer { border-color: var(--ink-dim); color: var(--accent); }
   }
 
-  &__num    { @include display(42px, 0px); color: var(--ink); line-height: 1; }
-  &__kicker { @include mono(9px, 2px); color: var(--ink-dim); }
-  &__title  { @include serif-italic(28px, 1.1); color: var(--ink); transition: color .2s; }
-  &__desc   { font-family: var(--font-mono); font-size: 11px; line-height: 1.7; color: var(--ink-dim); }
+  &__num    { @include display(42px, 0px); color: var(--ink); line-height: 1; transition: color .3s; }
+  &__kicker { @include mono(9px, 2px); color: var(--ink-dim); transition: color .3s; }
+  &__title  { @include serif-italic(28px, 1.1); color: var(--ink); transition: color .3s; }
+  
+  &__desc { 
+    font-family: var(--font-mono); 
+    font-size: 11px; 
+    line-height: 1.7; 
+    color: var(--ink-dim);
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all .4s ease;
+  }
   &__footer {
     margin-top: auto;
     display: flex;
