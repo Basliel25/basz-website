@@ -502,6 +502,20 @@ pre[data-language="zsh"] {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+
+  &--featured { grid-template-columns: 1fr; padding-bottom: 24px; }
+}
+
+.vault-card--featured {
+  border: 2px solid var(--ink);
+  padding: 32px;
+  min-height: 180px;
+  background: var(--paper);
+  box-shadow: 6px 6px 0 var(--ink);
+
+  .vault-card__type { color: var(--accent); font-weight: 700; letter-spacing: 2.5px; }
+  .vault-card__title { font-size: 1.4em; }
+  &:hover { box-shadow: 10px 10px 0 var(--accent); }
 }
 
 .vault-card {

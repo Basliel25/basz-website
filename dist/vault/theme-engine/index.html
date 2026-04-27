@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Theme Engine — basz_</title><meta name="description" content="Variable-injection theme system — configs as compilation targets."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Theme Engine</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">theming</span><span class="vault-tag vault-tag--inline">dotfiles</span><span class="vault-tag vault-tag--inline">scripting</span> </div> <h1 class="article__title">Theme Engine</h1> <p class="article__sub">Variable-injection theme system — configs as compilation targets.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Variable-injection theme system. Treats configs as compilation targets, not source.</p>
+<h2 id="layout">Layout</h2>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>themes/</span></span>
+<span class="line"><span>├── &lt;theme&gt;/</span></span>
+<span class="line"><span>│   ├── theme.conf       # variable exports</span></span>
+<span class="line"><span>│   └── wallpaper.png</span></span>
+<span class="line"><span>├── templates/</span></span>
+<span class="line"><span>│   ├── hypr-theme.conf.tpl</span></span>
+<span class="line"><span>│   ├── waybar-style.css.tpl</span></span>
+<span class="line"><span>│   └── wofi-style.css.tpl</span></span>
+<span class="line"><span>├── switch.sh            # compiler</span></span>
+<span class="line"><span>└── select.sh            # wofi front-end</span></span></code></pre>
+<h2 id="variable-contract">Variable contract</h2>
+<p>Every <code>theme.conf</code> must export:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="text"><code><span class="line"><span>ACCENT1, ACCENT2</span></span>
+<span class="line"><span>GAPS_IN, GAPS_OUT</span></span>
+<span class="line"><span>HYPR_ROUNDING</span></span>
+<span class="line"><span>OPACITY_TERMINAL</span></span></code></pre>
+<h2 id="themes">Themes</h2>
+<ul>
+<li><code>kiboDesk</code> · <code>pixelAlley</code> · <code>skyGlitch</code> · <code>titanDusk</code> · <code>twoFish</code></li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/theme-switcher-script">Theme Switcher Script</a></li>
+<li><a href="/vault/hyprland-config">Hyprland Config</a></li>
+<li><a href="/vault/waybar-config">Waybar Config</a></li>
+<li><a href="/vault/wofi-config">Wofi Config</a></li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

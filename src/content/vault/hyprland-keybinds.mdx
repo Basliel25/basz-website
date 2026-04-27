@@ -1,0 +1,38 @@
+---
+title: Hyprland Keybinds
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [hyprland, keybinds, dotfiles]
+description: Global Hyprland bindings, organized by modifier convention.
+---
+
+Global bindings. Source: `hypr/keybinds.conf`.
+
+## Apps
+
+| Bind | Action |
+|---|---|
+| `SUPER + T` | kitty |
+| `SUPER + N` | kitty → nvim in CWD |
+| `SUPER + SPACE` | wofi launcher |
+| `SUPER + V` | clipboard history (`cliphist` + wofi) |
+| `SUPER + U` | theme switcher ([[Theme Switcher Script]]) |
+| `SUPER + M` | hyprexpo workspace overview |
+
+## Convention
+
+Most-used → `SUPER + <single letter>`. Window ops → `SUPER + SHIFT`. System → `SUPER + CTRL`.
+
+## Conflict check
+
+Before adding:
+
+```bash
+grep -i 'bind.*<key>' ~/dotfiles/hypr/.config/hypr/keybinds.conf
+```
+
+## Related
+
+- [[Hyprland Config]]
+- [[Wofi Config]]

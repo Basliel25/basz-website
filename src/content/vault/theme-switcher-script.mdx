@@ -1,0 +1,37 @@
+---
+title: Theme Switcher Script
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [theming, scripting, dotfiles]
+description: The compiler for the Theme Engine — envsubst, pywal, reload.
+---
+
+The compiler for [[Theme Engine]]. Reads `theme.conf`, injects into `.tpl` files, syncs pywal, reloads bar + WM.
+
+## Core
+
+```bash
+source "$THEME_DIR/$THEME/theme.conf"
+envsubst < templates/hypr-theme.conf.tpl   > "$HYPR_THEME"
+envsubst < templates/waybar-style.css.tpl  > "$WAYBAR_CSS"
+wal -i "$WALLPAPER" -n -q
+pkill -SIGUSR2 waybar
+hyprctl reload
+```
+
+## Adding a theme
+
+1. `mkdir themes/<name>`
+2. Add `theme.conf` (must export all required vars — see [[Theme Engine]])
+3. Drop `wallpaper.png`
+4. `select.sh` picks it up automatically
+
+## Bind
+
+`SUPER + U` → `select.sh` (wofi picker → `switch.sh <theme>`)
+
+## Related
+
+- [[Theme Engine]]
+- [[Hyprland Keybinds]]

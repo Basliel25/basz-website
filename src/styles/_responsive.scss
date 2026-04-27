@@ -5,16 +5,18 @@
 @media (max-width: $break) {
   .masthead {
     grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 20px $pad-x-sm;
-    &__nav  { justify-self: start; flex-wrap: wrap; }
-    &__meta { justify-self: start; }
+    gap: 24px;
+    padding: 24px $pad-x-sm;
+    text-align: center;
+    &__logo { justify-self: center; }
+    &__nav  { justify-content: center; flex-wrap: wrap; gap: 12px 20px; }
+    &__meta { justify-self: center; gap: 20px; }
   }
 
-  .hero__grid      { grid-template-columns: 1fr; gap: 16px; }
+  .hero__grid      { grid-template-columns: 1fr; gap: 24px; }
   .hero__numstack  { border-right: none; border-bottom: 2px solid var(--ink); padding-right: 0; padding-bottom: 16px; }
 
-  .index-sections  { grid-template-columns: 1fr 1fr; }
+  .index-sections  { grid-template-columns: 1fr 1fr; gap: 16px; }
   .index-recent,
   .mega-hero__row2,
   .about-main,
@@ -22,13 +24,16 @@
   .editorial-head  { grid-template-columns: 1fr; gap: 32px; }
 
   .editorial-head__divider { display: none; }
-  .featured__body  { grid-template-columns: 1fr; gap: 16px; }
-  .project-grid    { grid-template-columns: 1fr; padding: 0 $pad-x-sm; }
+  .featured__body  { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+  .project-grid    { grid-template-columns: 1fr; gap: 16px; }
+  .vault-grid      { grid-template-columns: 1fr 1fr; gap: 16px; }
 
   .post-row {
     grid-template-columns: 80px 1fr;
     gap: 16px;
-    &__meta { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; }
+    padding: 20px 12px;
+    &__meta { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; text-align: left; }
+    &__arrow { display: none; }
   }
 
   .colo-block__grid { grid-template-columns: 1fr; gap: 28px; }
@@ -37,8 +42,29 @@
   // Uniform side padding on all container-level elements
   .article, .mega-hero, .hero, .breadcrumb, .colophon, .filter-strip,
   .strip-divider, .featured, .posts, .colo-block, .contact-strip,
-  .editorial-head, .about-main, .index-recent, .index-sections, .entry-nav {
+  .editorial-head, .about-main, .index-recent, .index-sections, .entry-nav, .project-grid, .vault-grid {
     padding-left: $pad-x-sm;
     padding-right: $pad-x-sm;
   }
+}
+
+// ── Tighter breakpoint for small devices (480px) ─────────────────────────
+
+@media (max-width: 480px) {
+  .index-sections { grid-template-columns: 1fr; }
+  .vault-grid { grid-template-columns: 1fr; }
+  
+  .post-row {
+    grid-template-columns: 1fr;
+    &__day { font-size: 32px; }
+    &__meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+  }
+
+  .mega-hero__logo { font-size: 64px; }
+  .hero__title { font-size: 36px; }
+  
+  .featured__date-big { font-size: 42px; }
+  
+  .masthead__logo { font-size: 24px; }
+  .masthead__nav { gap: 8px 12px; font-size: 10px; }
 }

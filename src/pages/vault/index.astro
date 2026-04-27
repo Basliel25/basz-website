@@ -15,8 +15,9 @@ const tagCounts = new Map<string, number>()
 for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
 const tags = [{ label: "ALL", count: all.length, active: true }, ...[...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))]
 
-const notes = all.filter((e) => e.data.type === "note")
-const mocs  = all.filter((e) => e.data.type === "moc")
+const notes        = all.filter((e) => e.data.type === "note")
+const mocs         = all.filter((e) => e.data.type === "moc" && !e.data.featured)
+const featuredMocs = all.filter((e) => e.data.type === "moc" && e.data.featured)
 
 const statusIcon: Record<string, string> = {
   seedling:  "○",
@@ -47,6 +48,41 @@ const crumbs = [{ label: "bas_", href: "/" }, { label: "Vault" }]
   <div id="no-results" class="is-hidden" style="padding: 48px; text-align: center; color: var(--ink-dim); font-family: var(--font-mono);">
     NO NOTES MATCHING SELECTED TAG.
   </div>
+
+  {featuredMocs.length > 0 && (
+    <div class="filterable-group">
+      <StripDivider text="· FEATURED MAP ·" />
+      <div class="vault-grid vault-grid--featured">
+        {featuredMocs.map((note) => {
+          const slug = note.id.replace(/\.[^.]+$/, "")
+          return (
+            <a
+              href={`/vault/${slug}`}
+              class="vault-card vault-card--moc vault-card--featured filterable-item"
+              data-tags={note.data.tags.map(t => t.toLowerCase()).join(' ')}
+            >
+              <div class="vault-card__status">
+                <span class={`vault-status vault-status--${note.data.status}`}>
+                  {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
+                </span>
+                <span class="vault-card__type">★ FEATURED MAP</span>
+              </div>
+              <h3 class="vault-card__title">{note.data.title}</h3>
+              {note.data.description && (
+                <p class="vault-card__desc">{note.data.description}</p>
+              )}
+              <div class="vault-card__footer">
+                <div class="vault-card__tags">
+                  {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
+                </div>
+                <span class="vault-card__arrow">→</span>
+              </div>
+            </a>
+          )
+        })}
+      </div>
+    </div>
+  )}
 
   <div class="filterable-group">
     <StripDivider text="· MAPS OF CONTENT ·" />

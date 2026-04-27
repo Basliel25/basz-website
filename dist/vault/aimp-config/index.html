@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AIMP Config — basz_</title><meta name="description" content="Wine-based music player, library aligned with the rip script."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">AIMP Config</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">aimp</span><span class="vault-tag vault-tag--inline">music</span><span class="vault-tag vault-tag--inline">dotfiles</span> </div> <h1 class="article__title">AIMP Config</h1> <p class="article__sub">Wine-based music player, library aligned with the rip script.</p> <div class="article__meta"> <span>PLANTED · 27 APRIL 2026</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Music player config (Wine-based). Library points at organized rip tree from <code>rip_playlist.py</code> workflow.</p>
+<h2 id="files">Files</h2>
+<p><code>AIMP/.config/AIMP/</code> — settings, skins, playlist state</p>
+<h2 id="library-convention">Library convention</h2>
+<p><code>{albumartist} - {title} ({year})</code> — set in player options to match rip script output.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="/vault/system-config-moc">System Config MOC</a></li>
+</ul> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

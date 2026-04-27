@@ -6,7 +6,7 @@
           (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
         document.documentElement.dataset.theme = t
       })()
-    </script><link rel="stylesheet" href="/_astro/_slug_.9vScOMnB.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Go Programming Language</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">programming</span><span class="vault-tag vault-tag--inline">go</span><span class="vault-tag vault-tag--inline">systems</span> </div> <h1 class="article__title">Go Programming Language</h1> <p class="article__sub">Notes on designing systems in Go — patterns, idioms, and when not to use it.</p> <div class="article__meta"> <span>PLANTED · 15 AUGUST 2023</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Notes on designing systems in Go. Not a tutorial — a working reference for patterns I keep reaching for.</p>
+    </script><link rel="stylesheet" href="/_astro/_slug_.iqMUrhxq.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a><a href="/showcase" class> Showcase </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">Go Programming Language</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">programming</span><span class="vault-tag vault-tag--inline">go</span><span class="vault-tag vault-tag--inline">systems</span> </div> <h1 class="article__title">Go Programming Language</h1> <p class="article__sub">Notes on designing systems in Go — patterns, idioms, and when not to use it.</p> <div class="article__meta"> <span>PLANTED · 15 AUGUST 2023</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>Notes on designing systems in Go. Not a tutorial — a working reference for patterns I keep reaching for.</p>
 <h2 id="why-go">Why Go</h2>
 <ul>
 <li><strong>Simplicity</strong> — small language surface, readable by anyone who knows one C-family language</li>
@@ -26,25 +26,25 @@
 <h3 id="interfaces--small-is-powerful">Interfaces — Small is Powerful</h3>
 <p>Go uses <em>structural</em> (duck) typing. Any type implementing the required methods satisfies the interface — no <code>implements</code> keyword.</p>
 <pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> Reader</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
-<span class="line"><span style="color:#FFC799">    Read</span><span style="color:#FFF">(p []</span><span style="color:#A0A0A0">byte</span><span style="color:#FFF">) (n </span><span style="color:#A0A0A0">int</span><span style="color:#FFF">, err </span><span style="color:#A0A0A0">error</span><span style="color:#FFF">)</span></span>
+<span class="line"><span style="color:#FFC799">    Read</span><span style="color:#FFF">(p []</span><span style="color:#A0A0A0">byte) (n int, err error)</span></span>
 <span class="line"><span style="color:#FFF">}</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> Writer</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFF"> Writer </span><span style="color:#A0A0A0">interface</span><span style="color:#FFF"> {</span></span>
 <span class="line"><span style="color:#FFC799">    Write</span><span style="color:#FFF">(p []</span><span style="color:#A0A0A0">byte</span><span style="color:#FFF">) (n </span><span style="color:#A0A0A0">int</span><span style="color:#FFF">, err </span><span style="color:#A0A0A0">error</span><span style="color:#FFF">)</span></span>
 <span class="line"><span style="color:#FFF">}</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#8B8B8B94">// Composed interfaces stay small</span></span>
-<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFC799"> ReadWriter</span><span style="color:#A0A0A0"> interface</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#A0A0A0">type</span><span style="color:#FFF"> ReadWriter </span><span style="color:#A0A0A0">interface</span><span style="color:#FFF"> {</span></span>
 <span class="line"><span style="color:#FFC799">    Reader</span></span>
 <span class="line"><span style="color:#FFC799">    Writer</span></span>
 <span class="line"><span style="color:#FFF">}</span></span></code></pre>
 <p>This is why <code>io.Reader</code> is everywhere. A file, a network connection, a byte buffer, an HTTP response body — all satisfy <code>io.Reader</code>. You write one function; it works with all of them.</p>
 <h3 id="goroutines-and-channels">Goroutines and Channels</h3>
-<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">func</span><span style="color:#FFC799"> fanOut</span><span style="color:#FFF">(inputs []</span><span style="color:#A0A0A0">string</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">&lt;-chan</span><span style="color:#FFC799"> Result</span><span style="color:#FFF"> {</span></span>
-<span class="line"><span style="color:#FFF">    out </span><span style="color:#A0A0A0">:=</span><span style="color:#FFC799"> make</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">chan</span><span style="color:#FFC799"> Result</span><span style="color:#FFF">, </span><span style="color:#FFC799">len</span><span style="color:#FFF">(inputs))</span></span>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="go"><code><span class="line"><span style="color:#A0A0A0">func</span><span style="color:#FFC799"> fanOut</span><span style="color:#FFF">(inputs []</span><span style="color:#A0A0A0">string) &lt;-chan Result {</span></span>
+<span class="line"><span style="color:#FFC799">    out</span><span style="color:#A0A0A0"> :=</span><span style="color:#FFC799"> make</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">chan Result, len(inputs))</span></span>
 <span class="line"><span style="color:#A0A0A0">    var</span><span style="color:#FFF"> wg </span><span style="color:#FFC799">sync</span><span style="color:#FFF">.</span><span style="color:#FFC799">WaitGroup</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> _, s </span><span style="color:#A0A0A0">:=</span><span style="color:#A0A0A0"> range</span><span style="color:#FFF"> inputs {</span></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFC799"> _</span><span style="color:#FFF">, </span><span style="color:#FFC799">s</span><span style="color:#A0A0A0"> :=</span><span style="color:#A0A0A0"> range</span><span style="color:#FFF"> inputs {</span></span>
 <span class="line"><span style="color:#FFF">        wg.</span><span style="color:#FFC799">Add</span><span style="color:#FFF">(</span><span style="color:#FFC799">1</span><span style="color:#FFF">)</span></span>
 <span class="line"><span style="color:#A0A0A0">        go</span><span style="color:#A0A0A0"> func</span><span style="color:#FFF">(s </span><span style="color:#A0A0A0">string</span><span style="color:#FFF">) {</span></span>
 <span class="line"><span style="color:#A0A0A0">            defer</span><span style="color:#FFF"> wg.</span><span style="color:#FFC799">Done</span><span style="color:#FFF">()</span></span>
@@ -57,7 +57,7 @@
 <span class="line"><span style="color:#FFC799">        close</span><span style="color:#FFF">(out)</span></span>
 <span class="line"><span style="color:#FFF">    }()</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFF"> out</span></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFC799"> out</span></span>
 <span class="line"><span style="color:#FFF">}</span></span></code></pre>
 <p>Goroutines are cheap (~2KB stack, grows as needed). Channels are typed pipes with built-in backpressure when buffered channels fill. The <code>select</code> statement lets you multiplex across channels without callbacks.</p>
 <h3 id="context-propagation">Context Propagation</h3>

@@ -1,0 +1,47 @@
+---
+title: Theme Engine
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [theming, dotfiles, scripting]
+description: Variable-injection theme system — configs as compilation targets.
+---
+
+Variable-injection theme system. Treats configs as compilation targets, not source.
+
+## Layout
+
+```text
+themes/
+├── <theme>/
+│   ├── theme.conf       # variable exports
+│   └── wallpaper.png
+├── templates/
+│   ├── hypr-theme.conf.tpl
+│   ├── waybar-style.css.tpl
+│   └── wofi-style.css.tpl
+├── switch.sh            # compiler
+└── select.sh            # wofi front-end
+```
+
+## Variable contract
+
+Every `theme.conf` must export:
+
+```text
+ACCENT1, ACCENT2
+GAPS_IN, GAPS_OUT
+HYPR_ROUNDING
+OPACITY_TERMINAL
+```
+
+## Themes
+
+- `kiboDesk` · `pixelAlley` · `skyGlitch` · `titanDusk` · `twoFish`
+
+## Related
+
+- [[Theme Switcher Script]]
+- [[Hyprland Config]]
+- [[Waybar Config]]
+- [[Wofi Config]]

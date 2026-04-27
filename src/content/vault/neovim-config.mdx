@@ -1,0 +1,50 @@
+---
+title: Neovim Config
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [neovim, editor, lua, dotfiles]
+description: Lua-only Neovim — modular core / plugins / per-server LSP.
+---
+
+Lua-only. Modular: `core/` for vim primitives, `plugins/` for features, `lsp/` per-server.
+
+## Tree
+
+```text
+nvim/
+├── init.lua
+├── lua/
+│   ├── core/
+│   │   ├── options.lua
+│   │   ├── keymaps.lua
+│   │   └── plugins.lua
+│   └── plugins/
+│       ├── lsp.lua
+│       ├── telescope.lua
+│       └── ...
+└── lsp/
+    ├── lua_ls.lua
+    └── pyright.lua
+```
+
+## Stack
+
+- LSP — `nvim-lspconfig` + `nvim-cmp`
+- Find — `telescope.nvim`
+- UI — `lualine.nvim` (theme-synced)
+- Format — `formatter.lua`
+
+## Adding a language
+
+1. Create `nvim/lsp/<server>.lua`
+2. `require` it in `init.lua`
+3. Install via `:Mason` or system pkg
+
+## Gotcha
+
+Lua keymap callbacks must be wrapped, not invoked. `function() require('x').y() end`, not `require('x').y()`.
+
+## Related
+
+- [[System Config MOC]]

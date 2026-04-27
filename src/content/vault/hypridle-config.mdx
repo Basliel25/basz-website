@@ -1,0 +1,25 @@
+---
+title: Hypridle Config
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [hyprland, idle, dotfiles]
+description: Idle daemon — triggers lock / dpms / suspend on timeouts.
+---
+
+Idle daemon. Triggers lock / dpms / suspend on timeouts.
+
+## File
+
+`hypr/.config/hypr/hypridle.conf`
+
+## Typical timeline
+
+- `t+5min` — dim
+- `t+10min` — invoke [[Hyprlock Config]]
+- `t+30min` — dpms off
+
+## Related
+
+- [[Hyprlock Config]]
+- [[Hyprland Config]]

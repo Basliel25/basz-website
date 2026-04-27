@@ -1,0 +1,31 @@
+---
+title: Kitty Config
+type: note
+status: evergreen
+created: 2026-04-27
+tags: [kitty, terminal, dotfiles]
+description: GPU-accelerated terminal, theme-synced via pywal.
+---
+
+GPU-accelerated terminal.
+
+## File
+
+`kitty/.config/kitty/kitty.conf`
+
+## Font
+
+`VictorMono Nerd Font` — italics + ligatures.
+
+## Color sourcing
+
+```ini
+include ~/.cache/wal/colors-kitty.conf
+```
+
+Overridden after include — cursor and selection stay neon pink (`#ff14c7`) regardless of active palette.
+
+## Related
+
+- [[Theme Engine]]
+- [[Tmuxinator Config]]

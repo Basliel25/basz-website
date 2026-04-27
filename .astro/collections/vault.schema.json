@@ -50,6 +50,10 @@
         "description": {
           "type": "string"
         },
+        "featured": {
+          "type": "boolean",
+          "default": false
+        },
         "draft": {
           "type": "boolean",
           "default": false

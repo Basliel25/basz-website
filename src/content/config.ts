@@ -42,6 +42,7 @@ const vault = defineCollection({
     created:     z.coerce.date().optional(),
     tags:        z.array(z.string()).default([]),
     description: z.string().optional(),
+    featured:    z.boolean().default(false),
     draft:       z.boolean().default(false),
   }),
 })
