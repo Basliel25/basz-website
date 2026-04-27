@@ -46,7 +46,9 @@
               "linux",
               "foss",
               "learning",
-              "meta"
+              "meta",
+              "public",
+              "portfolio"
             ]
           },
           "default": []

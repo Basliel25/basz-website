@@ -1,6 +1,6 @@
 import { defineCollection, z } from "astro:content"
 
-const pillVariants = ["systems", "linux", "foss", "learning", "meta"] as const
+const pillVariants = ["systems", "linux", "foss", "learning", "meta", "public", "portfolio"] as const
 
 const projects = defineCollection({
   type: "content",
