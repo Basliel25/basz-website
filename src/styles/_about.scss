@@ -1,5 +1,92 @@
 @use 'mixins' as *;
 
+// ── About Hero Card (00) ────────────────────────────────────────────────
+
+.about-hero-card {
+  @include container;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ah-card {
+  border: 4px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 12px 12px 0 var(--ink);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 16px 16px 0 var(--accent);
+    border-color: var(--accent);
+    .ah-card__header { background: var(--accent); }
+    .ah-card__num { color: var(--paper); }
+  }
+
+  &__header {
+    background: var(--ink);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+  }
+
+  &__num { @include display(32px, 0); color: var(--accent); line-height: 1; transition: color 0.3s; }
+  &__kicker { @include mono(10px, 3px); color: var(--paper); opacity: 0.6; }
+
+  &__body {
+    padding: 56px;
+    max-width: 800px;
+  }
+
+  &__title { 
+    @include display(clamp(32px, 7vw, 72px), -3px); 
+    margin-bottom: 24px; 
+    text-transform: uppercase; 
+    color: var(--ink);
+    line-height: 0.85;
+  }
+
+  &__tag { 
+    font-family: var(--font-serif); 
+    font-size: 22px; 
+    line-height: 1.45; 
+    color: var(--ink-dim); 
+    font-style: italic; 
+  }
+}
+
+@media (max-width: 840px) {
+  .ah-card__body { padding: 32px; }
+  .about-hero-card { padding-top: 48px; padding-bottom: 48px; }
+}
+
+// ── Contact Box ──────────────────────────────────────────────────────────
+
+.contact-box {
+  margin-top: 32px;
+  
+  &__link {
+    display: inline-block;
+    @include mono(14px, 2px);
+    background: var(--ink);
+    color: var(--accent);
+    padding: 16px 32px;
+    border: 1px solid var(--ink);
+    transition: all .2s;
+    text-decoration: none;
+
+    &:hover {
+      background: var(--accent);
+      color: var(--paper);
+      border-color: var(--accent);
+      transform: translate(-4px, -4px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+  }
+}
+
 // ── Editorial head (portrait + at-a-glance) ───────────────────────────────
 
 .editorial-head {
@@ -23,6 +110,73 @@
   font-size: 12px;
   line-height: 1.2;
   white-space: pre;
+}
+
+// ── Interests grid ────────────────────────────────────────────────────────
+
+.interests-grid {
+  @include container;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  border-bottom: 3px solid var(--ink);
+
+  &__header {
+    margin-bottom: 56px;
+    text-align: center;
+  }
+
+  &__title {
+    @include display(48px, -1.5px);
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+.interest-block {
+  padding: 32px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  transition: all .2s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 var(--accent);
+  }
+
+  &__num {
+    @include display(32px, 0px);
+    color: var(--accent);
+    opacity: 0.4;
+  }
+
+  &__title {
+    @include mono(14px, 2px);
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+
+  &__text {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+  }
+}
+
+@media (max-width: 840px) {
+  .interests-grid__body { grid-template-columns: 1fr; }
 }
 
 // ── About main: bio + sidebar ─────────────────────────────────────────────

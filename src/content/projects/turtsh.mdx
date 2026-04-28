@@ -1,0 +1,140 @@
+---
+title: "turtsh: A UNIX Shell in C"
+date: 2026-01-15
+status: shipped
+description: "A minimal POSIX shell implementation. Fork, exec, and parallel process management."
+excerpt: "Building a shell to understand the mental model of fork. Moving from sequential execution to parallel process orchestration."
+repo: "https://github.com/Basliel25/turtsh"
+tags: ["systems", "linux", "portfolio"]
+stack: ["C", "POSIX", "Pthreads"]
+featured: false
+---
+import Mermaid from '../../components/Mermaid.astro'
+
+Man pages remain abstract until you build the systems they describe. I worked through K.N. King and Beej's guide for weeks before starting **turtsh**. The goal: build a POSIX shell that handles builtins, redirection, and parallel execution. This project taught me the mental model of `fork`—the actual mechanism behind the syscall.
+
+## The Shell Loop
+
+A shell functions as a continuous loop. It reads input, tokensizes the line, forks a child, and waits. The first iteration of turtsh implemented this core cycle:
+
+```c
+while (1) {
+    char *line = turtsh_read();
+    char **args = turtsh_split(line);
+
+    pid_t pid = fork();
+    if (pid == 0) {
+        execvp(args[0], args);
+        perror("execvp failed");
+        exit(1);
+    } else {
+        waitpid(pid, NULL, 0);
+    }
+}
+```
+
+This structure handles basic commands like `ls -la`. Builtins like `cd` and `exit` followed. They execute in the parent process because their effects must persist in the shell environment.
+
+## Parallel Execution
+
+The OSTEP specification requires parallel command support using `&` as a separator. `cmd1 & cmd2 & cmd3` must run simultaneously. The shell only returns to the prompt after the final child exits.
+
+Initially, I attempted to loop the fork-wait cycle:
+
+```c
+// BROKEN: Sequential masquerading as parallel
+int turtsh_execute(PLine line) {
+    pid_t pid = fork();
+
+    for (int i = 0; i < line.count; i++) {
+        Command cmd = line.commands[i];
+        if (pid == 0) {
+            execv(path_resolve(cmd.args[0]), cmd.args);
+            exit(1);
+        } else {
+            waitpid(pid, NULL, 0);
+        }
+    }
+    return 0;
+}
+```
+
+This code fails. `execv` replaces the child process memory. It never returns to the loop. The first child vanishes after the first command. The parent waits for one child and then loops through remaining commands without an execution mechanism.
+
+## The Fork-Join Pattern
+
+Correct parallel execution requires a fork-join pattern. One loop spawns all children. A second loop waits for them.
+
+<Mermaid content={`
+sequenceDiagram
+    participant S as Shell (Parent)
+    participant C1 as Child 1
+    participant C2 as Child 2
+    participant K as Kernel
+
+    Note over S: Fork Loop Starts
+    S->>K: fork()
+    K-->>C1: PID 0
+    S->>K: fork()
+    K-->>C2: PID 0
+    Note over C1,C2: Children Executing
+    
+    Note over S: Wait Loop Starts
+    S->>K: waitpid(C1)
+    C1->>S: exit(0)
+    S->>K: waitpid(C2)
+    C2->>S: exit(0)
+    Note over S: Prompt Returns
+`} />
+
+```c
+int turtsh_execute(PLine line) {
+    pid_t pids[line.count];
+
+    for (int i = 0; i < line.count; i++) {
+        Command cmd = line.commands[i];
+        pids[i] = fork();
+        if (pids[i] == 0) {
+            if (cmd.redirect_file) apply_redirect(cmd.redirect_file);
+            execv(path_resolve(cmd.args[0]), cmd.args);
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < line.count; i++) {
+        waitpid(pids[i], NULL, 0);
+    }
+    return 0;
+}
+```
+
+This ensures the kernel schedules all processes in parallel. The parent stays out of the execution path until the join phase.
+
+## Manual Path Resolution
+
+The specification mandates a custom search path. Relinquishing `execvp` removes the "p" (path search) convenience. I implemented a manual resolution step to walk the shell's internal path array.
+
+```c
+char *path_resolve(char *cmd) {
+    for (int i = 0; shell_path[i] != NULL; i++) {
+        char candidate[PATH_MAX];
+        snprintf(candidate, sizeof(candidate), "%s/%s", shell_path[i], cmd);
+        if (access(candidate, X_OK) == 0) return strdup(candidate);
+    }
+    return NULL;
+}
+```
+
+This exposes the work `execvp` performed hidden behind the abstraction. 
+
+## Mechanical Lessons
+
+`fork` splits a program into two independent execution streams. Both halves run the same source code. Designing for this split is the fundamental challenge of systems programming.
+
+`dup2` manages I/O rewiring. `dup2(fd, STDOUT_FILENO)` points standard output to a file descriptor. The child process remains unaware of the redirection. It simply writes to descriptor 1. 
+
+turtsh passes the OSTEP test suite in 600 lines of C. It serves as the foundation for the upcoming MapReduce implementation.
+
+---
+
+*Referenced in the [[system-config-moc|System Config MOC]].*

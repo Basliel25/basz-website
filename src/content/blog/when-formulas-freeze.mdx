@@ -1,0 +1,67 @@
+---
+title: "When Formulas Freeze"
+date: 2026-07-20
+issue: "DISPATCH № 29"
+tags: ["learning", "meta"]
+excerpt: "Complexity theory meets statistical physics. Analyzing the sharp phase transitions where Boolean satisfiability problems transform from trivial to exponential."
+readTime: 12
+---
+
+*Inspired by my reading of [[nature-of-computation-notes|The Nature of Computation]].*
+
+Water doesn't slowly thicken into ice. 
+ At 0°C and atmospheric pressure, the liquid commits. Molecules that were sliding past each other lock into a crystal lattice. The whole substance changes its character at once. A fractional temperature shift triggers a global reorganization. Physicists call this a **phase transition**. 
+
+The same mathematics describes how *Boolean satisfiability problems*—the foundation of NP-completeness—transform from trivial to impossible.
+
+## The Critical Ratio
+
+Random 3-SAT provides the test bed. We take $N$ Boolean variables and generate $M$ clauses, each containing exactly three variables or their negations. We ask: does an assignment exist that satisfies every clause?
+
+At low ratios of $M$ to $N$, the problem is almost always satisfiable. At high ratios, it is almost always unsatisfiable. Both regimes are computationally fast to resolve. 
+
+Something abrupt happens at the **critical ratio of $\alpha \approx 4.267$** clauses per variable. The probability of satisfiability drops from near-1 to near-0 in a vanishingly thin window. The phase transition is sharp.
+
+## The Easy-Hard-Easy Pattern
+
+At this critical ratio, every known SAT-solving algorithm slows down by orders of magnitude. The hardest instances live exactly at the boundary. The algorithm must perform exponential work to determine which side of the line a given instance falls on.
+
+This "easy-hard-easy" pattern is a fingerprint of NP-completeness. It appears in graph coloring, vertex cover, and the traveling salesman problem. Hardness is not uniform across problem space. Hardness is concentrated at the edge between two regimes.
+
+## Statistical Physics as Complexity Theory
+
+The reason this works is that the same statistical physics describing **magnets and spin glasses** describes random constraint satisfaction problems.
+
+Statistical physics spent the twentieth century studying systems with billions of identical interacting particles. Computer science studied algorithms for combinatorial problems. These disciplines maintained different vocabularies and journals.
+
+In the 1990s, work by Kirkpatrick and Selman revealed that typical-case hardness is governed by critical phenomena. The worst-case complexity bounds of traditional CS are often less informative than the average-case behavior near the phase transition. 
+
+> "The interesting question wasn't *is this problem hard in the worst case*... but *where, in the parameter space of random instances, does hardness actually live*."
+
+## Backdoors and Spin Glasses
+
+This matters in industrial applications. Industrial SAT solvers—used in chip verification and model checking—handle real-world instances rather than uniform random ones. Yet, the framework of random SAT informs our understanding of these real instances. 
+
+The structure of "backdoors"—small subsets of variables that determine the entire formula—was mapped using concepts from spin glass theory. The performance gap between stochastic local search and complete backtracking solvers tracks the underlying solution space in ways physics predicted before CS measured.
+
+## The Unified Landscape
+
+连接 runs in both directions. Physics gave computer science **survey propagation** and replica methods. Computer science gave physics tools to understand the *information content* of disordered systems. 
+
+Spin glasses were notoriously hard to study experimentally because their energy landscapes are computationally intractable. The CS side knew why: they are NP-hard. 
+
+Cristopher Moore and Stephan Mertens explore this in *[The Nature of Computation](https://nature-of-computation.org/)*. They argue that computational complexity is best understood through the lens of statistical mechanics.
+
+## Computation as Physical Act
+
+Computation is not just a tool for studying physics. Computation is something physics *does*. 
+
+The universe lives in the easy region for almost all systems we care about. Phase transitions in matter, evolution finding fitness peaks, and neurons settling into stable patterns are physical systems traversing energy landscapes. 
+
+When the landscape is rugged, the system stalls. When it is smooth, the system slides into a ground state. The boundary between these regimes is the easy-hard transition. 
+
+The freezing of water and the freezing of a SAT instance are the same mathematical event.
+
+---
+
+*Part of the [[system-config-moc|System Config MOC]].*

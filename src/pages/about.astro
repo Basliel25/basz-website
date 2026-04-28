@@ -1,139 +1,110 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
 import Hero from "../components/Hero.astro"
+import GardenAscii from "../components/GardenAscii.astro"
 
 const crumbs = [{ label: "bas_", href: "/" }, { label: "About" }]
-
-const portrait = `         ___
-        /   \\
-       |  o o|
-       |  ▽  |
-       \\_____/
-      /|     |\\
-     / |BAS_ | \\
-    /__|_____|__\\
-       |     |
-       |_____|
-       /     \\
-      /       \\`
 ---
 
-<BaseLayout title="About" description="Systems engineer, writing in public. Padova." crumbs={crumbs}>
+<BaseLayout title="About" description="Information engineering student in Padova, learning Linux and systems from the inside, in public." crumbs={crumbs}>
   <Hero
-    section="03"
-    issueLabel="Section · the short version"
-    kickerStamp="COLOPHON"
-    kicker="/ who is writing, and from where"
+    section="00"
+    issueLabel="Section · the long signature"
+    kickerStamp="GARDENER"
+    kicker="/ building a public digital garden"
     titleHtml={`<strong>One</strong> person, <span class="u">in public</span>`}
-    tag="Hi. I'm Bas — a systems-curious engineer working out loud. This page is the long-form version of my email signature."
-    meta={["PADOVA · UTC+1", "· OPEN FOR WORK", "· <a href='#contact'>JUMP TO CONTACT</a>"]}
+    tag="I'm Bas. I study information engineering at the University of Padova and spend the hours between lectures and shifts exploring systems and computers. This page is the long version of my email signature, written for anyone who stumbles upon my digital garden. Welcome traveler."
+    meta={["PADOVA · UTC+1", "· CULTIVATING NOTES", "· <a href='#contact'>JUMP TO CONTACT</a>"]}
   />
 
-  <section class="editorial-head">
+  <section class="editorial-head" style="grid-template-columns: 2fr 1px 1fr;">
     <div>
-      <div class="portrait-label">PORTRAIT · HAND-SET · 2025</div>
-      <pre class="portrait-frame">{portrait}</pre>
-      <div class="portrait-label" style="margin-top:12px;text-align:right">— fig. 1 · self</div>
+      <div class="portrait-label">GARDEN_SCHEMATIC :: ASCII :: 2026</div>
+      <div class="portrait-frame">
+        <GardenAscii />
+      </div>
+      <div class="portrait-label" style="margin-top:12px;text-align:right">— fig. 1 · the garden</div>
     </div>
     <div class="editorial-head__divider"></div>
     <div>
       <div class="portrait-label">AT A GLANCE</div>
       <div class="sb-section__body">
-        <div class="row"><span class="key">Name</span><span class="val">Basliel B. Gugsa (Basz)</span></div>
-        <div class="row"><span class="key">Role</span><span class="val">Systems engineer in the making, late-night hobbyist</span></div>
-        <div class="row"><span class="key">Base</span><span class="val">Padova, IT · UTC+1</span></div>
-        <div class="row"><span class="key">Stack</span><span class="val">Bash · Rust · C · Python · Zig · nix · Linux · mutt</span></div>
-        <div class="row"><span class="key">Status</span><span class="val" style="color:var(--accent)">Open to collaborations.</span></div>
+        <div class="row"><span class="key">Name</span><span class="val">Basliel B. Gugsa (Bas)</span></div>
+        <div class="row"><span class="key">Where</span><span class="val">Padova, IT · UTC+1</span></div>
+        <div class="row"><span class="key">Apprentice @</span><span class="val">3nd-year B.Sc. in Information & Automation Engineering, UniPD (DEI)</span></div>
+        <div class="row"><span class="key">Working with</span><span class="val">Python, shell, C, Linux, Rust, Go, Zig</span></div>
+        <div class="row"><span class="key">Status</span><span class="val" style="color:var(--accent)">Learning in public. Open to useful collaborations.</span></div>
       </div>
     </div>
   </section>
 
   <section class="about-main">
     <div class="bio">
-      <p>I write software the slow way, on purpose. My days start with <em>mutt</em> and a pot of coffee and end, most nights, with a <em>git commit</em> I will probably rewrite tomorrow. I work on systems — the layer of software where abstractions stop being free and start costing cycles, memory, and sometimes sleep. I like it there. I like that you can measure things.</p>
+      <h2>What I'm doing here</h2>
+      <p>This site is part a workbench part a digital garden. Currently I have solid foundations in math and signal processing, I'm at home in a Linux terminal, and navigate any linux system. The interesting work is still ahead of me, and I would rather show that arc as it happens than wait until it looks finished.</p>
 
-      <p>Professionally I spend my time on backends, developer tooling, and the occasional compiler. For the last three years I've been a systems engineer at a small infrastructure company — the kind of place where the code review catches a dangling <em>mmap</em> before the test suite does. Before that I studied at TU Delft, dropped out to contribute to an open-source OS, came back, and graduated by writing a thesis on memory allocator design nobody asked for.</p>
+      <p>The plan, roughly, is to spend the next six to twelve months getting production-competent in the things I actually care about — computational analysis, low-level and systems programming, the tooling adjacent to HPC, embedded work where the constraints push back. I am drawn to code that has modles complex systems and their relationship with agents.</p>
 
       <h2>What I work on</h2>
-      <p>Four recurring interests that show up in both paid work and <a href="/projects">projects</a>. <strong>One:</strong> operating systems, especially the gap between what POSIX promises and what Linux actually does. <strong>Two:</strong> small, legible programs — the kind you can read in an afternoon and feel smarter afterwards. <strong>Three:</strong> developer tools that respect the keyboard. <strong>Four:</strong> <em>local-first software</em>, and the quiet case that it's still the best default for most things.</p>
+      <p><strong>Linux as a daily driver and a study object.</strong> I run Arch with Hyprland on an HP ProBook 430 with eight gigabytes of RAM. With my old hardware i learned that there cant be room to hide a sloppy script behind, and that pressure has taught me more about resource use than any textbook.</p>
 
-      <h2>How I work</h2>
-      <p>I write <a href="/blog">notes</a> as I go — it's the only way I've found to think at the pace of the problem. I build in public when I can. I am allergic to meetings that could have been a thread, and devoted to meetings that are properly chaired.</p>
+      <p>Most of what I learn ends up documented in small tools and configuration notes: <a href="/vault/custom-scripts">notification scripts</a>, <a href="/vault/waybar-config">status modules</a>, and the kind of plumbing that exists to make an arch server on 1GB RAM alive.</p>
 
-      <blockquote>"Make it work, make it right, make it fast" — in that order, but with honesty about which one you've reached.</blockquote>
+      <p><strong>FOSS, on principle.</strong> Tool ownership and open infrastructure decide a lot about who gets to think clearly in public, and I would like to keep that decision close to home. So I self-host where I can, run no analytics, and keep things in plain text whenever plain text will hold them.</p>
+
+      <p><strong>Notes as a thinking tool.</strong> I keep a <a href="/blog/mordor-zettelkasten">Zettelkasten-style</a> Obsidian vault for coursework and projects, and the vault has become its own ongoing project — templates, tag hierarchies, a dashboard layer in progress. I write while I work because I can't think at the pace of a problem otherwise. The notebook is where the thinking actually happens; the code is what falls out of it.</p>
+
+      <blockquote>Build the smallest thing that's honest. Then make it right. Then, if it matters, make it fast.</blockquote>
 
       <h2>Outside the terminal</h2>
-      <p>I ride a steel bike with too many lights. I read more than I finish — currently <em>A Philosophy of Software Design</em> (again). I cook slowly, and badly.</p>
+      <p>I work part-time at McDonald's, which keeps the abstraction-leak problem grounded in something other than software. There is a particular kind of clarity that comes from finishing a six-hour shift on your feet and then sitting down to debug a kernel module.</p>
+
+      <h2>Get in touch</h2>
+      <p>I read every message and reply to most of them.</p>
+      
+      <div class="contact-box">
+         <a href="mailto:basliel.gugsa25@gmail.com" class="contact-box__link">basliel.gugsa25@gmail.com</a>
+      </div>
     </div>
 
     <aside class="sidebar">
       <div class="sb-section">
+        <div class="sb-section__label">Garden Status</div>
+        <div class="sb-section__body">
+          <div class="row"><span class="key">Planted</span><span class="val">April 2024</span></div>
+          <div class="row"><span class="key">Tendency</span><span class="val">Weekly reviews · Continuous growth</span></div>
+          <div class="row"><span class="key">Yield</span><span class="val">Systems models · Config notes · Long-form dispatches</span></div>
+        </div>
+      </div>
+      <div class="sb-section">
         <div class="sb-section__label">Currently</div>
         <div class="sb-section__body">
-          <div class="row"><span class="key">Building</span><span class="val"><em>this site</em></span></div>
-          <div class="row"><span class="key">Reading</span><span class="val"><em>A Philosophy of Software Design</em></span></div>
-          <div class="row"><span class="key">Listening</span><span class="val">William Basinski — on repeat</span></div>
-          <div class="row"><span class="key">Learning</span><span class="val">Zig, patiently</span></div>
+          <div class="row"><span class="key">Building</span><span class="val">this site · <a href="/vault/obsidian-config">Obsidian dashboards</a></span></div>
+          <div class="row"><span class="key">Reading</span><span class="val">coursework first · philosophy of mind in the gaps</span></div>
+          <div class="row"><span class="key">Learning</span><span class="val">C, properly this time</span></div>
         </div>
       </div>
       <div class="sb-section">
         <div class="sb-section__label">Elsewhere</div>
         <div class="sb-section__body">
-          <div class="row"><span class="key">GitHub</span><span class="val"><a href="https://github.com">github.com/bas</a></span></div>
-          <div class="row"><span class="key">Mastodon</span><span class="val"><a href="#">@bas@fosstodon.org</a></span></div>
-          <div class="row"><span class="key">Mail</span><span class="val"><a href="mailto:hello@bas.dev">hello@bas.dev</a></span></div>
-        </div>
-      </div>
-      <div class="sb-section">
-        <div class="sb-section__label">Résumé</div>
-        <div class="sb-section__body">
-          <div class="row"><span class="key">Format</span><span class="val"><a href="#">PDF on request</a></span></div>
+          <div class="row"><span class="key">GitHub</span><span class="val"><a href="https://github.com/Basliel25">github.com/Basliel25</a></span></div>
+          <div class="row"><span class="key">Mail</span><span class="val"><a href="mailto:basliel.gugsa25@gmail.com">basliel.gugsa25@gmail.com</a></span></div>
         </div>
       </div>
     </aside>
   </section>
 
-  <section class="contact-strip" id="contact">
-    <div>
-      <div class="contact-strip__title">Get in touch</div>
-      <p class="contact-strip__tag">I read every message. I reply to most of them. Ask me about compilers, collaborations, or weird shell scripts.</p>
-    </div>
-    <form class="contact-form" action="mailto:hello@bas.dev" method="get" enctype="text/plain">
-      <div class="contact-form__row">
-        <label class="contact-form__lbl">From</label>
-        <input class="contact-form__inp" type="email" name="from" placeholder="your@email.com" />
-      </div>
-      <div class="contact-form__row">
-        <label class="contact-form__lbl">Subject</label>
-        <input class="contact-form__inp" type="text" name="subject" placeholder="Re: something interesting" />
-      </div>
-      <div class="contact-form__row">
-        <label class="contact-form__lbl">Message</label>
-        <textarea class="contact-form__inp" name="body" rows="4" placeholder="..."></textarea>
-      </div>
-      <button type="submit" class="contact-form__btn">SEND →</button>
-    </form>
-  </section>
-
   <section class="colo-block">
     <div class="colo-block__inner">
       <div class="colo-block__label">· COLOPHON ·</div>
-      <div class="colo-block__headline">Made with intent,<br />not for scale.</div>
+      <h2 class="colo-block__headline">Hand-set.<br />Hand-coded.<br />Static.</h2>
       <div class="colo-block__grid">
-        <div class="colo-block__col">
-          <h3>Stack</h3>
-          <p>Astro · MDX · Sass · vanilla JS. No frameworks. No analytics. Static output on Cloudflare Pages.</p>
-        </div>
-        <div class="colo-block__col">
-          <h3>Design</h3>
-          <p>Brutalist print zine aesthetic. Anybody (display) · Playfair Display (serif) · DM Mono. No rounded corners. No gradients on UI.</p>
-        </div>
-        <div class="colo-block__col">
-          <h3>Philosophy</h3>
-          <p>Build in public. Own your words. No paywalls, no newsletters, no tracking pixels. Just pages.</p>
+        <div class="colo-block__col" style="grid-column: span 3;">
+          <h3>Technical Stack</h3>
+          <p>Astro 5.0 · MDX · Sass · Vanilla JavaScript. This workbench operates as a collection of static assets. Every page exists as a durable, framework-free document. This is my plain text digital garden.</p>
         </div>
       </div>
-      <div class="colo-block__ticker">· bas.dev · Padova · {new Date().getFullYear()} · Static · No JS required for reading · Built with intent ·</div>
+      <div class="colo-block__ticker">· bas.dev · Padova · {new Date().getFullYear()} · Static · Built with intent ·</div>
     </div>
   </section>
 </BaseLayout>

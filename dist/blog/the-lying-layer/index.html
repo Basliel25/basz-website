@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Lying Layer — basz_</title><meta name="description" content="Every layer of abstraction in a modern computer is a useful fiction. Learning to see through these fictions separates code writing from system understanding."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.Bw5UapMy.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class="active"> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/blog">Dispatches</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">The Lying Layer</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="hero__kicker-stamp">DISPATCH № 27</span> <span class="pill pill--systems">SYSTEMS</span><span class="pill pill--learning">LEARNING</span> </div> <h1 class="article__title">The Lying Layer</h1>  <div class="article__meta"> <span>PUBLISHED · MAR 25, 2025</span> <span>· 8 MIN READ</span> </div>  </article> <section class="prose">  <p>On paper, a context switch on Linux costs a few microseconds. In practice, it costs a cache, a branch predictor, and the quiet coherence you’d built up over the last thousand instructions. The microseconds are the lie.</p>
+<p>This realization broke my mental model of computers. Not the headline number—anyone who’s read <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">an OS textbook</a> has seen “context switches are cheap, just save and restore the registers”. The revelation exists in what’s <em>not</em> in the documented cost. The registers are the cheap part. Everything the CPU had been quietly accumulating before the switch—the warmed-up cache lines, the trained branch predictor, the populated TLB—gets thrown away or invalidated. The next time your process runs, it pays for that loss in cold-cache misses and mispredicted branches. The lie is structural. The OS abstraction <em>has</em> to lie. If it told the truth, every syscall would come with a probability distribution.</p>
+<h2 id="the-microseconds-are-the-lie">The Microseconds are the Lie</h2>
+<p>Abstractions about abstraction are a trap. We start with a concrete example.</p>
+<p>The direct cost of a context switch—saving CPU registers, FPU state, swapping page tables, and loading the new process state—is <a href="https://blog.codingconfessions.com/p/context-switching-and-performance">usually a few microseconds on modern hardware</a>. This is the headline number.</p>
+<p>The indirect cost remains unquoted. When the new process starts running, the CPU’s <a href="https://blog.codingconfessions.com/p/context-switching-and-performance">L1 caches still hold the old process’s state</a>. The new process requires different data and different code. Cache lines get evicted. Cold misses replace hot hits. A typical L1 miss costs 10 cycles; an L3 miss costs hundreds; a <a href="https://www.akkadia.org/drepper/cpumemory.pdf">main-memory miss costs hundreds more</a>. Multiply by the instructions needed to reheat the working set. You are looking at tens of thousands of cycles of indirect cost. This cost exists as an invisible tax on tail latency.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Translation_lookaside_buffer">TLB</a> shares this story. A TLB miss costs <a href="https://blog.codingconfessions.com/p/context-switching-and-performance">hundreds of cycles</a> during hardware page-table walks. Modern Linux uses <a href="https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch">PCID / ASID tags</a> to avoid flushing the TLB, but the <a href="https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch">tag space is finite</a>. On a busy system, flushes still occur. The branch predictor, trained over thousands of instructions, suffers similar degradation.</p>
+<p>The textbook number represents what it can measure. It cannot measure what matters.</p>
+<h2 id="the-stack-of-fictions">The Stack of Fictions</h2>
+<p>Once the pattern is visible at the OS level, it appears everywhere.</p>
+<ul>
+<li><strong>Memory Uniformity.</strong> High-level languages pretend <a href="https://www.akkadia.org/drepper/cpumemory.pdf">memory is uniform</a>. It isn’t. L1, L2, L3, DRAM, and swap each operate 10× to 100× slower than the tier above. Sequential iteration is an order of magnitude faster than strided access.</li>
+<li><strong>Process Isolation.</strong> The OS pretends processes are isolated. They are, until <a href="https://meltdownattack.com/">Spectre</a> and <a href="https://meltdownattack.com/">Meltdown</a> showed they share enough microarchitectural state for side-channel leaks.</li>
+<li><strong>Execution Order.</strong> The compiler pretends your code runs in the order you wrote it. <a href="https://en.wikipedia.org/wiki/Memory_ordering">It doesn’t.</a> C’s “as-if rule” lets the compiler reorder anything as long as a single-threaded observer cannot detect the difference.</li>
+<li><strong>Instruction Atomicity.</strong> The hardware pretends each instruction is one operation. It <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">isn’t</a>. Modern x86 chips break instructions into micro-ops, run them out of order, and speculate down branches. The <a href="https://en.wikipedia.org/wiki/Out-of-order_execution">retirement stage cleans up the lie</a>.</li>
+</ul>
+<p>Every layer presents a clean model as a useful approximation. The lies stack.</p>
+<h2 id="necessary-fictions">Necessary Fictions</h2>
+<p>Abstractions exist because the real machine is unmanageable. If you held cache coherence protocols, branch predictor architecture, and memory consistency models in your head simultaneously, you would never write another loop.</p>
+<p>This isn’t a bug. It’s the fundamental design pattern of computing. Every level of the stack is a response to the same problem: <em>the level below me is too complicated, so I’ll present a simpler model and pay the cost in occasional leaks</em>.</p>
+<p>The lies are necessary. The lies are also where performance lives.</p>
+<h2 id="leaking-abstractions">Leaking Abstractions</h2>
+<p>The lies leak when performance matters.</p>
+<ul>
+<li><strong>Memory Ordering.</strong> Concurrent code breaks on real CPUs because hardware reordered loads and stores.</li>
+<li><strong>Cache Locality.</strong> Algorithmic complexity meets reality. Textbook O(n log n) fails when the cache hates the access pattern.</li>
+<li><strong>False Sharing.</strong> Two threads writing to different variables in the same cache line murder performance as the <a href="https://en.wikipedia.org/wiki/Cache_coherence">cache coherence protocol</a> ping-pongs the line between cores.</li>
+</ul>
+<p>Application-level competence hits a ceiling here. Until you see through the abstraction, you cannot name the failure.</p>
+<h2 id="mechanical-sympathy">Mechanical Sympathy</h2>
+<p>The phrase belongs to <a href="https://en.wikipedia.org/wiki/Jackie_Stewart">Jackie Stewart</a>. <em>You don’t have to be an engineer to drive the car well, but you have to have a sympathy for what the car is doing.</em> Martin Thompson brought this to systems programming.</p>
+<p>You don’t need to understand cache coherence to write working code. But the gap between <em>code that works</em> and <em>code worth shipping under load</em> is the gap between trusting the abstraction and seeing through it.</p>
+<p>My <a href="https://support.hp.com/us-en/product/hp-probook-430-g6-notebook-pc/">HP ProBook 430</a> with 8GB of RAM forces this seeing. On a Mac Studio with 64GB, nothing wakes you up. On the ProBook, an unnecessary allocation in a hot loop is felt. The constraint is the gift. It refuses to let me pretend the abstractions are free.</p>
+<p>The texture of the machine becomes legible as you peel back the layers. Code stops being incantation. It becomes mechanism. The abstraction is no longer a wall; it’s a description. You learn which parts to trust and which parts to check.</p>
+<p>The lies were always necessary. Knowing they were lies is what changed.</p>
+<hr/>
+<h2 id="references">References</h2>
+<ul>
+<li>Arpaci-Dusseau, R. &amp; A. <em>Operating Systems: Three Easy Pieces</em>. <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">Link</a></li>
+<li>Drepper, Ulrich. <em>What Every Programmer Should Know About Memory</em> (2007). <a href="https://www.akkadia.org/drepper/cpumemory.pdf">Link</a></li>
+<li><em>Context Switching and Performance: What Every Developer Should Know</em>, Coding Confessions. <a href="https://blog.codingconfessions.com/p/context-switching-and-performance">Link</a></li>
+<li><em>Linux: Determining the Cost of a Context Switch</em>, copyprogramming.com. <a href="https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch">Link</a></li>
+<li><em>Translation Lookaside Buffer</em>, Wikipedia. <a href="https://en.wikipedia.org/wiki/Translation_lookaside_buffer">Link</a></li>
+<li><em>Memory ordering</em>, Wikipedia. <a href="https://en.wikipedia.org/wiki/Memory_ordering">Link</a></li>
+<li><em>Instruction pipelining</em>, Wikipedia. <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">Link</a></li>
+<li><em>Out-of-order execution</em>, Wikipedia. <a href="https://en.wikipedia.org/wiki/Out-of-order_execution">Link</a></li>
+<li><em>Cache coherence</em>, Wikipedia. <a href="https://en.wikipedia.org/wiki/Cache_coherence">Link</a></li>
+<li><em>Spectre &amp; Meltdown</em> official site. <a href="https://meltdownattack.com/">Link</a></li>
+<li>C11 atomic memory order, cppreference. <a href="https://en.cppreference.com/w/c/atomic/memory_order.html">Link</a></li>
+<li><em>Jackie Stewart</em>, Wikipedia (origin of “mechanical sympathy”). <a href="https://en.wikipedia.org/wiki/Jackie_Stewart">Link</a></li>
+<li>Thompson, Martin — <em>Mechanical Sympathy</em> blog. <a href="https://mechanical-sympathy.blogspot.com/">Link</a></li>
+</ul>  </section> <nav class="entry-nav"> <a href="/blog"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All dispatches</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Nature of Computation: A Reader&#39;s Journal — basz_</title><meta name="description" content="Reading notes on Moore and Mertens' exploration of complexity. P vs NP, phase transitions, and the physical reality of computation."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.Bw5UapMy.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class="active"> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/vault">Vault</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">The Nature of Computation: A Reader&#39;s Journal</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="vault-status vault-status--evergreen"> ● EVERGREEN </span> <span class="vault-type-badge">NOTE</span> <span class="vault-tag vault-tag--inline">learning</span><span class="vault-tag vault-tag--inline">meta</span><span class="vault-tag vault-tag--inline">book-note</span> </div> <h1 class="article__title">The Nature of Computation: A Reader&#39;s Journal</h1> <p class="article__sub">Reading notes on Moore and Mertens&#39; exploration of complexity. P vs NP, phase transitions, and the physical reality of computation.</p> <div class="article__meta"> <span>PLANTED · 4 AUGUST 2025</span> <span>· ZETTEL NOTE</span> </div> </article> <section class="prose"> <p>These are notes captured while reading Cristopher Moore and Stephan Mertens’ <em>The Nature of Computation</em>. The text frames computational complexity as a property of physical systems, moving from the logic of P vs NP to the statistical mechanics of random SAT.</p>
+<h3 id="log-aug-2025--oct-2025">Log: Aug 2025 – Oct 2025</h3>
+<p><strong>[2025-08-04]</strong>
+Computation is not about computers. It’s about the structure of problems. A problem has a shape. That shape dictates whether it yields to brute force or demands cleverness. The machine is irrelevant at first.</p>
+<p><strong>[2025-08-06]</strong>
+P versus NP lands on page one, not as a footnote but as the central crack in the universe. The question divides problems into those whose solutions can be checked easily and those whose solutions can be found easily. No one knows if the two sets are the same.</p>
+<p><strong>[2025-08-08]</strong>
+Hamiltonian path. Traveling salesman. These problems feel different but share a deep structure. The book wastes no time showing the isomorphism. Pattern recognition again. The problem’s costume changes. Its skeleton stays the same.</p>
+<p><strong>[2025-08-10]</strong>
+A Turing machine is a strip of tape and a head that reads, writes, shifts. That’s it. All computation reduces to this. The power is not in the hardware. It’s in the logic of state transitions. Minimal primitives, infinite reach.</p>
+<p><strong>[2025-08-12]</strong>
+Reduction. Take problem A, warp its inputs and outputs, and you have problem B. If B is hard, A is hard. The reduction is a lever. It transfers difficulty from one problem to another without solving either directly.</p>
+<p><strong>[2025-08-14]</strong>
+The book distinguishes decision problems from optimization problems. One asks yes or no. The other asks how much. But they intertwine. Solve the decision version and you often unlock the optimization. Structure the question right.</p>
+<p><strong>[2025-08-16]</strong>
+NP-completeness is a club. Thousands of problems belong. If you solve one efficiently, you solve them all. The unity beneath diversity is staggering. The world’s messiest problems share a single hidden order.</p>
+<p><strong>[2025-08-18]</strong>
+Cook’s theorem. SAT is the root. Every NP problem reduces to satisfiability. The Boolean formula sits at the base of the hardness tree. Find a fast SAT solver and the tree topples.</p>
+<p><strong>[2025-08-20]</strong>
+The book moves through graphs, circuits, and formulas without breaking stride. Each chapter is a new lens on the same landscape. A problem that looks geometric turns out to be combinatorial. A circuit problem becomes a graph problem. Fluidity of perspective.</p>
+<p><strong>[2025-08-22]</strong>
+Randomized algorithms appear. They flip coins and sometimes lie. But their lies are bounded. A Monte Carlo algorithm gambles and might be wrong. A Las Vegas algorithm gambles and might be slow. But both beat deterministic despair.</p>
+<p><strong>[2025-08-24]</strong>
+Primality testing. Once a hard problem. Now in P. The AKS algorithm proved it. Hardness is not permanent. A problem’s status can collapse overnight. The map is provisional.</p>
+<p><strong>[2025-08-26]</strong>
+Phase transitions. Random 3-SAT problems shift from easy to hard to easy as clause density rises. The hardest problems cluster at the threshold. The boundary between order and chaos is where computation sweats.</p>
+<p><strong>[2025-08-28]</strong>
+Approximation algorithms step in where exact solutions fear to tread. You give up perfection. You get a guarantee. A ρ-approximation promises you’re within a factor of optimal. Sometimes near enough is the smart play.</p>
+<p><strong>[2025-08-30]</strong>
+The gap between P and NP is not the only cliff. PSPACE, EXPTIME, the polynomial hierarchy. Problems stack upward in difficulty. The landscape has altitude. Most people only see the first peak.</p>
+<p><strong>[2025-09-02]</strong>
+Interactive proofs. A prover tries to convince a verifier. The verifier asks questions. The protocol reveals truth without revealing why. Zero-knowledge proofs hide the secret and still persuade. Proof as conversation.</p>
+<p><strong>[2025-09-04]</strong>
+Quantum computation enters. Qubits replace bits. Superposition and entanglement replace deterministic states. Shor’s algorithm factors integers in polynomial time. The hardness of factoring—assumed for decades—crumbles under quantum logic.</p>
+<p><strong>[2025-09-06]</strong>
+But quantum is not magic. BQP sits between P and NP. It breaks some cryptosystems but not all. The book draws the boundary with precision. Quantum expands the feasible. It does not make the impossible trivial.</p>
+<p><strong>[2025-09-08]</strong>
+The nature of computation is fundamentally about resources. Time. Space. Randomness. Interaction. Each resource is a dimension. A problem is a point in this multidimensional space. Complexity theory maps the terrain.</p>
+<p><strong>[2025-09-10]</strong>
+Circuit complexity. A problem’s hardness can be measured in gate count. Small depth circuits solve easy problems. Deep circuits handle harder ones. The silicon mirror of the polynomial hierarchy.</p>
+<p><strong>[2025-09-12]</strong>
+Information theory leaks into computation. Entropy. Kolmogorov complexity. A string’s compressibility is its randomness. An incompressible string has no shorter description. It is its own shortest program.</p>
+<p><strong>[2025-09-14]</strong>
+The book treats the physical limits of computation. Landauer’s principle. Reversible computing. Erasing a bit costs heat. Computation is physical. Bits are not abstract when they touch the world.</p>
+<p><strong>[2025-09-16]</strong>
+Optimization versus decision returns as a deeper theme. Many real-world problems demand the best answer, not just a yes. The book shows how to navigate when decision is easy but optimization is cruel.</p>
+<p><strong>[2025-09-18]</strong>
+Counting problems. #P complexity class. Not just finding a solution. Counting how many solutions exist. Harder than NP in a precise sense. The number of paths, the number of matchings. Enumeration as a separate frontier.</p>
+<p><strong>[2025-09-20]</strong>
+The polynomial hierarchy. Alternating quantifiers. There exists an x such that for all y there exists a z. Each layer adds a quantifier. Each layer may be strictly harder. The hierarchy may be infinite. No one knows.</p>
+<p><strong>[2025-09-22]</strong>
+The book’s elegance is its refusal to babble. Every proof is an artifact. The reduction from 3-SAT to Vertex Cover is a clean mechanism. Inputs become gadgets. Truth assignments become vertex selections. The logic crystallizes into graph structure.</p>
+<p><strong>[2025-09-24]</strong>
+Random walks. A simple process. Step randomly on a graph. The stationary distribution emerges. PageRank is a random walk. MCMC sampling is a random walk. Simplicity repeated yields global structure.</p>
+<p><strong>[2025-09-26]</strong>
+Cellular automata. Rule 110 is Turing complete. Complexity can emerge from the simplest neighborhood rule. The lesson repeats: simple primitives, local interactions, global surprise.</p>
+<p><strong>[2025-09-28]</strong>
+The book closes on the P versus NP question. Unsolved. A million-dollar prize waits. But the question’s value is not the answer. It’s the structure it has revealed. The chase has built a cathedral.</p>
+<p><strong>[2025-09-30]</strong>
+Computation is a lens, not a subject. It applies to physics, biology, economics. Any system that processes information is a computer. The natural world computes. The book’s title is literal.</p>
+<p><strong>[2025-10-02]</strong>
+The ultimate insight: hardness is not a wall. It is a resource. Cryptography relies on hardness. If P equals NP, modern encryption evaporates. The crack in the universe keeps secrets safe.</p>
+<hr/>
+<h2 id="synthesis-what-the-nature-of-computation-teaches">Synthesis: What The Nature of Computation Teaches</h2>
+<p>The Nature of Computation teaches that computation is a property of the universe, not a human invention. A river finding its path computes. A protein folding computes. A market settling on a price computes. The machine on your desk is a special case, not the definition.</p>
+<p>The book maps the difficulty of problems as a geologist maps strata. P is the accessible surface. NP is the layer where solutions check easily but find stubbornly. Beyond lie PSPACE, EXPTIME, the polynomial hierarchy. Each stratum is a resource boundary. Time, space, randomness, interaction—these are the dimensions of the map.</p>
+<p>Reduction is the fundamental tool. It says: this problem hides inside that problem. A fast algorithm for one topples the other. The web of reductions shows that thousands of seemingly unrelated problems share an identical core. Diversity collapses to unity.</p>
+<p>Randomness, interaction, and quantum mechanics alter the landscape but do not flatten it. Each new resource expands what we can compute efficiently. Each has limits. The map grows more detailed, but the mountains remain.</p>
+<p>The deepest lesson is that hardness has value. An easy problem offers no resistance and no security. A hard problem is a lock. Cryptography, digital signatures, secure communication—all rest on the assumption that certain problems resist fast solution. The crack in the universe between P and NP is not a flaw. It is the foundation of trust in a digital world.</p>
+<p>Finally, the book teaches intellectual posture. Stand before a hard problem and ask not “Can I solve it?” but “What is its structure?” Classify it. Map its reductions. Understand its place in the hierarchy. The classification is the understanding. The problem may outlast you. That’s fine. The map is the achievement.</p> </section> <nav class="entry-nav"> <a href="/vault"> <span class="entry-nav__label">↑ Vault</span> <span class="entry-nav__title">All notes</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

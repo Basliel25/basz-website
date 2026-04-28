@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>turtsh: A UNIX Shell in C — basz_</title><meta name="description" content="A minimal POSIX shell implementation. Fork, exec, and parallel process management."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.Bw5UapMy.css"><style>.mermaid-wrap{margin:48px 0;border:1px solid var(--border);background:var(--paper)}.mermaid-target{padding:24px;display:block;width:100%;overflow-x:auto}.mermaid-target svg{width:100%!important;height:auto!important;max-width:100%!important;min-height:480px;display:block}.mermaid-target svg[aria-roledescription=xychart],.mermaid-target svg[aria-roledescription=pie]{min-height:560px}.mermaid-target svg text,.mermaid-target svg tspan{font-size:18px}.mermaid-target svg .titleText,.mermaid-target svg .pieTitleText{font-size:24px;font-weight:600}.mermaid-container *:first-letter{all:unset!important;float:none!important;margin:0!important}.mermaid-error{color:var(--accent);font-size:10px;padding:20px;background:#000}
+</style></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class="active"> Projects </a><a href="/blog" class> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/projects">Projects</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">turtsh: A UNIX Shell in C</span> </nav> <main>  <header class="project-header"> <div class="project-header__main"> <div class="project-header__meta"> <span class="project-header__type">C</span> <span class="project-header__status project-header__status--shipped">Shipped</span> </div> <h1 class="project-header__title">turtsh: A UNIX Shell in C</h1> <a href="https://github.com/Basliel25/turtsh" class="project-header__repo" target="_blank" rel="noopener noreferrer"> <span class="project-header__repo-icon">SOURCE://</span> <span class="project-header__repo-url">turtsh</span> </a> <p class="project-header__subtitle">A minimal POSIX shell implementation. Fork, exec, and parallel process management.</p> </div> <aside class="project-header__sidebar"> <div class="project-header__sidebar-label">Project Info</div> <div class="project-header__stats">  <div class="header-stat"> <span class="header-stat__label">Stack</span> <span class="header-stat__value">C · POSIX · Pthreads</span> </div> <div class="header-stat"> <span class="header-stat__label">Updated</span> <span class="header-stat__value">JAN 15, 2026</span> </div> </div> </aside> </header> <section class="prose" style="margin-top:48px">  <p>Man pages remain abstract until you build the systems they describe. I worked through K.N. King and Beej’s guide for weeks before starting <strong>turtsh</strong>. The goal: build a POSIX shell that handles builtins, redirection, and parallel execution. This project taught me the mental model of <code>fork</code>—the actual mechanism behind the syscall.</p>
+<h2 id="the-shell-loop">The Shell Loop</h2>
+<p>A shell functions as a continuous loop. It reads input, tokensizes the line, forks a child, and waits. The first iteration of turtsh implemented this core cycle:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="c"><code><span class="line"><span style="color:#A0A0A0">while</span><span style="color:#FFF"> (</span><span style="color:#FFC799">1</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#A0A0A0">    char</span><span style="color:#A0A0A0"> *</span><span style="color:#FFF">line </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> turtsh_read</span><span style="color:#FFF">();</span></span>
+<span class="line"><span style="color:#A0A0A0">    char</span><span style="color:#A0A0A0"> **</span><span style="color:#FFF">args </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> turtsh_split</span><span style="color:#FFF">(line);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    pid_t</span><span style="color:#FFF"> pid </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> fork</span><span style="color:#FFF">();</span></span>
+<span class="line"><span style="color:#A0A0A0">    if</span><span style="color:#FFF"> (pid </span><span style="color:#A0A0A0">==</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFC799">        execvp</span><span style="color:#FFF">(args[</span><span style="color:#FFC799">0</span><span style="color:#FFF">], args);</span></span>
+<span class="line"><span style="color:#FFC799">        perror</span><span style="color:#FFF">(</span><span style="color:#99FFE4">&quot;execvp failed&quot;</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFC799">        exit</span><span style="color:#FFF">(</span><span style="color:#FFC799">1</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">    } </span><span style="color:#A0A0A0">else</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">        waitpid</span><span style="color:#FFF">(pid, NULL, </span><span style="color:#FFC799">0</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This structure handles basic commands like <code>ls -la</code>. Builtins like <code>cd</code> and <code>exit</code> followed. They execute in the parent process because their effects must persist in the shell environment.</p>
+<h2 id="parallel-execution">Parallel Execution</h2>
+<p>The OSTEP specification requires parallel command support using <code>&amp;</code> as a separator. <code>cmd1 &amp; cmd2 &amp; cmd3</code> must run simultaneously. The shell only returns to the prompt after the final child exits.</p>
+<p>Initially, I attempted to loop the fork-wait cycle:</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="c"><code><span class="line"><span style="color:#8B8B8B94">// BROKEN: Sequential masquerading as parallel</span></span>
+<span class="line"><span style="color:#A0A0A0">int</span><span style="color:#FFC799"> turtsh_execute</span><span style="color:#FFF">(PLine line) {</span></span>
+<span class="line"><span style="color:#A0A0A0">    pid_t</span><span style="color:#FFF"> pid </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> fork</span><span style="color:#FFF">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> (</span><span style="color:#A0A0A0">int</span><span style="color:#FFF"> i </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">; i </span><span style="color:#A0A0A0">&lt;</span><span style="color:#FFF"> line.count; i</span><span style="color:#A0A0A0">++</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFF">        Command cmd </span><span style="color:#A0A0A0">=</span><span style="color:#FFF"> line.commands[i];</span></span>
+<span class="line"><span style="color:#A0A0A0">        if</span><span style="color:#FFF"> (pid </span><span style="color:#A0A0A0">==</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFC799">            execv</span><span style="color:#FFF">(</span><span style="color:#FFC799">path_resolve</span><span style="color:#FFF">(cmd.args[</span><span style="color:#FFC799">0</span><span style="color:#FFF">]), cmd.args);</span></span>
+<span class="line"><span style="color:#FFC799">            exit</span><span style="color:#FFF">(</span><span style="color:#FFC799">1</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">        } </span><span style="color:#A0A0A0">else</span><span style="color:#FFF"> {</span></span>
+<span class="line"><span style="color:#FFC799">            waitpid</span><span style="color:#FFF">(pid, NULL, </span><span style="color:#FFC799">0</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">        }</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">;</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This code fails. <code>execv</code> replaces the child process memory. It never returns to the loop. The first child vanishes after the first command. The parent waits for one child and then loops through remaining commands without an execution mechanism.</p>
+<h2 id="the-fork-join-pattern">The Fork-Join Pattern</h2>
+<p>Correct parallel execution requires a fork-join pattern. One loop spawns all children. A second loop waits for them.</p>
+<div class="mermaid-container" data-diagram="
+sequenceDiagram
+  participant S as Shell (Parent)
+  participant C1 as Child 1
+  participant C2 as Child 2
+  participant K as Kernel
+
+  Note over S: Fork Loop Starts
+  S->>K: fork()
+  K-->>C1: PID 0
+  S->>K: fork()
+  K-->>C2: PID 0
+  Note over C1,C2: Children Executing
+  
+  Note over S: Wait Loop Starts
+  S->>K: waitpid(C1)
+  C1->>S: exit(0)
+  S->>K: waitpid(C2)
+  C2->>S: exit(0)
+  Note over S: Prompt Returns
+"> <div class="mermaid-wrap"> <div class="mermaid-wrap__header"> <div class="terminal__header-dots"> <span></span><span></span><span></span> </div> <span class="terminal__header-title">DIAGRAM::VIEWER</span> </div> <div class="mermaid-wrap__body">  <div class="mermaid-target"></div> </div> </div> </div> <script type="module" src="/_astro/Mermaid.astro_astro_type_script_index_0_lang.Dj10k4Ow.js"></script> 
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="c"><code><span class="line"><span style="color:#A0A0A0">int</span><span style="color:#FFC799"> turtsh_execute</span><span style="color:#FFF">(PLine line) {</span></span>
+<span class="line"><span style="color:#A0A0A0">    pid_t</span><span style="color:#FFF"> pids[line.count];</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> (</span><span style="color:#A0A0A0">int</span><span style="color:#FFF"> i </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">; i </span><span style="color:#A0A0A0">&lt;</span><span style="color:#FFF"> line.count; i</span><span style="color:#A0A0A0">++</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFF">        Command cmd </span><span style="color:#A0A0A0">=</span><span style="color:#FFF"> line.commands[i];</span></span>
+<span class="line"><span style="color:#FFF">        pids[i] </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> fork</span><span style="color:#FFF">();</span></span>
+<span class="line"><span style="color:#A0A0A0">        if</span><span style="color:#FFF"> (pids[i] </span><span style="color:#A0A0A0">==</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#A0A0A0">            if</span><span style="color:#FFF"> (cmd.redirect_file) </span><span style="color:#FFC799">apply_redirect</span><span style="color:#FFF">(cmd.redirect_file);</span></span>
+<span class="line"><span style="color:#FFC799">            execv</span><span style="color:#FFF">(</span><span style="color:#FFC799">path_resolve</span><span style="color:#FFF">(cmd.args[</span><span style="color:#FFC799">0</span><span style="color:#FFF">]), cmd.args);</span></span>
+<span class="line"><span style="color:#FFC799">            exit</span><span style="color:#FFF">(</span><span style="color:#FFC799">1</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">        }</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> (</span><span style="color:#A0A0A0">int</span><span style="color:#FFF"> i </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">; i </span><span style="color:#A0A0A0">&lt;</span><span style="color:#FFF"> line.count; i</span><span style="color:#A0A0A0">++</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#FFC799">        waitpid</span><span style="color:#FFF">(pids[i], NULL, </span><span style="color:#FFC799">0</span><span style="color:#FFF">);</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">;</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This ensures the kernel schedules all processes in parallel. The parent stays out of the execution path until the join phase.</p>
+<h2 id="manual-path-resolution">Manual Path Resolution</h2>
+<p>The specification mandates a custom search path. Relinquishing <code>execvp</code> removes the “p” (path search) convenience. I implemented a manual resolution step to walk the shell’s internal path array.</p>
+<pre class="astro-code vesper" style="background-color:#101010;color:#FFF;overflow-x:auto" tabindex="0" data-language="c"><code><span class="line"><span style="color:#A0A0A0">char</span><span style="color:#A0A0A0"> *</span><span style="color:#FFC799">path_resolve</span><span style="color:#FFF">(</span><span style="color:#A0A0A0">char</span><span style="color:#A0A0A0"> *</span><span style="color:#FFF">cmd) {</span></span>
+<span class="line"><span style="color:#A0A0A0">    for</span><span style="color:#FFF"> (</span><span style="color:#A0A0A0">int</span><span style="color:#FFF"> i </span><span style="color:#A0A0A0">=</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">; shell_path[i] </span><span style="color:#A0A0A0">!=</span><span style="color:#FFF"> NULL; i</span><span style="color:#A0A0A0">++</span><span style="color:#FFF">) {</span></span>
+<span class="line"><span style="color:#A0A0A0">        char</span><span style="color:#FFF"> candidate[PATH_MAX];</span></span>
+<span class="line"><span style="color:#FFC799">        snprintf</span><span style="color:#FFF">(candidate, </span><span style="color:#A0A0A0">sizeof</span><span style="color:#FFF">(candidate), </span><span style="color:#99FFE4">&quot;</span><span style="color:#FFF">%s</span><span style="color:#99FFE4">/</span><span style="color:#FFF">%s</span><span style="color:#99FFE4">&quot;</span><span style="color:#FFF">, shell_path[i], cmd);</span></span>
+<span class="line"><span style="color:#A0A0A0">        if</span><span style="color:#FFF"> (</span><span style="color:#FFC799">access</span><span style="color:#FFF">(candidate, X_OK) </span><span style="color:#A0A0A0">==</span><span style="color:#FFC799"> 0</span><span style="color:#FFF">) </span><span style="color:#A0A0A0">return</span><span style="color:#FFC799"> strdup</span><span style="color:#FFF">(candidate);</span></span>
+<span class="line"><span style="color:#FFF">    }</span></span>
+<span class="line"><span style="color:#A0A0A0">    return</span><span style="color:#FFF"> NULL;</span></span>
+<span class="line"><span style="color:#FFF">}</span></span></code></pre>
+<p>This exposes the work <code>execvp</code> performed hidden behind the abstraction.</p>
+<h2 id="mechanical-lessons">Mechanical Lessons</h2>
+<p><code>fork</code> splits a program into two independent execution streams. Both halves run the same source code. Designing for this split is the fundamental challenge of systems programming.</p>
+<p><code>dup2</code> manages I/O rewiring. <code>dup2(fd, STDOUT_FILENO)</code> points standard output to a file descriptor. The child process remains unaware of the redirection. It simply writes to descriptor 1.</p>
+<p>turtsh passes the OSTEP test suite in 600 lines of C. It serves as the foundation for the upcoming MapReduce implementation.</p>
+<hr/>
+<p><em>Referenced in the <a href="/vault/system-config-moc">System Config MOC</a>.</em></p>  </section> <nav class="entry-nav"> <a href="/projects"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All projects</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

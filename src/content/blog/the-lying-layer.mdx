@@ -1,0 +1,83 @@
+---
+title: "The Lying Layer"
+date: 2025-03-25
+issue: "DISPATCH № 27"
+tags: ["systems", "learning"]
+excerpt: "Every layer of abstraction in a modern computer is a useful fiction. Learning to see through these fictions separates code writing from system understanding."
+readTime: 8
+---
+
+On paper, a context switch on Linux costs a few microseconds. In practice, it costs a cache, a branch predictor, and the quiet coherence you'd built up over the last thousand instructions. The microseconds are the lie.
+
+This realization broke my mental model of computers. Not the headline number—anyone who's read [an OS textbook](https://pages.cs.wisc.edu/~remzi/OSTEP/) has seen "context switches are cheap, just save and restore the registers". The revelation exists in what's *not* in the documented cost. The registers are the cheap part. Everything the CPU had been quietly accumulating before the switch—the warmed-up cache lines, the trained branch predictor, the populated TLB—gets thrown away or invalidated. The next time your process runs, it pays for that loss in cold-cache misses and mispredicted branches. The lie is structural. The OS abstraction *has* to lie. If it told the truth, every syscall would come with a probability distribution.
+
+## The Microseconds are the Lie
+
+Abstractions about abstraction are a trap. We start with a concrete example.
+
+The direct cost of a context switch—saving CPU registers, FPU state, swapping page tables, and loading the new process state—is [usually a few microseconds on modern hardware](https://blog.codingconfessions.com/p/context-switching-and-performance). This is the headline number.
+
+The indirect cost remains unquoted. When the new process starts running, the CPU's [L1 caches still hold the old process's state](https://blog.codingconfessions.com/p/context-switching-and-performance). The new process requires different data and different code. Cache lines get evicted. Cold misses replace hot hits. A typical L1 miss costs 10 cycles; an L3 miss costs hundreds; a [main-memory miss costs hundreds more](https://www.akkadia.org/drepper/cpumemory.pdf). Multiply by the instructions needed to reheat the working set. You are looking at tens of thousands of cycles of indirect cost. This cost exists as an invisible tax on tail latency.
+
+The [TLB](https://en.wikipedia.org/wiki/Translation_lookaside_buffer) shares this story. A TLB miss costs [hundreds of cycles](https://blog.codingconfessions.com/p/context-switching-and-performance) during hardware page-table walks. Modern Linux uses [PCID / ASID tags](https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch) to avoid flushing the TLB, but the [tag space is finite](https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch). On a busy system, flushes still occur. The branch predictor, trained over thousands of instructions, suffers similar degradation. 
+
+The textbook number represents what it can measure. It cannot measure what matters.
+
+## The Stack of Fictions
+
+Once the pattern is visible at the OS level, it appears everywhere.
+
+- **Memory Uniformity.** High-level languages pretend [memory is uniform](https://www.akkadia.org/drepper/cpumemory.pdf). It isn't. L1, L2, L3, DRAM, and swap each operate 10× to 100× slower than the tier above. Sequential iteration is an order of magnitude faster than strided access.
+- **Process Isolation.** The OS pretends processes are isolated. They are, until [Spectre](https://meltdownattack.com/) and [Meltdown](https://meltdownattack.com/) showed they share enough microarchitectural state for side-channel leaks.
+- **Execution Order.** The compiler pretends your code runs in the order you wrote it. [It doesn't.](https://en.wikipedia.org/wiki/Memory_ordering) C's "as-if rule" lets the compiler reorder anything as long as a single-threaded observer cannot detect the difference. 
+- **Instruction Atomicity.** The hardware pretends each instruction is one operation. It [isn't](https://en.wikipedia.org/wiki/Instruction_pipelining). Modern x86 chips break instructions into micro-ops, run them out of order, and speculate down branches. The [retirement stage cleans up the lie](https://en.wikipedia.org/wiki/Out-of-order_execution).
+
+Every layer presents a clean model as a useful approximation. The lies stack.
+
+## Necessary Fictions
+
+Abstractions exist because the real machine is unmanageable. If you held cache coherence protocols, branch predictor architecture, and memory consistency models in your head simultaneously, you would never write another loop.
+
+This isn't a bug. It's the fundamental design pattern of computing. Every level of the stack is a response to the same problem: *the level below me is too complicated, so I'll present a simpler model and pay the cost in occasional leaks*.
+
+The lies are necessary. The lies are also where performance lives.
+
+## Leaking Abstractions
+
+The lies leak when performance matters.
+
+- **Memory Ordering.** Concurrent code breaks on real CPUs because hardware reordered loads and stores.
+- **Cache Locality.** Algorithmic complexity meets reality. Textbook O(n log n) fails when the cache hates the access pattern.
+- **False Sharing.** Two threads writing to different variables in the same cache line murder performance as the [cache coherence protocol](https://en.wikipedia.org/wiki/Cache_coherence) ping-pongs the line between cores.
+
+Application-level competence hits a ceiling here. Until you see through the abstraction, you cannot name the failure.
+
+## Mechanical Sympathy
+
+The phrase belongs to [Jackie Stewart](https://en.wikipedia.org/wiki/Jackie_Stewart). *You don't have to be an engineer to drive the car well, but you have to have a sympathy for what the car is doing.* Martin Thompson brought this to systems programming.
+
+You don't need to understand cache coherence to write working code. But the gap between *code that works* and *code worth shipping under load* is the gap between trusting the abstraction and seeing through it. 
+
+My [HP ProBook 430](https://support.hp.com/us-en/product/hp-probook-430-g6-notebook-pc/) with 8GB of RAM forces this seeing. On a Mac Studio with 64GB, nothing wakes you up. On the ProBook, an unnecessary allocation in a hot loop is felt. The constraint is the gift. It refuses to let me pretend the abstractions are free.
+
+The texture of the machine becomes legible as you peel back the layers. Code stops being incantation. It becomes mechanism. The abstraction is no longer a wall; it's a description. You learn which parts to trust and which parts to check.
+
+The lies were always necessary. Knowing they were lies is what changed.
+
+---
+
+## References
+
+- Arpaci-Dusseau, R. & A. *Operating Systems: Three Easy Pieces*. [Link](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+- Drepper, Ulrich. *What Every Programmer Should Know About Memory* (2007). [Link](https://www.akkadia.org/drepper/cpumemory.pdf)
+- *Context Switching and Performance: What Every Developer Should Know*, Coding Confessions. [Link](https://blog.codingconfessions.com/p/context-switching-and-performance)
+- *Linux: Determining the Cost of a Context Switch*, copyprogramming.com. [Link](https://copyprogramming.com/howto/what-is-the-overhead-of-a-context-switch)
+- *Translation Lookaside Buffer*, Wikipedia. [Link](https://en.wikipedia.org/wiki/Translation_lookaside_buffer)
+- *Memory ordering*, Wikipedia. [Link](https://en.wikipedia.org/wiki/Memory_ordering)
+- *Instruction pipelining*, Wikipedia. [Link](https://en.wikipedia.org/wiki/Instruction_pipelining)
+- *Out-of-order execution*, Wikipedia. [Link](https://en.wikipedia.org/wiki/Out-of-order_execution)
+- *Cache coherence*, Wikipedia. [Link](https://en.wikipedia.org/wiki/Cache_coherence)
+- *Spectre & Meltdown* official site. [Link](https://meltdownattack.com/)
+- C11 atomic memory order, cppreference. [Link](https://en.cppreference.com/w/c/atomic/memory_order.html)
+- *Jackie Stewart*, Wikipedia (origin of "mechanical sympathy"). [Link](https://en.wikipedia.org/wiki/Jackie_Stewart)
+- Thompson, Martin — *Mechanical Sympathy* blog. [Link](https://mechanical-sympathy.blogspot.com/)

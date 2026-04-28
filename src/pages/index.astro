@@ -16,11 +16,29 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
 ---
 
 <BaseLayout title="basz_" description="Systems engineer. Writing, projects, notes.">
-  <MegaHero
-    meta={{ Base: "Padova · IT", Apprentice: "Universita degli studi di Padova", Interests: "Systems & tooling", Stack: "Bash · Rust · C · Linux" }}
-  />
+<MegaHero
+  meta={{ Base: "Padova · IT", Apprentice: "Universita degli studi di Padova", Interests: "Systems & tooling", Stack: "Bash · Rust · C · Linux" }}
+  manifesto="Cultivating a digital garden of systems, software, and the models we build to understand them."
+/>
+
+  <section class="manifesto-wrap">
+    <div class="manifesto">
+      <div class="manifesto__label">PUBLIC_IDEA_GARDEN</div>
+      <h2 class="manifesto__title">A public idea garden for ideas in progress.</h2>
+      <p class="manifesto__text">
+        This space is a nonlinear collection of notes, tools, and systems research. 
+      </p>
+      <a href="/about" class="manifesto__cta">ACCESS_THE_GARDENER</a>
+    </div>
+  </section>
+
   <StripDivider text="· INDEX ·" />
   <div class="index-sections">
+    <IdxCard
+      num="00" kicker="ABOUT" title="One person, in public"
+      desc="Who is writing, and from where."
+      href="/about" count="Padova · IT"
+    />
     <IdxCard
       num="01" kicker="PROJECTS" title="Garage of Projects"
       desc="learning projects, tools, side experiments"
@@ -32,16 +50,12 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
       href="/blog" count={`${posts.length} published`}
     />
     <IdxCard
-      num="03" kicker="ABOUT" title="One person, in public"
-      desc="Who is writing, and from where."
-      href="/about" count="Padova · IT"
-    />
-    <IdxCard
-      num="04" kicker="VAULT" title="Notes"
+      num="03" kicker="VAULT" title="Notes"
       desc="A slice of the zettelkasten. MOCs, seedlings, evergreens."
-      href="https://vault.bas.dev" count="Public notes"
+      href="/vault" count="Public notes"
     />
   </div>
+
   <StripDivider text="· RECENT ·" />
   <IndexRecent posts={posts} projects={projects} />
 </BaseLayout>

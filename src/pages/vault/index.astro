@@ -15,7 +15,8 @@ const tagCounts = new Map<string, number>()
 for (const p of all) for (const t of p.data.tags) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)
 const tags = [{ label: "ALL", count: all.length, active: true }, ...[...tagCounts.entries()].map(([label, count]) => ({ label: label.toUpperCase(), count }))]
 
-const notes        = all.filter((e) => e.data.type === "note")
+const bookNotes    = all.filter((e) => e.data.tags.includes("book-note"))
+const notes        = all.filter((e) => e.data.type === "note" && !e.data.tags.includes("book-note"))
 const mocs         = all.filter((e) => e.data.type === "moc" && !e.data.featured)
 const featuredMocs = all.filter((e) => e.data.type === "moc" && e.data.featured)
 
@@ -34,7 +35,7 @@ const crumbs = [{ label: "bas_", href: "/" }, { label: "Vault" }]
   crumbs={crumbs}
 >
   <Hero
-    section="05"
+    section="03"
     issueLabel={`${all.length} notes · ${mocs.length} maps`}
     kickerStamp="VAULT"
     kicker="/ personal knowledge base"
@@ -100,6 +101,39 @@ const crumbs = [{ label: "bas_", href: "/" }, { label: "Vault" }]
                 {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
               </span>
               <span class="vault-card__type">MAP</span>
+            </div>
+            <h3 class="vault-card__title">{note.data.title}</h3>
+            {note.data.description && (
+              <p class="vault-card__desc">{note.data.description}</p>
+            )}
+            <div class="vault-card__footer">
+              <div class="vault-card__tags">
+                {note.data.tags.map((t) => <span class="vault-tag">{t}</span>)}
+              </div>
+              <span class="vault-card__arrow">→</span>
+            </div>
+          </a>
+        )
+      })}
+    </div>
+  </div>
+
+  <div class="filterable-group">
+    <StripDivider text="· BOOK NOTES ·" alt />
+    <div class="vault-grid">
+      {bookNotes.map((note) => {
+        const slug = note.id.replace(/\.[^.]+$/, "")
+        return (
+          <a 
+            href={`/vault/${slug}`} 
+            class="vault-card filterable-item"
+            data-tags={note.data.tags.map(t => t.toLowerCase()).join(' ')}
+          >
+            <div class="vault-card__status">
+              <span class={`vault-status vault-status--${note.data.status}`}>
+                {statusIcon[note.data.status]} {note.data.status.toUpperCase()}
+              </span>
+              <span class="vault-card__type">BOOK NOTE</span>
             </div>
             <h3 class="vault-card__title">{note.data.title}</h3>
             {note.data.description && (

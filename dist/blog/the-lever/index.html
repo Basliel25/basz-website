@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>The Lever Goes Backwards — basz_</title><meta name="description" content="Interventions in complex systems often invert themselves. From colonial rat bounties to industrial quotas, the cobra effect demonstrates why incentives reorganize behavior in unexpected ways."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.Bw5UapMy.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class="active"> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/blog">Dispatches</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">The Lever Goes Backwards</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="hero__kicker-stamp">DISPATCH № 28</span> <span class="pill pill--systems">SYSTEMS</span><span class="pill pill--learning">LEARNING</span> </div> <h1 class="article__title">The Lever Goes Backwards</h1>  <div class="article__meta"> <span>PUBLISHED · AUG 4, 2026</span> <span>· 10 MIN READ</span> </div>  </article> <section class="prose">  <p>In 1902, the French colonial government in Hanoi faced a bubonic plague threat. Rats thrived in the dark, predator-free sewers of the new French Quarter. The administration offered a bounty of one cent per rat. They required a severed tail as proof.</p>
+<p>The program initially appeared successful. Daily counts exceeded ten thousand. On June 21st, residents submitted 20,112 tails.</p>
+<p>The rat population continued to grow.</p>
+<p>Administrators eventually identified the failure. Streets contained tail-less rats surviving in the gutters. Residents had established rat farms on the outskirts of the city. They bred rats, harvested tails, and released the breeding stock to multiply. The bounty transformed rats into a commodity. The intervention ended with an outbreak that killed nearly three hundred people.</p>
+<p>This mechanism is universal. Interventions often invert themselves. You push a lever to fix a problem and the problem intensifies. This is the <strong>Cobra Effect</strong>.</p>
+<h2 id="mechanical-models-fail">Mechanical Models Fail</h2>
+<p>Most people carry a mechanical model of change. They observe a problem, apply pressure, and expect movement in the intended direction. Real complex systems—markets, ecosystems, software architectures—contain feedback. They consist of agents who read your rules and adjust their behavior.</p>
+<p>Donella Meadows observed this counterintuitiveness in systems research.</p>
+<blockquote>
+<p>“People know intuitively where leverage points are. Time after time I’ve done an analysis of a company, and I’ve figured out a leverage point. Then I’ve gone to the company and discovered that there’s already a lot of attention to that point. Everyone is trying very hard to push it [in the wrong direction].”</p>
+</blockquote>
+<p>Leverage points attract focus. Intuition often dictates the wrong direction. The Hanoi government correctly identified the leverage point: the rat population. They incorrectly defined the metric and the incentive. The system pushed back. Agents optimized for the metric (tails) without changing the underlying problem (rats).</p>
+<h2 id="goodhart-and-campbell">Goodhart and Campbell</h2>
+<p>The pattern exists across economics and sociology.</p>
+<p><strong>Goodhart’s Law</strong> states that when a measure becomes a target, it ceases to be a good measure. Rewarding dead-rat tails optimizes for tails. The proxy and the goal diverge.</p>
+<p><strong>Campbell’s Law</strong> asserts that quantitative social indicators used for decision-making distort the processes they monitor. Test scores stop measuring learning. Lines of code stop measuring engineering productivity. Measurement deforms the reality.</p>
+<p>Complex systems are not clay. They are populations of decision-makers. They reorganize behavior to optimize against your rules rather than your intent. Powerful incentives trigger aggressive reorganization.</p>
+<h2 id="industrial-echoes">Industrial Echoes</h2>
+<p>The pattern repeats in modern industry.</p>
+<ul>
+<li><strong>Banking Fraud.</strong> Wells Fargo branch managers faced strict cross-selling quotas. Employees opened millions of fake accounts to hit targets and secure bonuses. The incentive intended to deepen relationships; it produced systemic fraud.</li>
+<li><strong>Healthcare Mortality.</strong> The Hospital Readmissions Reduction Program penalized hospitals for returns within thirty days. Readmissions dropped. Mortality rose for patients with heart failure. Hospitals avoided readmitting sick patients to preserve their metrics. Patients died at home.</li>
+<li><strong>Climate Degradation.</strong> The UN Clean Development Mechanism rewarded factories for destroying HFC-23, a greenhouse gas byproduct. Credits became so lucrative that factories produced more refrigerant specifically to generate HFC-23 for destruction.</li>
+</ul>
+<p>The cycle is predictable. Identify a problem. Pick a proxy. Attach an incentive. Watch the system reorganize around the proxy while the underlying problem worsens.</p>
+<h2 id="design-for-resistance">Design for Resistance</h2>
+<p>Honest interventions are difficult and unsexy.</p>
+<p><strong>Assume the system will fight.</strong> Every agent inside the system will seek the cheapest path to reward. If your design is fragile to gaming, it will fail. This is the only assumption that survives contact with reality.</p>
+<p><strong>Target goals, not parameters.</strong> Meadows ranked parameters—tax rates, bounty prices—as the weakest leverage points. Strongest leverage lives in the system’s goals and paradigms. If the goal is counting tails, you get tails. If the goal is eliminating habitat, gaming becomes impossible.</p>
+<p><strong>Build feedback for perverse outcomes.</strong> Most modern systems are too large for absurdity to be visible on the street. You must measure whether the metric still tracks the goal. The second measurement protects you from the first.</p>
+<p><strong>Intervene less. Observe more.</strong> Aggressive interventions often deepen global problems. The strongest move is frequently to remove pressure rather than increasing it.</p>
+<h2 id="the-competence-trap">The Competence Trap</h2>
+<p>The Hanoi administrators were not incompetent. They defined a goal, selected a proxy, and built a clean incentive structure. By every internal metric, the program worked. The world outside the metric failed.</p>
+<p>Your model of the system is not the system. Your metric of the goal is not the goal. Agents run their own models. You cannot out-design this reality. You can only stay humble enough to watch your lever invert and modest enough to abandon the program when it does.</p>
+<p>Check the rats in your gutter. Ensure they still have their tails.</p>
+<hr/>
+<p><em>Part of the <a href="/vault/system-config-moc">System Config MOC</a>.</em></p>  </section> <nav class="entry-nav"> <a href="/blog"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All dispatches</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>

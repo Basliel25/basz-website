@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en" data-theme="light"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>When Formulas Freeze — basz_</title><meta name="description" content="Complexity theory meets statistical physics. Analyzing the sharp phase transitions where Boolean satisfiability problems transform from trivial to exponential."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous"><link rel="alternate" type="application/rss+xml" title="bas_ dispatches" href="/rss.xml"><script>
+      // FOUC prevention — runs before first paint
+      ;(function () {
+        var t =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+        document.documentElement.dataset.theme = t
+      })()
+    </script><link rel="stylesheet" href="/_astro/_slug_.Bw5UapMy.css"></head> <body> <header class="masthead"> <a href="/" class="masthead__logo">BASZ<span>_</span></a> <nav class="masthead__nav"> <a href="/projects" class> Projects </a><a href="/blog" class="active"> Dispatches </a><a href="/vault" class> Vault </a><a href="/about" class> About </a> </nav> <div class="masthead__meta"> <span>Padova · IT</span> <button class="theme-toggle" id="theme-toggle">DARK</button> </div> </header> <nav class="breadcrumb"> <a href="/">bas_</a><span class="breadcrumb__sep">/</span><a href="/blog">Dispatches</a><span class="breadcrumb__sep">/</span><span class="breadcrumb__current">When Formulas Freeze</span> </nav> <main>  <article class="article"> <div class="article__kicker"> <span class="hero__kicker-stamp">DISPATCH № 29</span> <span class="pill pill--learning">LEARNING</span><span class="pill pill--meta">META</span> </div> <h1 class="article__title">When Formulas Freeze</h1>  <div class="article__meta"> <span>PUBLISHED · JUL 20, 2026</span> <span>· 12 MIN READ</span> </div>  </article> <section class="prose">  <p><em>Inspired by my reading of <a href="/vault/nature-of-computation-notes">The Nature of Computation</a>.</em></p>
+<p>Water doesn’t slowly thicken into ice.
+At 0°C and atmospheric pressure, the liquid commits. Molecules that were sliding past each other lock into a crystal lattice. The whole substance changes its character at once. A fractional temperature shift triggers a global reorganization. Physicists call this a <strong>phase transition</strong>.</p>
+<p>The same mathematics describes how <em>Boolean satisfiability problems</em>—the foundation of NP-completeness—transform from trivial to impossible.</p>
+<h2 id="the-critical-ratio">The Critical Ratio</h2>
+<p>Random 3-SAT provides the test bed. We take <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.109em">N</span></span></span></span> Boolean variables and generate <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.109em">M</span></span></span></span> clauses, each containing exactly three variables or their negations. We ask: does an assignment exist that satisfies every clause?</p>
+<p>At low ratios of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.109em">M</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.109em">N</span></span></span></span>, the problem is almost always satisfiable. At high ratios, it is almost always unsatisfiable. Both regimes are computationally fast to resolve.</p>
+<p>Something abrupt happens at the <strong>critical ratio of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≈</mo><mn>4.267</mn></mrow><annotation encoding="application/x-tex">\alpha \approx 4.267</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em"></span><span class="mord mathnormal" style="margin-right:0.0037em">α</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">4.267</span></span></span></span></strong> clauses per variable. The probability of satisfiability drops from near-1 to near-0 in a vanishingly thin window. The phase transition is sharp.</p>
+<h2 id="the-easy-hard-easy-pattern">The Easy-Hard-Easy Pattern</h2>
+<p>At this critical ratio, every known SAT-solving algorithm slows down by orders of magnitude. The hardest instances live exactly at the boundary. The algorithm must perform exponential work to determine which side of the line a given instance falls on.</p>
+<p>This “easy-hard-easy” pattern is a fingerprint of NP-completeness. It appears in graph coloring, vertex cover, and the traveling salesman problem. Hardness is not uniform across problem space. Hardness is concentrated at the edge between two regimes.</p>
+<h2 id="statistical-physics-as-complexity-theory">Statistical Physics as Complexity Theory</h2>
+<p>The reason this works is that the same statistical physics describing <strong>magnets and spin glasses</strong> describes random constraint satisfaction problems.</p>
+<p>Statistical physics spent the twentieth century studying systems with billions of identical interacting particles. Computer science studied algorithms for combinatorial problems. These disciplines maintained different vocabularies and journals.</p>
+<p>In the 1990s, work by Kirkpatrick and Selman revealed that typical-case hardness is governed by critical phenomena. The worst-case complexity bounds of traditional CS are often less informative than the average-case behavior near the phase transition.</p>
+<blockquote>
+<p>“The interesting question wasn’t <em>is this problem hard in the worst case</em>… but <em>where, in the parameter space of random instances, does hardness actually live</em>.”</p>
+</blockquote>
+<h2 id="backdoors-and-spin-glasses">Backdoors and Spin Glasses</h2>
+<p>This matters in industrial applications. Industrial SAT solvers—used in chip verification and model checking—handle real-world instances rather than uniform random ones. Yet, the framework of random SAT informs our understanding of these real instances.</p>
+<p>The structure of “backdoors”—small subsets of variables that determine the entire formula—was mapped using concepts from spin glass theory. The performance gap between stochastic local search and complete backtracking solvers tracks the underlying solution space in ways physics predicted before CS measured.</p>
+<h2 id="the-unified-landscape">The Unified Landscape</h2>
+<p>连接 runs in both directions. Physics gave computer science <strong>survey propagation</strong> and replica methods. Computer science gave physics tools to understand the <em>information content</em> of disordered systems.</p>
+<p>Spin glasses were notoriously hard to study experimentally because their energy landscapes are computationally intractable. The CS side knew why: they are NP-hard.</p>
+<p>Cristopher Moore and Stephan Mertens explore this in <em><a href="https://nature-of-computation.org/">The Nature of Computation</a></em>. They argue that computational complexity is best understood through the lens of statistical mechanics.</p>
+<h2 id="computation-as-physical-act">Computation as Physical Act</h2>
+<p>Computation is not just a tool for studying physics. Computation is something physics <em>does</em>.</p>
+<p>The universe lives in the easy region for almost all systems we care about. Phase transitions in matter, evolution finding fitness peaks, and neurons settling into stable patterns are physical systems traversing energy landscapes.</p>
+<p>When the landscape is rugged, the system stalls. When it is smooth, the system slides into a ground state. The boundary between these regimes is the easy-hard transition.</p>
+<p>The freezing of water and the freezing of a SAT instance are the same mathematical event.</p>
+<hr/>
+<p><em>Part of the <a href="/vault/system-config-moc">System Config MOC</a>.</em></p>  </section> <nav class="entry-nav"> <a href="/blog"> <span class="entry-nav__label">↑ Index</span> <span class="entry-nav__title">All dispatches</span> </a> </nav>  </main> <footer class="colophon"> <div class="colophon__copy"> <span>bas_ · 2026</span> <span>Padova, IT</span> <span>Static · No tracking</span> <a href="/rss.xml">RSS</a> </div> </footer> <script>
+      var btn = document.getElementById("theme-toggle")
+      if (btn) {
+        function syncBtn() {
+          btn.textContent = document.documentElement.dataset.theme === "dark" ? "LIGHT" : "DARK"
+        }
+        syncBtn()
+        btn.addEventListener("click", function () {
+          var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+          document.documentElement.dataset.theme = next
+          localStorage.setItem("theme", next)
+          syncBtn()
+        })
+      }
+    </script> </body> </html>
