@@ -1,0 +1,53 @@
+---
+title: Lockdiff Drawingboard
+project: Lockdiff
+status: seedling
+started: 2026-04-26
+target_done:
+tags:
+  - seedling
+  - project
+  - domain-tag-here
+  - "#public"
+---
+# Lockdiff
+A smart way to analyze package `lock` file.
+## Goal
+- Parse *package lock*: parse and analyze
+	- Graph section of lock file
+	- Added and Removed section of lock file
+- Count transitions and bumping of packages
+- Cascade graphs to arrbitrate required and human required resolutions.
+
+## Project Synthesis
+- Drawing board:
+##### `Parser.py`
+Takes a path to `uv.lock` and returns a python data structure representing the lock file. Format:
+```python
+{ "package_name": Package(name="package_name", version="8.3.3", is_direct=True, 
+"package_name": Package(name="package_name", version="5.3.3", is_direct=True, 
+"package_name": Package(name="package_name", version="8.3.3", is_direct=True, 
+}
+```
+- Returns a dict mapping `package_name -> Package`
+	- O(1) lookup for diff
+	- `is_direct` is computed from the structure of the lock file
+	- `dependencies` as tuple of stings; keep name references for the cascading layer
+- *Finds* the root package:
+	- Collect dependecies into a set
+	- For every other package:
+		- 
+
+## Project Log
+>[26/04/26]
+- First project design
+## 🔗 Related
+- 
+
+
+---
+**Status Updates:**
+- Seedling: Planning/early stages
+- Growing: Actively working
+- Evergreen: Complete/maintained
+- Archive when done: Move to 5-Archive/Projects-Done/
